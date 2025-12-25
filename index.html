@@ -1,1 +1,191 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DIY Registry - Create and Plan Your Projects</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        header {
+            text-align: center;
+            padding: 20px;
+            background-color: #007bff;
+            color: white;
+        }
+        section {
+            margin: 20px 0;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #333;
+        }
+        ul#project-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        ul#project-list li {
+            background-color: #e9ecef;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        input[type="text"], input[type="number"] {
+            padding: 8px;
+            margin-right: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        #material-list {
+            margin-top: 10px;
+        }
+        #material-list div {
+            background-color: #e9ecef;
+            margin: 5px 0;
+            padding: 8px;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>DIY Registry</h1>
+        <p>Your one-stop hub for creating project lists and planning materials for all your DIY adventures!</p>
+    </header>
+
+    <section id="project-section">
+        <h2>User-Created Project List</h2>
+        <p>Add your DIY projects here. Each project can have a name and description.</p>
+        <input type="text" id="project-name" placeholder="Project Name">
+        <input type="text" id="project-desc" placeholder="Project Description">
+        <button onclick="addProject()">Add Project</button>
+        <ul id="project-list"></ul>
+    </section>
+
+    <section id="material-planner-section">
+        <h2>Material Planner</h2>
+        <p>Plan materials for your selected project. Select a project from the list above to start planning.</p>
+        <select id="select-project"></select>
+        <input type="text" id="material-name" placeholder="Material Name">
+        <input type="number" id="material-quantity" placeholder="Quantity" min="1">
+        <input type="text" id="material-unit" placeholder="Unit (e.g., pcs, kg)">
+        <button onclick="addMaterial()">Add Material</button>
+        <div id="material-list"></div>
+    </section>
+
+    <script>
+        let projects = [];
+        let selectedProjectIndex = -1;
+
+        function addProject() {
+            const name = document.getElementById('project-name').value;
+            const desc = document.getElementById('project-desc').value;
+            if (name) {
+                projects.push({ name, desc, materials: [] });
+                renderProjects();
+                renderProjectOptions();
+                document.getElementById('project-name').value = '';
+                document.getElementById('project-desc').value = '';
+            }
+        }
+
+        function renderProjects() {
+            const list = document.getElementById('project-list');
+            list.innerHTML = '';
+            projects.forEach((project, index) => {
+                const li = document.createElement('li');
+                li.innerHTML = `<span>${project.name} - ${project.desc}</span>
+                                <button onclick="selectProject(${index})">Select</button>
+                                <button onclick="removeProject(${index})">Remove</button>`;
+                list.appendChild(li);
+            });
+        }
+
+        function removeProject(index) {
+            projects.splice(index, 1);
+            renderProjects();
+            renderProjectOptions();
+            if (selectedProjectIndex === index) selectedProjectIndex = -1;
+        }
+
+        function selectProject(index) {
+            selectedProjectIndex = index;
+            renderMaterials();
+        }
+
+        function renderProjectOptions() {
+            const select = document.getElementById('select-project');
+            select.innerHTML = '<option value="">Select a Project</option>';
+            projects.forEach((project, index) => {
+                const option = document.createElement('option');
+                option.value = index;
+                option.textContent = project.name;
+                select.appendChild(option);
+            });
+            select.addEventListener('change', (e) => {
+                selectedProjectIndex = parseInt(e.target.value);
+                renderMaterials();
+            });
+        }
+
+        function addMaterial() {
+            if (selectedProjectIndex === -1) {
+                alert('Please select a project first.');
+                return;
+            }
+            const name = document.getElementById('material-name').value;
+            const quantity = document.getElementById('material-quantity').value;
+            const unit = document.getElementById('material-unit').value;
+            if (name && quantity) {
+                projects[selectedProjectIndex].materials.push({ name, quantity, unit });
+                renderMaterials();
+                document.getElementById('material-name').value = '';
+                document.getElementById('material-quantity').value = '';
+                document.getElementById('material-unit').value = '';
+            }
+        }
+
+        function renderMaterials() {
+            const list = document.getElementById('material-list');
+            list.innerHTML = '';
+            if (selectedProjectIndex !== -1) {
+                projects[selectedProjectIndex].materials.forEach((material, index) => {
+                    const div = document.createElement('div');
+                    div.innerHTML = `<span>${material.name}: ${material.quantity} ${material.unit}</span>
+                                     <button onclick="removeMaterial(${index})">Remove</button>`;
+                    list.appendChild(div);
+                });
+            }
+        }
+
+        function removeMaterial(index) {
+            projects[selectedProjectIndex].materials.splice(index, 1);
+            renderMaterials();
+        }
+    </script>
+</body>
+</html>

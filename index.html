@@ -3,378 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DIY Registry - Create and Plan Your Projects</title>
+    <title>DIYRegistry.com - Your DIY Project & Domain Hub</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
-            padding: 20px;
-            background-color: #f4f4f4;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-        header {
-            text-align: center;
-            padding: 30px;
-            background-color: #007bff;
-            color: white;
-            border-radius: 8px 8px 0 0;
-        }
-        main {
-            flex: 1;
-        }
-        section {
-            margin: 20px 0;
-            padding: 20px;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        h2 {
+            padding: 0;
+            background-color: #f8f9fa;
             color: #333;
         }
-        ul#project-list {
-            list-style-type: none;
-            padding: 0;
-        }
-        ul#project-list li {
-            background-color: #e9ecef;
-            margin: 10px 0;
-            padding: 10px;
-            border-radius: 4px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        button {
-            background-color: #28a745;
+        header {
+            background-color: #007bff;
             color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 4px;
-            cursor: pointer;
+            text-align: center;
+            padding: 80px 20px;
         }
-        button:hover {
-            background-color: #218838;
+        header h1 {
+            margin: 0;
+            font-size: 3.5em;
         }
-        button.remove {
-            background-color: #dc3545;
-        }
-        button.remove:hover {
-            background-color: #c82333;
-        }
-        input[type="text"], input[type="url"], input[type="number"], select {
-            padding: 8px;
-            margin-right: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            width: 180px;
-        }
-        #material-list {
-            margin-top: 10px;
-        }
-        #material-list > div {
-            background-color: #e9ecef;
-            margin: 8px 0;
-            padding: 12px;
-            border-radius: 4px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-        .material-info {
-            flex: 1;
-            min-width: 300px;
-        }
-        .material-link {
-            margin-top: 8px;
-            font-size: 0.9em;
-        }
-        .material-link a {
-            color: #007bff;
-            word-break: break-all;
-        }
-        .total-cost {
-            font-weight: bold;
-            font-size: 1.2em;
+        header p {
+            font-size: 1.5em;
             margin-top: 20px;
-            padding: 10px;
-            background-color: #d4edda;
-            border-radius: 4px;
-            text-align: right;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 20px;
+            text-align: center;
+        }
+        .cta-button {
+            display: inline-block;
+            margin: 30px 15px;
+            padding: 18px 36px;
+            font-size: 1.4em;
+            font-weight: bold;
+            text-decoration: none;
+            color: white;
+            background-color: #28a745;
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
+        }
+        .cta-button:hover {
+            background-color: #218838;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        .secondary-button {
+            background-color: #ffc107;
+            color: #212529;
+        }
+        .secondary-button:hover {
+            background-color: #e0a800;
+        }
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 60px;
+        }
+        .feature-card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            width: 300px;
         }
         footer {
             text-align: center;
-            padding: 20px;
-            margin-top: 40px;
+            padding: 40px;
             background-color: #343a40;
             color: #ddd;
-            font-size: 0.9em;
-            border-radius: 8px;
+            margin-top: 80px;
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>DIY Registry</h1>
-        <p>Your one-stop hub for creating project lists, planning materials, estimating costs, and linking suppliers for all your DIY adventures!</p>
+        <h1>DIYRegistry.com</h1>
+        <p>Your all-in-one hub for DIY project planning and domain name services</p>
+
+        <!-- Main Call-to-Action Buttons -->
+        <div>
+            <a href="/projectplanner.html" class="cta-button">DIY Project Planner</a>
+            <a href="/domainlookup.html" class="cta-button">Domain Name Lookup</a>
+        </div>
     </header>
 
-    <main>
-        <section id="project-section">
-            <h2>User-Created Project List</h2>
-            <p>Add your DIY projects here. Each project can have a name and description.</p>
-            <input type="text" id="project-name" placeholder="Project Name">
-            <input type="text" id="project-desc" placeholder="Project Description">
-            <button onclick="addProject()">Add Project</button>
-            <ul id="project-list"></ul>
-        </section>
+    <div class="container">
+        <h2>Welcome to DIYRegistry.com</h2>
+        <p>Plan your next DIY project with our material planner and cost estimator, or find and register the perfect domain name for your ideas.</p>
 
-        <section id="material-planner-section">
-            <h2>Material Planner & Cost Estimator</h2>
-            <p>Select a project to add or view its required materials, costs, and supplier links.</p>
-            <select id="select-project"></select>
-            <div>
-                <input type="text" id="material-name" placeholder="Material Name">
-                <input type="number" id="material-quantity" placeholder="Quantity" min="0" step="any">
-                <input type="text" id="material-unit" placeholder="Unit (e.g., pcs, m, kg)">
-                <input type="number" id="material-price" placeholder="Price per unit ($)" min="0" step="any">
-                <input type="url" id="material-link" placeholder="Supplier Link (optional)">
-                <button onclick="addMaterial()">Add Material</button>
+        <div class="features">
+            <div class="feature-card">
+                <h3>DIY Project Planner</h3>
+                <p>Organize projects, list materials, estimate costs, and add supplier links – all saved locally in your browser.</p>
             </div>
-            <div id="material-list"></div>
-            <div id="total-cost" class="total-cost" style="display:none;"></div>
-        </section>
-    </main>
+            <div class="feature-card">
+                <h3>Domain Name Lookup</h3>
+                <p>Instantly check domain availability with WHOIS data and register your perfect .com, .net, or any TLD.</p>
+                <a href="/domainlookup.html" class="cta-button secondary-button">Go to Domain Lookup</a>
+            </div>
+        </div>
+    </div>
 
     <footer>
-        <p>&copy; 2025 DIY Registry • Built with ❤️⚒️ for makers and creators</p>
-        <p>All your project data is saved locally in your browser using Local Storage – nothing is sent to any server. To purchase this domain or suggest new features please contact info@diyregistry.com</p>
+        <p>&copy; 2025 DIYRegistry.com • Built with ❤️⚒️ for makers, builders, and creators</p>
+        <p>All project data stored locally • Domain tools powered by public APIs</p>
     </footer>
-
-    <script>
-        const STORAGE_KEY = 'diyRegistryProjects';
-        let projects = [];
-        let selectedProjectIndex = -1;
-
-        function loadData() {
-            const stored = localStorage.getItem(STORAGE_KEY);
-            if (stored) {
-                projects = JSON.parse(stored);
-            }
-            renderProjects();
-            renderProjectOptions();
-            renderMaterials();
-        }
-
-        function saveData() {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(projects));
-        }
-
-        function addProject() {
-            const name = document.getElementById('project-name').value.trim();
-            const desc = document.getElementById('project-desc').value.trim();
-            if (name) {
-                projects.push({ name, desc: desc || '', materials: [] });
-                saveData();
-                renderProjects();
-                renderProjectOptions();
-                document.getElementById('project-name').value = '';
-                document.getElementById('project-desc').value = '';
-            }
-        }
-
-        function renderProjects() {
-            const list = document.getElementById('project-list');
-            list.innerHTML = '';
-            projects.forEach((project, index) => {
-                const li = document.createElement('li');
-
-                const textSpan = document.createElement('span');
-                textSpan.innerHTML = `<strong>${project.name}</strong>`;
-                if (project.desc) {
-                    textSpan.innerHTML += ` - ${project.desc}`;
-                }
-
-                const buttonDiv = document.createElement('div');
-                buttonDiv.innerHTML = `
-                    <button onclick="selectProject(${index})">Select</button>
-                    <button class="remove" onclick="removeProject(${index})">Remove</button>`;
-
-                li.appendChild(textSpan);
-                li.appendChild(buttonDiv);
-                list.appendChild(li);
-            });
-        }
-
-        function removeProject(index) {
-            if (confirm('Are you sure you want to delete this project and all its materials?')) {
-                projects.splice(index, 1);
-                saveData();
-                renderProjects();
-                renderProjectOptions();
-                if (selectedProjectIndex === index) {
-                    selectedProjectIndex = -1;
-                    renderMaterials();
-                } else if (selectedProjectIndex > index) {
-                    selectedProjectIndex--;
-                }
-            }
-        }
-
-        function selectProject(index) {
-            selectedProjectIndex = index;
-            document.getElementById('select-project').value = index;
-            renderMaterials();
-        }
-
-        function renderProjectOptions() {
-            const select = document.getElementById('select-project');
-            select.innerHTML = '<option value="">-- Select a Project --</option>';
-            projects.forEach((project, index) => {
-                const option = document.createElement('option');
-                option.value = index;
-                option.textContent = project.name;
-                select.appendChild(option);
-            });
-        }
-
-        // Helper to ensure proper URL format
-        function ensureProtocol(url) {
-            if (!url) return '';
-            if (/^https?:\/\//i.test(url)) {
-                return url;
-            }
-            return 'https://' + url;
-        }
-
-        function addMaterial() {
-            if (selectedProjectIndex === -1) {
-                alert('Please select a project first.');
-                return;
-            }
-            const name = document.getElementById('material-name').value.trim();
-            const quantity = parseFloat(document.getElementById('material-quantity').value);
-            const unit = document.getElementById('material-unit').value.trim();
-            const price = parseFloat(document.getElementById('material-price').value);
-            let link = document.getElementById('material-link').value.trim();
-
-            if (name && !isNaN(quantity) && quantity >= 0 && !isNaN(price) && price >= 0) {
-                // Normalize the link by adding https:// if missing
-                link = ensureProtocol(link);
-
-                projects[selectedProjectIndex].materials.push({ 
-                    name, 
-                    quantity, 
-                    unit: unit || '', 
-                    price,
-                    link: link
-                });
-                saveData();
-                renderMaterials();
-                document.getElementById('material-name').value = '';
-                document.getElementById('material-quantity').value = '';
-                document.getElementById('material-unit').value = '';
-                document.getElementById('material-price').value = '';
-                document.getElementById('material-link').value = '';
-            } else {
-                alert('Please fill in all required fields correctly (quantity and price must be valid numbers).');
-            }
-        }
-
-        function calculateTotalCost(materials) {
-            return materials.reduce((total, mat) => total + (mat.quantity * mat.price), 0);
-        }
-
-        function renderMaterials() {
-            const list = document.getElementById('material-list');
-            const totalDiv = document.getElementById('total-cost');
-            list.innerHTML = '<p><strong>Materials for selected project:</strong></p>';
-
-            if (selectedProjectIndex === -1 || !projects[selectedProjectIndex]) {
-                list.innerHTML += '<p>Select a project to view or add materials.</p>';
-                totalDiv.style.display = 'none';
-                return;
-            }
-
-            const materials = projects[selectedProjectIndex].materials;
-
-            if (materials.length === 0) {
-                list.innerHTML += '<p>No materials added yet.</p>';
-                totalDiv.style.display = 'none';
-                return;
-            }
-
-            materials.forEach((material, index) => {
-                const itemCost = material.quantity * material.price;
-                const unitDisplay = material.unit || 'unit(s)';
-
-                const container = document.createElement('div');
-
-                const infoDiv = document.createElement('div');
-                infoDiv.className = 'material-info';
-
-                const strongName = document.createElement('strong');
-                strongName.textContent = material.name;
-                infoDiv.appendChild(strongName);
-
-                infoDiv.appendChild(document.createTextNode(': '));
-                infoDiv.appendChild(document.createTextNode(material.quantity + ' '));
-                infoDiv.appendChild(document.createTextNode(unitDisplay + ' @ $'));
-                infoDiv.appendChild(document.createTextNode(material.price.toFixed(2) + ' each '));
-
-                const strongTotal = document.createElement('strong');
-                strongTotal.textContent = '→ $' + itemCost.toFixed(2);
-                infoDiv.appendChild(strongTotal);
-
-                // Supplier link if present
-                if (material.link) {
-                    const br = document.createElement('br');
-                    infoDiv.appendChild(br);
-
-                    const linkDiv = document.createElement('div');
-                    linkDiv.className = 'material-link';
-                    const linkText = document.createTextNode('Supplier: ');
-                    const linkA = document.createElement('a');
-                    linkA.href = material.link;  // Now correctly uses the full https:// URL
-                    linkA.target = '_blank';
-                    linkA.rel = 'noopener noreferrer';  // Security best practice
-                    linkA.textContent = material.link;
-                    linkDiv.appendChild(linkText);
-                    linkDiv.appendChild(linkA);
-                    infoDiv.appendChild(linkDiv);
-                }
-
-                const removeBtn = document.createElement('button');
-                removeBtn.className = 'remove';
-                removeBtn.textContent = 'Remove';
-                removeBtn.onclick = () => removeMaterial(index);
-
-                container.appendChild(infoDiv);
-                container.appendChild(removeBtn);
-                list.appendChild(container);
-            });
-
-            const total = calculateTotalCost(materials);
-            totalDiv.textContent = `Estimated Total Cost: $${total.toFixed(2)}`;
-            totalDiv.style.display = 'block';
-        }
-
-        function removeMaterial(index) {
-            projects[selectedProjectIndex].materials.splice(index, 1);
-            saveData();
-            renderMaterials();
-        }
-
-        document.getElementById('select-project').addEventListener('change', (e) => {
-            selectedProjectIndex = e.target.value === '' ? -1 : parseInt(e.target.value);
-            renderMaterials();
-        });
-
-        window.onload = loadData;
-    </script>
 </body>
 </html>

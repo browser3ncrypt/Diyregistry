@@ -134,6 +134,18 @@
             font-style: italic;
             display: none;
         }
+        .back-link {
+    display: inline-block;
+    margin: 20px 0;
+    color: #f38020;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
     </style>
 </head>
 <body>
@@ -145,6 +157,8 @@
             <strong>Note on Pricing:</strong> Cloudflare Registrar offers domains <strong>at-cost</strong> (wholesale registry price + ICANN fee where applicable, with no markup). Prices are the same for registration, renewal, and transfer (except for a few TLDs with premium pricing). 
             Cloudflare does not publish a public pricing table due to registry agreements. Actual prices can vary slightly over time and are shown during checkout in the Cloudflare dashboard.
             For the most accurate and current prices, search for a domain at <a href="https://domains.cloudflare.com/" target="_blank">domains.cloudflare.com</a> or check third-party sites like <a href="https://cfdomainpricing.com/" target="_blank">cfdomainpricing.com</a> or <a href="https://tld-list.com/registrars/cloudflare" target="_blank">tld-list.com</a>.
+        </div>
+        <a href="https://diyregistry.com/domainlookup" class="back-link">← Back to Whois Domainlookup</a>
         </div>
 
         <h2>TLDs Recently Added</h2>
@@ -174,9 +188,15 @@
             <div class="tld-badge">.eco</div>
             <div class="tld-badge">.inc</div>
             <div class="tld-badge">.link</div>
-            <div class="tld-badge">.navy</div>
+            <div class="tld-badge">.maga</div>
+            <div class="tld-badge">.monster</div>
+            <div class="tld-badge">.navy</div>       
+            <div class="tld-badge">.porn</div>
+            <div class="tld-badge">.power</div>
+            <div class="tld-badge">.sex</div>
             <div class="tld-badge">.shop</div>
             <div class="tld-badge">.travel</div>
+            <div class="tld-badge">.trump</div>
         </div>
 
         <div class="scroll-note">Scroll to view more</div>
@@ -536,7 +556,7 @@
         </table>
         </div>
 
-        <a href="/" class="back-link">← Back to Whois Domainlookup</a>
+        <a href="https://diyregistry.com/domainlookup" class="back-link">← Back to Whois Domainlookup</a>
     </div>
 
         <footer>
@@ -603,5 +623,32 @@
             document.getElementById('noResults').style.display = visibleCount === 0 ? 'block' : 'none';
         }
     </script>
+<script>
+    // Dynamic Back Navigation
+    document.addEventListener("DOMContentLoaded", function () {
+        const backLink = document.querySelector('.back-link');
+        if (!backLink) return;
+
+        // Check if the user came from the domainlookup page
+        if (document.referrer.includes('/domainlookup')) {
+            backLink.addEventListener('click', function (e) {
+                e.preventDefault();
+                window.history.back();  // Smoothly go back in history
+            });
+        } else {
+            // If no referrer or not from domainlookup, go directly to the page
+            backLink.href = 'https://diyregistry.com/domainlookup';
+        }
+
+        // Optional: Add a nice hover effect
+        backLink.style.transition = 'color 0.3s ease';
+        backLink.addEventListener('mouseenter', () => {
+            backLink.style.color = '#e66f15';
+        });
+        backLink.addEventListener('mouseleave', () => {
+            backLink.style.color = '#f38020';
+        });
+    });
+</script>
 </body>
 </html>

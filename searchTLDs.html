@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloudflare Registrar TLD List - diyregisty.com/TLDlist</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1, h2 {
+            color: #f38020; /* Cloudflare orange */
+            text-align: center;
+        }
+        h2 {
+            margin-top: 40px;
+            border-bottom: 2px solid #f38020;
+            padding-bottom: 10px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .search-box {
+            margin: 20px 0;
+            text-align: center;
+        }
+        #searchInput {
+            width: 60%;
+            max-width: 500px;
+            padding: 12px 20px;
+            font-size: 1.1em;
+            border: 2px solid #f38020;
+            border-radius: 30px;
+            outline: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        #searchInput:focus {
+            border-color: #e66f15;
+            box-shadow: 0 4px 10px rgba(243,128,32,0.2);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f38020;
+            color: white;
+            cursor: pointer;
+            user-select: none;
+            position: relative;
+        }
+        th:hover {
+            background-color: #e66f15;
+        }
+        th::after {
+            content: " \25BE";
+            opacity: 0.5;
+        }
+        th.asc::after {
+            content: " \25B2";
+            opacity: 1;
+        }
+        th.desc::after {
+            content: " \25BC";
+            opacity: 1;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        a {
+            color: #f38020;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .recent-section, .soon-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+            padding: 20px;
+            background-color: #f0f8ff;
+            border-radius: 8px;
+        }
+        .tld-badge {
+            background-color: #f38020;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        .scroll-note {
+            text-align: center;
+            font-style: italic;
+            color: #666;
+            margin: 30px 0;
+        }
+        .note {
+            background-color: #fffacd;
+            padding: 15px;
+            border-left: 4px solid #f38020;
+            margin: 20px 0;
+            font-size: 0.95em;
+        }
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            color: #888;
+            font-size: 0.9em;
+        }
+        .no-results {
+            text-align: center;
+            padding: 20px;
+            color: #999;
+            font-style: italic;
+            display: none;
+        }
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 30px 0;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .pagination button {
+            padding: 8px 16px;
+            background: #f38020;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+        .pagination button:hover {
+            background: #e66f15;
+        }
+        .pagination button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .pagination .page-info {
+            font-size: 1em;
+            color: #555;
+        }
+        .rows-per-page {
+            margin: 15px 0;
+            text-align: right;
+        }
+        .rows-per-page select {
+            padding: 8px;
+            font-size: 1em;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Cloudflare Registrar Supported TLDs</h1>
+        <p style="text-align:center;">Last updated: December 29, 2025</p>
+
+        <div class="note">
+            <strong>Note on Pricing:</strong> Cloudflare Registrar offers domains <strong>at-cost</strong> (wholesale registry price + ICANN fee where applicable, with no markup). Prices are the same for registration, renewal, and transfer (except for a few TLDs with premium pricing). 
+            Cloudflare does not publish a public pricing table due to registry agreements. Actual prices can vary slightly over time and are shown during checkout in the Cloudflare dashboard.
+            For the most accurate and current prices, search for a domain at domains.cloudflare.com or check third-party sites like cfdomainpricing.com or tld-list.com.
+        </div>
+
+        <h2>TLDs Recently Added</h2>
+        <div class="recent-section">
+            <div class="tld-badge">.app</div>
+            <div class="tld-badge">.boo</div>
+            <div class="tld-badge">.dad</div>
+            <div class="tld-badge">.day</div>
+            <div class="tld-badge">.dev</div>
+            <div class="tld-badge">.esq</div>
+            <div class="tld-badge">.foo</div>
+            <div class="tld-badge">.how</div>
+            <div class="tld-badge">.mov</div>
+            <div class="tld-badge">.new</div>
+            <div class="tld-badge">.nexus</div>
+            <div class="tld-badge">.page</div>
+            <div class="tld-badge">.phd</div>
+            <div class="tld-badge">.prof</div>
+            <div class="tld-badge">.rsvp</div>
+            <div class="tld-badge">.soy</div>
+        </div>
+
+        <h2>TLDs Available Soon</h2>
+        <div class="soon-section">
+            <div class="tld-badge">.airforce</div>
+            <div class="tld-badge">.army</div>
+            <div class="tld-badge">.eco</div>
+            <div class="tld-badge">.inc</div>
+            <div class="tld-badge">.link</div>
+            <div class="tld-badge">.navy</div>
+            <div class="tld-badge">.shop</div>
+            <div class="tld-badge">.travel</div>
+        </div>
+
+        <div class="scroll-note">Scroll to view more</div>
+
+        <h2>Registry Policies</h2>
+
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Search by TLD, registry, or policy keyword..." autofocus>
+        </div>
+
+        <div class="rows-per-page">
+            Show <select id="rowsPerPage">
+                <option value="10">10</option>
+                <option value="25" selected>25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+                <option value="9999">All</option>
+            </select> entries per page
+        </div>
+
+        <div id="noResults" class="no-results">No TLDs match your search.</div>
+
+        <table id="tldTable">
+            <thead>
+                <tr>
+                    <th onclick="sortTable(0)">TLD</th>
+                    <th onclick="sortTable(1)">Registry</th>
+                    <th onclick="sortTable(2)">Policy Link</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                <!-- All rows will be inserted here by JavaScript -->
+            </tbody>
+        </table>
+
+        <div class="pagination" id="pagination">
+            <!-- Pagination buttons will be generated by JavaScript -->
+        </div>
+
+        <footer>
+            This is an unofficial list based on provided data. For the official list of supported TLDs, visit Cloudflare TLD Policies. Prices are at-cost and not publicly listed by Cloudflare.
+        </footer>
+    </div>
+
+    <script>
+        // Full data array
+        const tldData = [
+            { tld: ".academy", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".accountant", registry: "GRS Domains", policy: "-" },
+            { tld: ".accountants", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".actor", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".agency", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".apartments", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".app", registry: "Google Registry", policy: ' https://get.app /' },
+            { tld: ".associates", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".attorney", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".auction", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".band", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".bar", registry: "PUNTO 2012", policy: ' http://www.register.bar/policies /' },
+            { tld: ".bargains", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".beer", registry: "Godaddy", policy: "-" },
+            { tld: ".bet", registry: "Afilias", policy: ' http://www.afilias.info/policies ' },
+            { tld: ".bid", registry: "GRS Domains", policy: "-" },
+            { tld: ".bike", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".bingo", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".biz", registry: "Godaddy", policy: "-" },
+            { tld: ".black", registry: "Afilias", policy: ' http://www.afilias.info/policies ' },
+            { tld: ".blog", registry: "Knock Knock WHOIS There", policy: ' https://my.blog/registry-policies-privacy /' },
+            { tld: ".blue", registry: "Afilias", policy: ' http://www.afilias.info/policies ' },
+            { tld: ".boo", registry: "Google Registry", policy: ' https://hey.boo /' },
+            { tld: ".boston", registry: "Godaddy", policy: "-" },
+            { tld: ".boutique", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".broker", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".builders", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".business", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".cab", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".cafe", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".camera", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".camp", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".capital", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".cards", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".care", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".careers", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".casa", registry: "Godaddy", policy: "-" },
+            { tld: ".cash", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".casino", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".catering", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".cc", registry: "Verisign", policy: "-" },
+            { tld: ".center", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".ceo", registry: "PeopleBrowsr", policy: ' https://claim.ceo/terms/overview ' },
+            { tld: ".chat", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".cheap", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".church", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".city", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".claims", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".cleaning", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".clinic", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".clothing", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".cloud", registry: "Aruba PEC SpA", policy: "-" },
+            { tld: ".club", registry: "Godaddy", policy: "-" },
+            { tld: ".co", registry: "CO Internet SAS", policy: "-" },
+            { tld: ".coach", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".codes", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".coffee", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".college", registry: "XYZ", policy: ' http://nic.college/files/COLLEGE-policies.pdf ' },
+            { tld: ".com", registry: "Verisign", policy: "-" },
+            { tld: ".com.co", registry: "CO Internet SAS", policy: "-" },
+            { tld: ".community", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".company", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".compare", registry: "Godaddy", policy: "-" },
+            { tld: ".computer", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".condos", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".construction", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".consulting", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".contact", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".contractors", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".cooking", registry: "Godaddy", policy: "-" },
+            { tld: ".cool", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".co.uk", registry: "Nominet", policy: ' https://www.nominet.uk/domain-registration-tandc ' },
+            { tld: ".coupons", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".credit", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".creditcard", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".cricket", registry: "GRS Domains", policy: "-" },
+            { tld: ".cruises", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".dad", registry: "Google Registry", policy: "-" },
+            { tld: ".dance", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".date", registry: "GRS Domains", policy: "-" },
+            { tld: ".dating", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".day", registry: "Google Registry", policy: ' https://new.day /' },
+            { tld: ".deals", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".degree", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".delivery", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".democrat", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".dental", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".dentist", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".design", registry: "Top Level Design", policy: ' http://toplevel.design/policy /' },
+            { tld: ".dev", registry: "Google Registry", policy: ' https://get.dev /' },
+            { tld: ".diamonds", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".digital", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".direct", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".directory", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".discount", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".doctor", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".dog", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".domains", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".download", registry: "GRS Domains", policy: "-" },
+            { tld: ".education", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".email", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".energy", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".engineer", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".engineering", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".enterprises", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".equipment", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".esq", registry: "Google Registry", policy: "-" },
+            { tld: ".estate", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".events", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".exchange", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".expert", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".express", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".fail", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+             { tld: ".faith", registry: "GRS Domains", policy: "-" },
+            { tld: ".family", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".fans", registry: "Asiamix Digital", policy: ' http://nic.fans/en/h-col-104.html ' },
+            { tld: ".farm", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".fashion", registry: "Godaddy", policy: "-" },
+            { tld: ".finance", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".financial", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".fish", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".fishing", registry: "Godaddy", policy: "-" },
+            { tld: ".fit", registry: "Godaddy", policy: "-" },
+            { tld: ".fitness", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".flights", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".florist", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".fm", registry: "BRS Media", policy: "-" },
+            { tld: ".foo", registry: "Google Registry", policy: "-" },
+            { tld: ".football", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".forex", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".forsale", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+      { tld: ".foundation", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".fun", registry: "Radix", policy: ' http://radix.website/policies /' },
+            { tld: ".fund", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".furniture", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".futbol", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".fyi", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".gallery", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".games", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".garden", registry: "Godaddy", policy: "-" },
+            { tld: ".gifts", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".gives", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".glass", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".gmbh", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+               { tld: ".gold", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".golf", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".graphics", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".gratis", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".green", registry: "Afilias", policy: ' http://www.afilias.info/policies ' },
+            { tld: ".gripe", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".group", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".guide", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".guru", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".haus", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".health", registry: "dotHealth LLC", policy: "-" },
+            { tld: ".healthcare", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".hockey", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".holdings", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".holiday", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".horse", registry: "Godaddy", policy: "-" },
+            { tld: ".hospital", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".host", registry: "Radix", policy: ' http://radix.website/policies /' },
+            { tld: ".house", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".how", registry: "Google Registry", policy: ' https://get.how /' },
+            { tld: ".immo", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".immobilien", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".industries", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".info", registry: "Afilias", policy: ' http://www.afilias.info/policies ' },
+            { tld: ".ink", registry: "Top Level Design", policy: ' http://toplevel.design/policy /' },
+            { tld: ".institute", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".insure", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".international", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+              { tld: ".investments", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".io", registry: "NIC.io", policy: ' http://www.nic.io/terms.htm ' },
+            { tld: ".irish", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+     { tld: ".jetzt", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".jewelry", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".kaufen", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".kim", registry: "Afilias", policy: ' http://www.afilias.info/policies ' },
+            { tld: ".kitchen", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".land", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".lawyer", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".lease", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".legal", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".lgbt", registry: "Afilias", policy: ' http://www.afilias.info/policies ' },
+            { tld: ".life", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".lighting", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".limited", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".limo", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".live", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".loan", registry: "GRS Domains", policy: "-" },
+            { tld: ".loans", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".love", registry: "Merchant Law Group LLP", policy: ' Policy PDF' },
+            { tld: ".ltd", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".luxe", registry: "Godaddy", policy: "-" },
+            { tld: ".maison", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".management", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".market", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".marketing", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".markets", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".mba", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".me", registry: "DoMEn d.o.o", policy: ' https://domain.me/policies ' },
+            { tld: ".media", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".memorial", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".men", registry: "GRS Domains", policy: "-" },
+            { tld: ".me.uk", registry: "Nominet", policy: ' https://www.nominet.uk/domain-registration-tandc ' },
+            { tld: ".miami", registry: "Godaddy", policy: "-" },
+            { tld: ".mobi", registry: "Dotmobi", policy: ' Anti-Abuse Policy' },
+            { tld: ".moda", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".money", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".mortgage", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".mov", registry: "Google Registry", policy: "-" },
+            { tld: ".movie", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".net", registry: "Verisign", policy: "-" },
+            { tld: ".net.co", registry: "CO Internet SAS", policy: "-" },
+            { tld: ".network", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".new", registry: "Google Registry", policy: ' https://get.new /' },
+            { tld: ".news", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".nexus", registry: "Google Registry", policy: "-" },
+            { tld: ".ninja", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".nom.co", registry: "CO Internet SAS", policy: "-" },
+            { tld: ".observer", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".online", registry: "Radix", policy: ' http://radix.website/policies /' },
+            { tld: ".org", registry: "PIR", policy: ' https://pir.org/our-impact/privacy /' },
+            { tld: ".org.uk", registry: "Nominet", policy: ' https://www.nominet.uk/domain-registration-tandc ' },
+            { tld: ".page", registry: "Google Registry", policy: ' https://get.page /' },
+            { tld: ".partners", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".parts", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".party", registry: "GRS Domains", policy: "-" },
+            { tld: ".pet", registry: "Afilias", policy: ' http://www.afilias.info/policies ' },
+            { tld: ".phd", registry: "Google Registry", policy: "-" },
+            { tld: ".photography", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".photos", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".pictures", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".pink", registry: "Afilias", policy: ' http://www.afilias.info/policies ' },
+            { tld: ".pizza", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".place", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".plumbing", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+      { tld: ".plus", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".press", registry: "Radix", policy: ' http://radix.website/policies /' },
+            { tld: ".pro", registry: "Afilias", policy: ' http://www.afilias.info/policies ' },
+            { tld: ".productions", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".prof", registry: "Google Registry", policy: "-" },
+            { tld: ".promo", registry: "Get", policy: ' http://get.promo/about ' },
+            { tld: ".properties", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".pub", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".racing", registry: "GRS Domains", policy: "-" },
+            { tld: ".radio.fm", registry: "BRS Media", policy: "-" },
+            { tld: ".realty", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".recipes", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".red", registry: "Afilias", policy: ' http://www.afilias.info/policies ' },
+            { tld: ".rehab", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".reise", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".reisen", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".rent", registry: "XYZ", policy: ' http://nic.rent/files/rent-policies.pdf ' },
+            { tld: ".rentals", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".repair", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".report", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".republican", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".rest", registry: "PUNTO 2012", policy: ' http://www.register.rest/policies /' },
+            { tld: ".restaurant", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".review", registry: "GRS Domains", policy: "-" },
+            { tld: ".reviews", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".rip", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".rocks", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".rodeo", registry: "Godaddy", policy: "-" },
+            { tld: ".rsvp", registry: "Google Registry", policy: ' https://get.rsvp /' },
+            { tld: ".run", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+              { tld: ".sale", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".salon", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".sarl", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".school", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".schule", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".science", registry: "GRS Domains", policy: "-" },
+            { tld: ".security", registry: "XYZ", policy: ' https://nic.security /' },
+            { tld: ".select", registry: "Godaddy", policy: "-" },
+            { tld: ".services", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".shoes", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".shopping", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".show", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".singles", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".site", registry: "Radix", policy: ' http://radix.website/policies /' },
+            { tld: ".soccer", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".social", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".software", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".solar", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".solutions", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".soy", registry: "Google Registry", policy: ' https://iam.soy /' },
+            { tld: ".space", registry: "Radix", policy: ' http://radix.website/policies /' },
+            { tld: ".storage", registry: "XYZ", policy: ' https://go.storage /' },
+            { tld: ".store", registry: "Radix", policy: ' http://radix.website/policies /' },
+            { tld: ".stream", registry: "GRS Domains", policy: "-" },
+            { tld: ".studio", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".style", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".supplies", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".supply", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".support", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".surf", registry: "Godaddy", policy: "-" },
+            { tld: ".surgery", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".systems", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".tax", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".taxi", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".team", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".tech", registry: "Radix", policy: ' http://radix.website/policies /' },
+            { tld: ".technology", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".tennis", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+     { tld: ".theater", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".theatre", registry: "XYZ", policy: ' http://nic.theatre /' },
+            { tld: ".tienda", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".tips", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".tires", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".today", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".tools", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".tours", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".town", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".toys", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".trade", registry: "GRS Domains", policy: "-" },
+            { tld: ".trading", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".training", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".tv", registry: "Verisign", policy: "-" },
+            { tld: ".uk", registry: "Nominet", policy: ' https://www.nominet.uk/domain-registration-tandc ' },
+            { tld: ".university", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".us", registry: "Godaddy", policy: ' https://www.about.us/policies ' },
+            { tld: ".vacations", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".ventures", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".vet", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".viajes", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".video", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".villas", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".vin", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".vip", registry: "Godaddy", policy: "-" },
+            { tld: ".vision", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".vodka", registry: "Godaddy", policy: "-" },
+            { tld: ".voyage", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".watch", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".webcam", registry: "GRS Domains", policy: "-" },
+            { tld: ".website", registry: "Radix", policy: ' http://radix.website/policies /' },
+            { tld: ".wedding", registry: "Godaddy", policy: "-" },
+            { tld: ".wiki", registry: "Top Level Design", policy: ' http://toplevel.design/policy /' },
+            { tld: ".win", registry: "GRS Domains", policy: "-" },
+            { tld: ".wine", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".work", registry: "Godaddy", policy: "-" },
+            { tld: ".works", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".world", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".wtf", registry: "Identity Digital", policy: ' https://identity.digital/policies /' },
+            { tld: ".xyz", registry: "XYZ", policy: ' https://gen.xyz/registrationterms ' },
+            { tld: ".yoga", registry: "Godaddy", policy: "-" },
+            { tld: ".zone", registry: "Identity Digital", policy: ' https://identity.digital/policies /' }
+        ];
+
+
+         let currentData = [...tldData]; // Working copy for sorting/filtering
+        let currentPage = 1;
+        let rowsPerPage = 25;
+
+        const tableBody = document.getElementById('tableBody');
+        const pagination = document.getElementById('pagination');
+        const searchInput = document.getElementById('searchInput');
+        const rowsPerPageSelect = document.getElementById('rowsPerPage');
+        const noResults = document.getElementById('noResults');
+
+        function renderTable() {
+            tableBody.innerHTML = '';
+            const start = (currentPage - 1) * rowsPerPage;
+            const end = start + rowsPerPage;
+            const paginatedData = currentData.slice(start, end);
+
+            if (paginatedData.length === 0) {
+                noResults.style.display = 'block';
+            } else {
+                noResults.style.display = 'none';
+                paginatedData.forEach(item => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `<td>\( {item.tld}</td><td> \){item.registry}</td><td>${item.policy}</td>`;
+                    tableBody.appendChild(row);
+                });
+            }
+
+            renderPagination();
+        }
+
+        function renderPagination() {
+            pagination.innerHTML = '';
+            const totalPages = Math.ceil(currentData.length / rowsPerPage);
+
+            const prevButton = document.createElement('button');
+            prevButton.textContent = 'Previous';
+            prevButton.disabled = currentPage === 1;
+            prevButton.onclick = () => {
+                currentPage--;
+                renderTable();
+            };
+            pagination.appendChild(prevButton);
+
+            const pageInfo = document.createElement('span');
+            pageInfo.className = 'page-info';
+            pageInfo.textContent = `Page ${currentPage} of \( {totalPages} ( \){currentData.length} results)`;
+            pagination.appendChild(pageInfo);
+
+            const nextButton = document.createElement('button');
+            nextButton.textContent = 'Next';
+            nextButton.disabled = currentPage === totalPages || totalPages === 0;
+            nextButton.onclick = () => {
+                currentPage++;
+                renderTable();
+            };
+            pagination.appendChild(nextButton);
+        }
+
+        function filterAndRender() {
+            const filter = searchInput.value.toLowerCase();
+            currentData = tldData.filter(item => 
+                item.tld.toLowerCase().includes(filter) ||
+                item.registry.toLowerCase().includes(filter) ||
+                item.policy.toLowerCase().includes(filter)
+            );
+            currentPage = 1;
+            renderTable();
+        }
+
+        function sortTable(colIndex) {
+            const dir = document.querySelectorAll('th')[colIndex].classLis t.toggle('asc') ? 'asc' : 'desc';
+            if (!document.querySelectorAll('th')[colIndex].classL ist.contains('asc')) {
+                document.querySelectorAll('th')[colIndex].classLis t.add('desc');
+            }
+            document.querySelectorAll('th').forEach((th, i) => {
+                if (i !== colIndex) {
+                    th.classList.remove('asc', 'desc');
+                }
+            });
+
+            currentData.sort((a, b) => {
+                let A = [a.tld, a.registry, a.policy][colIndex];
+                let B = [b.tld, b.registry, b.policy][colIndex];
+                A = A.replace(/<[^>]*>/g, '').toLowerCase(); // strip HTML for sorting
+                B = B.replace(/<[^>]*>/g, '').toLowerCase();
+                if (A < B) return dir === 'asc' ? -1 : 1;
+                if (A > B) return dir === 'asc' ? 1 : -1;
+                return 0;
+            });
+
+            renderTable();
+        }
+
+        // Event listeners
+        searchInput.addEventListener('input', filterAndRender);
+        rowsPerPageSelect.addEventListener('change', () => {
+            rowsPerPage = rowsPerPageSelect.value === '9999' ? currentData.length : parseInt(rowsPerPageSelect.value);
+            currentPage = 1;
+            renderTable();
+        });
+
+        // Initial render
+        renderTable();
+    </script>
+</body>
+</html>

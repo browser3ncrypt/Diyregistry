@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloudflare Registrar TLD List - diyregisty.com/TLDlist</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1, h2 {
+            color: #f38020; /* Cloudflare orange */
+            text-align: center;
+        }
+        h2 {
+            margin-top: 40px;
+            border-bottom: 2px solid #f38020;
+            padding-bottom: 10px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f38020;
+            color: white;
+            cursor: pointer;
+            user-select: none;
+            position: relative;
+        }
+        th:hover {
+            background-color: #e66f15;
+        }
+        th::after {
+            content: " \25BE"; /* down arrow */
+            opacity: 0.5;
+        }
+        th.asc::after {
+            content: " \25B2"; /* up arrow */
+            opacity: 1;
+        }
+        th.desc::after {
+            content: " \25BC"; /* down arrow */
+            opacity: 1;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        a {
+            color: #f38020;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .recent-section, .soon-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+            padding: 20px;
+            background-color: #f0f8ff;
+            border-radius: 8px;
+        }
+        .tld-badge {
+            background-color: #f38020;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        .scroll-note {
+            text-align: center;
+            font-style: italic;
+            color: #666;
+            margin: 30px 0;
+        }
+        .note {
+            background-color: #fffacd;
+            padding: 15px;
+            border-left: 4px solid #f38020;
+            margin: 20px 0;
+            font-size: 0.95em;
+        }
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            color: #888;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Cloudflare Registrar Supported TLDs</h1>
+        <p style="text-align:center;">Last updated: December 29, 2025</p>
+
+        <div class="note">
+            <strong>Note on Pricing:</strong> Cloudflare Registrar offers domains <strong>at-cost</strong> (wholesale registry price + ICANN fee where applicable, with no markup). Prices are the same for registration, renewal, and transfer (except for a few TLDs with premium pricing). 
+            Cloudflare does not publish a public pricing table due to registry agreements. Actual prices can vary slightly over time and are shown during checkout in the Cloudflare dashboard.
+            For the most accurate and current prices, search for a domain at <a href="https://domains.cloudflare.com/" target="_blank">domains.cloudflare.com</a> or check third-party sites like <a href="https://cfdomainpricing.com/" target="_blank">cfdomainpricing.com</a> or <a href="https://tld-list.com/registrars/cloudflare" target="_blank">tld-list.com</a>.
+        </div>
+
+        <h2>TLDs Recently Added</h2>
+        <div class="recent-section">
+            <div class="tld-badge">.app</div>
+            <div class="tld-badge">.boo</div>
+            <div class="tld-badge">.dad</div>
+            <div class="tld-badge">.day</div>
+            <div class="tld-badge">.dev</div>
+            <div class="tld-badge">.esq</div>
+            <div class="tld-badge">.foo</div>
+            <div class="tld-badge">.how</div>
+            <div class="tld-badge">.mov</div>
+            <div class="tld-badge">.new</div>
+            <div class="tld-badge">.nexus</div>
+            <div class="tld-badge">.page</div>
+            <div class="tld-badge">.phd</div>
+            <div class="tld-badge">.prof</div>
+            <div class="tld-badge">.rsvp</div>
+            <div class="tld-badge">.soy</div>
+        </div>
+
+        <h2>TLDs Available Soon</h2>
+        <div class="soon-section">
+            <div class="tld-badge">.airforce</div>
+            <div class="tld-badge">.army</div>
+            <div class="tld-badge">.eco</div>
+            <div class="tld-badge">.inc</div>
+            <div class="tld-badge">.link</div>
+            <div class="tld-badge">.navy</div>
+            <div class="tld-badge">.shop</div>
+            <div class="tld-badge">.travel</div>
+        </div>
+
+        <div class="scroll-note">Scroll to view more</div>
+
+        <h2>Registry Policies</h2>
+        <table id="tldTable">
+            <thead>
+                <tr>
+                    <th onclick="sortTable(0)">TLD</th>
+                    <th onclick="sortTable(1)">Registry</th>
+                    <th onclick="sortTable(2)">Policy Link</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>.academy</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.accountant</td><td>GRS Domains</td><td>-</td></tr>
+                <tr><td>.accountants</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.actor</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.agency</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.apartments</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.app</td><td>Google Registry</td><td><a href="https://get.app/" target="_blank">https://get.app/</a></td></tr>
+                <tr><td>.associates</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.attorney</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.auction</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.band</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.bar</td><td>PUNTO 2012</td><td><a href="http://www.register.bar/policies/" target="_blank">http://www.register.bar/policies/</a></td></tr>
+                <tr><td>.bargains</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.beer</td><td>Godaddy</td><td>-</td></tr>
+                <tr><td>.bet</td><td>Afilias</td><td><a href="http://www.afilias.info/policies" target="_blank">http://www.afilias.info/policies</a></td></tr>
+                <tr><td>.bid</td><td>GRS Domains</td><td>-</td></tr>
+                <tr><td>.bike</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.bingo</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.biz</td><td>Godaddy</td><td>-</td></tr>
+                <tr><td>.black</td><td>Afilias</td><td><a href="http://www.afilias.info/policies" target="_blank">http://www.afilias.info/policies</a></td></tr>
+                <tr><td>.blog</td><td>Knock Knock WHOIS There</td><td><a href="https://my.blog/registry-policies-privacy/" target="_blank">https://my.blog/registry-policies-privacy/</a></td></tr>
+                <tr><td>.blue</td><td>Afilias</td><td><a href="http://www.afilias.info/policies" target="_blank">http://www.afilias.info/policies</a></td></tr>
+                <tr><td>.boo</td><td>Google Registry</td><td><a href="https://hey.boo/" target="_blank">https://hey.boo/</a></td></tr>
+                <tr><td>.boston</td><td>Godaddy</td><td>-</td></tr>
+                <tr><td>.boutique</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.broker</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.builders</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.business</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.cab</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.cafe</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.camera</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.camp</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.capital</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.cards</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.care</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.careers</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.casa</td><td>Godaddy</td><td>-</td></tr>
+                <tr><td>.cash</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.casino</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.catering</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.cc</td><td>Verisign</td><td>-</td></tr>
+                <tr><td>.center</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.ceo</td><td>PeopleBrowsr</td><td><a href="https://claim.ceo/terms/overview" target="_blank">https://claim.ceo/terms/overview</a></td></tr>
+                <tr><td>.chat</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.cheap</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.church</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.city</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.claims</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.cleaning</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.clinic</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.clothing</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.cloud</td><td>Aruba PEC SpA</td><td>-</td></tr>
+                <tr><td>.club</td><td>Godaddy</td><td>-</td></tr>
+                <tr><td>.co</td><td>CO Internet SAS</td><td>-</td></tr>
+                <tr><td>.coach</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.codes</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.coffee</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.college</td><td>XYZ</td><td><a href="http://nic.college/files/COLLEGE-policies.pdf" target="_blank">http://nic.college/files/COLLEGE-policies.pdf</a></td></tr>
+                <tr><td>.com</td><td>Verisign</td><td>-</td></tr>
+                <tr><td>.com.co</td><td>CO Internet SAS</td><td>-</td></tr>
+                <tr><td>.community</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.company</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.compare</td><td>Godaddy</td><td>-</td></tr>
+                <tr><td>.computer</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.condos</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.construction</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.consulting</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.contact</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.contractors</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.cooking</td><td>Godaddy</td><td>-</td></tr>
+                <tr><td>.cool</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.co.uk</td><td>Nominet</td><td><a href="https://www.nominet.uk/domain-registration-tandc" target="_blank">https://www.nominet.uk/domain-registration-tandc</a></td></tr>
+                <tr><td>.coupons</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.credit</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.creditcard</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.cricket</td><td>GRS Domains</td><td>-</td></tr>
+                <tr><td>.cruises</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.dad</td><td>Google Registry</td><td>-</td></tr>
+                <tr><td>.dance</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.date</td><td>GRS Domains</td><td>-</td></tr>
+                <tr><td>.dating</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.day</td><td>Google Registry</td><td><a href="https://new.day/" target="_blank">https://new.day/</a></td></tr>
+                <tr><td>.deals</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.degree</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.delivery</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.democrat</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.dental</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.dentist</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.design</td><td>Top Level Design</td><td><a href="http://toplevel.design/policy/" target="_blank">http://toplevel.design/policy/</a></td></tr>
+                <tr><td>.dev</td><td>Google Registry</td><td><a href="https://get.dev/" target="_blank">https://get.dev/</a></td></tr>
+                <tr><td>.diamonds</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.digital</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.direct</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.directory</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.discount</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.doctor</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.dog</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.domains</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.download</td><td>GRS Domains</td><td>-</td></tr>
+                <tr><td>.education</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.email</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.energy</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.engineer</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.engineering</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.enterprises</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.equipment</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.esq</td><td>Google Registry</td><td>-</td></tr>
+                <tr><td>.estate</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.events</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.exchange</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.expert</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.express</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.fail</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.faith</td><td>GRS Domains</td><td>-</td></tr>
+                <tr><td>.family</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.fans</td><td>Asiamix Digital</td><td><a href="http://nic.fans/en/h-col-104.html" target="_blank">http://nic.fans/en/h-col-104.html</a></td></tr>
+                <tr><td>.farm</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.fashion</td><td>Godaddy</td><td>-</td></tr>
+                <tr><td>.finance</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.financial</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.fish</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.fishing</td><td>Godaddy</td><td>-</td></tr>
+                <tr><td>.fit</td><td>Godaddy</td><td>-</td></tr>
+                <tr><td>.fitness</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.flights</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.florist</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.fm</td><td>BRS Media</td><td>-</td></tr>
+                <tr><td>.foo</td><td>Google Registry</td><td>-</td></tr>
+                <tr><td>.football</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.forex</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.forsale</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.foundation</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.fun</td><td>Radix</td><td><a href="http://radix.website/policies/" target="_blank">http://radix.website/policies/</a></td></tr>
+                <tr><td>.fund</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.furniture</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.futbol</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.fyi</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.gallery</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.games</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.garden</td><td>Godaddy</td><td>-</td></tr>
+                <tr><td>.gifts</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.gives</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.glass</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.gmbh</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.gold</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.golf</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.graphics</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.gratis</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.green</td><td>Afilias</td><td><a href="http://www.afilias.info/policies" target="_blank">http://www.afilias.info/policies</a></td></tr>
+                <tr><td>.gripe</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.group</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.guide</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.guru</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.haus</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.health</td><td>dotHealth LLC</td><td>-</td></tr>
+                <tr><td>.healthcare</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.hockey</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.holdings</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.holiday</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.horse</td><td>Godaddy</td><td>-</td></tr>
+                <tr><td>.hospital</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.host</td><td>Radix</td><td><a href="http://radix.website/policies/" target="_blank">http://radix.website/policies/</a></td></tr>
+                <tr><td>.house</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.how</td><td>Google Registry</td><td><a href="https://get.how/" target="_blank">https://get.how/</a></td></tr>
+                <tr><td>.immo</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.immobilien</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.industries</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.info</td><td>Afilias</td><td><a href="http://www.afilias.info/policies" target="_blank">http://www.afilias.info/policies</a></td></tr>
+               <tr><td>.ink</td><td>Top Level Design</td><td><a href="http://toplevel.design/policy/" target="_blank">http://toplevel.design/policy/</a></td></tr>
+                <tr><td>.institute</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.insure</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.international</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.investments</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.io</td><td>NIC.io</td><td><a href="http://www.nic.io/terms.htm" target="_blank">http://www.nic.io/terms.htm</a></td></tr>
+                <tr><td>.irish</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.jetzt</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.jewelry</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.kaufen</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.kim</td><td>Afilias</td><td><a href="http://www.afilias.info/policies" target="_blank">http://www.afilias.info/policies</a></td></tr>
+                <tr><td>.kitchen</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.land</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.lawyer</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.lease</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.legal</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.lgbt</td><td>Afilias</td><td><a href="http://www.afilias.info/policies" target="_blank">http://www.afilias.info/policies</a></td></tr>
+                <tr><td>.life</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.lighting</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.limited</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.limo</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.live</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.loan</td><td>GRS Domains</td><td>-</td></tr>
+                <tr><td>.loans</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.love</td><td>Merchant Law Group LLP</td><td><a href="http://getdotlove.domains/wp-content/uploads/2015/05/Policies-dotlove-201504234.pdf" target="_blank">Policy PDF</a></td></tr>
+                <tr><td>.ltd</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.luxe</td><td>Godaddy</td><td>-</td></tr>
+                <tr><td>.maison</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.management</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.market</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.marketing</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.markets</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.mba</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.me</td><td>DoMEn d.o.o</td><td><a href="https://domain.me/policies" target="_blank">https://domain.me/policies</a></td></tr>
+                <tr><td>.media</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.memorial</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.men</td><td>GRS Domains</td><td>-</td></tr>
+                <tr><td>.me.uk</td><td>Nominet</td><td><a href="https://www.nominet.uk/domain-registration-tandc" target="_blank">https://www.nominet.uk/domain-registration-tandc</a></td></tr>
+                <tr><td>.miami</td><td>Godaddy</td><td>-</td></tr>
+                <tr><td>.mobi</td><td>Dotmobi</td><td><a href="http://dotmobi.mobi/about/afilias-anti-abuse-policy" target="_blank">Anti-Abuse Policy</a></td></tr>
+                <tr><td>.moda</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.money</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.mortgage</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.mov</td><td>Google Registry</td><td>-</td></tr>
+                <tr><td>.movie</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.net</td><td>Verisign</td><td>-</td></tr>
+                <tr><td>.net.co</td><td>CO Internet SAS</td><td>-</td></tr>
+                <tr><td>.network</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.new</td><td>Google Registry</td><td><a href="https://get.new/" target="_blank">https://get.new/</a></td></tr>
+                <tr><td>.news</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.nexus</td><td>Google Registry</td><td>-</td></tr>
+                <tr><td>.ninja</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.nom.co</td><td>CO Internet SAS</td><td>-</td></tr>
+                <tr><td>.observer</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.online</td><td>Radix</td><td><a href="http://radix.website/policies/" target="_blank">http://radix.website/policies/</a></td></tr>
+                <tr><td>.org</td><td>PIR</td><td><a href="https://pir.org/our-impact/privacy/" target="_blank">https://pir.org/our-impact/privacy/</a></td></tr>
+                <tr><td>.org.uk</td><td>Nominet</td><td><a href="https://www.nominet.uk/domain-registration-tandc" target="_blank">https://www.nominet.uk/domain-registration-tandc</a></td></tr>
+                <tr><td>.page</td><td>Google Registry</td><td><a href="https://get.page/" target="_blank">https://get.page/</a></td></tr>
+                <tr><td>.partners</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.parts</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.party</td><td>GRS Domains</td><td>-</td></tr>
+                <tr><td>.pet</td><td>Afilias</td><td><a href="http://www.afilias.info/policies" target="_blank">http://www.afilias.info/policies</a></td></tr>
+                <tr><td>.phd</td><td>Google Registry</td><td>-</td></tr>
+                <tr><td>.photography</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.photos</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.pictures</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.pink</td><td>Afilias</td><td><a href="http://www.afilias.info/policies" target="_blank">http://www.afilias.info/policies</a></td></tr>
+                <tr><td>.pizza</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.place</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.plumbing</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.plus</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.press</td><td>Radix</td><td><a href="http://radix.website/policies/" target="_blank">http://radix.website/policies/</a></td></tr>
+                <tr><td>.pro</td><td>Afilias</td><td><a href="http://www.afilias.info/policies" target="_blank">http://www.afilias.info/policies</a></td></tr>
+                <tr><td>.productions</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.prof</td><td>Google Registry</td><td>-</td></tr>
+                <tr><td>.promo</td><td>Get</td><td><a href="http://get.promo/about" target="_blank">http://get.promo/about</a></td></tr>
+                <tr><td>.properties</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.pub</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.racing</td><td>GRS Domains</td><td>-</td></tr>
+                <tr><td>.radio.fm</td><td>BRS Media</td><td>-</td></tr>
+                <tr><td>.realty</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.recipes</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.red</td><td>Afilias</td><td><a href="http://www.afilias.info/policies" target="_blank">http://www.afilias.info/policies</a></td></tr>
+                <tr><td>.rehab</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.reise</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.reisen</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.rent</td><td>XYZ</td><td><a href="http://nic.rent/files/rent-policies.pdf" target="_blank">http://nic.rent/files/rent-policies.pdf</a></td></tr>
+                <tr><td>.rentals</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.repair</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.report</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.republican</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.rest</td><td>PUNTO 2012</td><td><a href="http://www.register.rest/policies/" target="_blank">http://www.register.rest/policies/</a></td></tr>
+                <tr><td>.restaurant</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.review</td><td>GRS Domains</td><td>-</td></tr>
+                <tr><td>.reviews</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.rip</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.rocks</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.rodeo</td><td>Godaddy</td><td>-</td></tr>
+                <tr><td>.rsvp</td><td>Google Registry</td><td><a href="https://get.rsvp/" target="_blank">https://get.rsvp/</a></td></tr>
+                <tr><td>.run</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.sale</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.salon</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.sarl</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.school</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.schule</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.science</td><td>GRS Domains</td><td>-</td></tr>
+                <tr><td>.security</td><td>XYZ</td><td><a href="https://nic.security/" target="_blank">https://nic.security/</a></td></tr>
+                <tr><td>.select</td><td>Godaddy</td><td>-</td></tr>
+                <tr><td>.services</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.shoes</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.shopping</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.show</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.singles</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.site</td><td>Radix</td><td><a href="http://radix.website/policies/" target="_blank">http://radix.website/policies/</a></td></tr>
+                <tr><td>.soccer</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.social</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.software</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.solar</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.solutions</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.soy</td><td>Google Registry</td><td><a href="https://iam.soy/" target="_blank">https://iam.soy/</a></td></tr>
+                <tr><td>.space</td><td>Radix</td><td><a href="http://radix.website/policies/" target="_blank">http://radix.website/policies/</a></td></tr>
+                <tr><td>.storage</td><td>XYZ</td><td><a href="https://go.storage/" target="_blank">https://go.storage/</a></td></tr>
+                <tr><td>.store</td><td>Radix</td><td><a href="http://radix.website/policies/" target="_blank">http://radix.website/policies/</a></td></tr>
+                <tr><td>.stream</td><td>GRS Domains</td><td>-</td></tr>
+                <tr><td>.studio</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.style</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.supplies</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.supply</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.support</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.surf</td><td>Godaddy</td><td>-</td></tr>
+                <tr><td>.surgery</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.systems</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.tax</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.taxi</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.team</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.tech</td><td>Radix</td><td><a href="http://radix.website/policies/" target="_blank">http://radix.website/policies/</a></td></tr>
+                <tr><td>.technology</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.tennis</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.theater</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.theatre</td><td>XYZ</td><td><a href="http://nic.theatre/" target="_blank">http://nic.theatre/</a></td></tr>
+                <tr><td>.tienda</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.tips</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.tires</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.today</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.tools</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.tours</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.town</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.toys</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.trade</td><td>GRS Domains</td><td>-</td></tr>
+                <tr><td>.trading</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.training</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.tv</td><td>Verisign</td><td>-</td></tr>
+                <tr><td>.uk</td><td>Nominet</td><td><a href="https://www.nominet.uk/domain-registration-tandc" target="_blank">https://www.nominet.uk/domain-registration-tandc</a></td></tr>
+                <tr><td>.university</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.us</td><td>Godaddy</td><td><a href="https://www.about.us/policies" target="_blank">https://www.about.us/policies</a></td></tr>
+                <tr><td>.vacations</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.ventures</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.vet</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.viajes</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.video</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.villas</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.vin</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.vip</td><td>Godaddy</td><td>-</td></tr>
+                <tr><td>.vision</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.vodka</td><td>Godaddy</td><td>-</td></tr>
+                <tr><td>.voyage</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.watch</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.webcam</td><td>GRS Domains</td><td>-</td></tr>
+                <tr><td>.website</td><td>Radix</td><td><a href="http://radix.website/policies/" target="_blank">http://radix.website/policies/</a></td></tr>
+                <tr><td>.wedding</td><td>Godaddy</td><td>-</td></tr>
+                <tr><td>.wiki</td><td>Top Level Design</td><td><a href="http://toplevel.design/policy/" target="_blank">http://toplevel.design/policy/</a></td></tr>
+                <tr><td>.win</td><td>GRS Domains</td><td>-</td></tr>
+                <tr><td>.wine</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.work</td><td>Godaddy</td><td>-</td></tr>
+                <tr><td>.works</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.world</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.wtf</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+                <tr><td>.xyz</td><td>XYZ</td><td><a href="https://gen.xyz/registrationterms" target="_blank">https://gen.xyz/registrationterms</a></td></tr>
+                <tr><td>.yoga</td><td>Godaddy</td><td>-</td></tr>
+                <tr><td>.zone</td><td>Identity Digital</td><td><a href="https://identity.digital/policies/" target="_blank">https://identity.digital/policies/</a></td></tr>
+            </tbody>
+        </table>
+
+           <footer>
+            This is an unofficial list based on provided data. For the official list of supported TLDs, visit <a href="https://www.cloudflare.com/tld-policies/" target="_blank">Cloudflare TLD Policies</a>. Prices are at-cost and not publicly listed by Cloudflare.
+        </footer>
+    </div>
+
+    <script>
+        let sortDirection = {};
+        function sortTable(colIndex) {
+            const table = document.getElementById("tldTable");
+            const tbody = table.tBodies[0];
+            const rows = Array.from(tbody.rows);
+
+            // Determine sort direction (toggle)
+            const dir = (sortDirection[colIndex] = !sortDirection[colIndex]) ? "asc" : "desc";
+
+            // Clear previous sort indicators
+            table.querySelectorAll("th").forEach(th => {
+                th.classList.remove("asc", "desc");
+            });
+
+            // Set current header indicator
+            table.querySelectorAll("th")[colIndex].classList.add(dir);
+
+            rows.sort((a, b) => {
+                let A = a.cells[colIndex].textContent.trim();
+                let B = b.cells[colIndex].textContent.trim();
+
+                // Natural sort for TLD column (e.g., .com before .company)
+                if (colIndex === 0) {
+                    A = A.toLowerCase();
+                    B = B.toLowerCase();
+                }
+
+                if (A < B) return dir === "asc" ? -1 : 1;
+                if (A > B) return dir === "asc" ? 1 : -1;
+                return 0;
+            });
+
+            // Re-append rows in sorted order
+            rows.forEach(row => tbody.appendChild(row));
+        }
+    </script>
+</body>
+</html>

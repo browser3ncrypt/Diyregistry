@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Domain Hack Generator - diyregistry.com</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.7;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #f38020;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .back-link {
+            display: inline-block;
+            margin: 20px 0;
+            color: #f38020;
+            font-weight: bold;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .generator {
+            background: #f0f8ff;
+            padding: 30px;
+            border-radius: 10px;
+            margin: 30px 0;
+            border-left: 5px solid #f38020;
+            text-align: center;
+        }
+        label {
+            font-weight: bold;
+            font-size: 1.2em;
+            display: block;
+            margin-bottom: 10px;
+            color: #f38020;
+        }
+        input[type="text"] {
+            width: 70%;
+            max-width: 500px;
+            padding: 12px 20px;
+            font-size: 1.2em;
+            border: 2px solid #f38020;
+            border-radius: 30px;
+            outline: none;
+            text-align: center;
+        }
+        input[type="text"]:focus {
+            border-color: #e66f15;
+            box-shadow: 0 0 10px rgba(243,128,32,0.3);
+        }
+        .results {
+            margin-top: 30px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        .hack {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            text-align: center;
+            font-size: 1.3em;
+            font-weight: bold;
+            word-break: break-all;
+        }
+        .hack .tld {
+            color: #f38020;
+        }
+        .no-results {
+            grid-column: 1 / -1;
+            color: #999;
+            font-style: italic;
+        }
+        .note {
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: #666;
+        }
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            color: #888;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back-link">← Back to diyregistry.com</a>
+
+        <h1>Interactive Domain Hack Generator</h1>
+        <p style="text-align:center; font-size:1.1em; color:#555;">
+            Type a word or phrase and see clever domain hacks using real TLDs!<br>
+            Perfect for finding memorable, creative domain names.
+        </p>
+
+        <div class="generator">
+            <label for="wordInput">Enter a word or short phrase:</label>
+            <input type="text" id="wordInput" placeholder="e.g., delicious, read, play" autofocus autocomplete="off">
+
+            <div id="results" class="results">
+                <p class="no-results">Start typing to see domain hack suggestions...</p>
+            </div>
+
+            <p class="note">
+                Suggestions use real, registrable TLDs (as of December 2025). Availability not checked here — try them on the <a href="/domainlookup">Domain Lookup</a> tool!
+            </p>
+        </div>
+
+        <footer>
+            diyregistry.com — Your DIY Domain & Web Project Hub • Last updated: December 29, 2025
+        </footer>
+    </div>
+
+    <script>
+        // Comprehensive list of common and creative TLDs good for hacks (as of late 2025)
+        const tlds = [
+            ".com", ".io", ".me", ".ly", ".it", ".be", ".re", ".is", ".to", ".at",
+            ".es", ".us", ".in", ".on", ".rs", ".ge", ".app", ".dev", ".fun", ".xyz",
+            ".ai", ".tv", ".fm", ".co", ".gg", ".sh", ".io", ".ca", ".st", ".la",
+            ".so", ".ws", ".vc", ".mn", ".gl", ".ad", ".as", ".gs", ".ms", ".tc",
+            ".tl", ".ph", ".py", ".pe", ".ve", ".ne", ".se", ".de", ".ng", ".li",
+            ".ch", ".ck", ".ck", ".do", ".go", ".no", ".so", ".today", ".page",
+            ".new", ".day", ".how", ".foo", ".dad", ".esq", ".phd", ".prof", ".rsvp",
+            ".boo", ".mov", ".soy", ".nexus"
+        ];
+
+        const input = document.getElementById('wordInput');
+        const resultsDiv = document.getElementById('results');
+
+        input.addEventListener('input', function () {
+            const word = input.value.trim().toLowerCase().replace(/[^a-z]/g, ''); // Clean input
+            resultsDiv.innerHTML = '';
+
+            if (word.length < 2) {
+                resultsDiv.innerHTML = '<p class="no-results">Type at least 2 letters to see suggestions.</p>';
+                return;
+            }
+
+            const suggestions = [];
+
+            // Try hacks where TLD completes the word (e.g., delicio.us)
+            tlds.forEach(tld => {
+                const tldPart = tld.slice(1); // remove dot
+                if (word.endsWith(tldPart)) {
+                    const base = word.slice(0, -tldPart.length);
+                    if (base.length >= 2) { // require decent base name
+                        suggestions.push(base + '<span class="tld">' + tld + '</span>');
+                    }
+                }
+            });
+
+            // Also try TLD at the end even if not perfect match (partial creative)
+            tlds.forEach(tld => {
+                const tldPart = tld.slice(1);
+                if (word.length > tldPart.length + 1) {
+                    const base = word.slice(0, -tldPart.length + 1);
+                    const ending = word.slice(-tldPart.length + 1);
+                    if (tldPart.startsWith(ending)) {
+                        suggestions.push(base + '<span class="tld">' + tld + '</span>');
+                    }
+                }
+            });
+
+            // Dedupe
+            const unique = [...new Set(suggestions)];
+
+            if (unique.length === 0) {
+                resultsDiv.innerHTML = '<p class="no-results">No domain hacks found. Try words ending in common TLD sounds (like "ly", "it", "me", "is")!</p>';
+            } else {
+                unique.sort((a, b) => a.length - b.length); // Shortest first
+                unique.forEach(hack => {
+                    const div = document.createElement('div');
+                    div.className = 'hack';
+                    div.innerHTML = hack;
+                    resultsDiv.appendChild(div);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -2,3 +2,4 @@ User-agent: *
 Allow: /
 
 Sitemap: https://diyregistry.com/sitemap.xml
+Sitemap: https://diyregistry.com/sitemap.txt

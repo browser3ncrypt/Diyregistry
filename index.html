@@ -133,6 +133,12 @@
             color: #ddd;
             margin-top: 80px;
         }
+        video {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
     </style>
 </head>
 
@@ -203,8 +209,28 @@
 <img src="https://bankcoin.loan/DIYregistry.gif" alt="diyregistry logo" width="500" height="300">
         <div class="features">
             <div class="feature-card">
-                <h3>DIY Project Planner</h3>
-                <p>Organize projects, list materials, estimate costs, and add supplier links – all saved locally in your browser.</p>
+                <h3>What is DIY (Do It Yourself)</h3>
+                <p>DIY Registery offers tools and knowledge for individuals to use for making professional websites. Watch the video to learn more about what services are offered.</p>
+<video 
+  controls
+  width="640" 
+  height="360"
+  preload="metadata"          <!-- or "auto" or "none" -->
+  poster="thumbnail.jpg"      <!-- optional: cover image before play -->
+  playsinline                 <!-- important for mobile – prevents going fullscreen on iOS -->
+>
+  <!-- Main source – MP4 with H.264 is still the most compatible -->
+  <source src="https://bankcoin.loan/new-faceless-video.mp4" type="video/mp4">
+
+  <!-- Optional: Add WebM version for better compression on supported browsers -->
+  <!-- <source src="video.webm" type="video/webm"> -->
+
+  <!-- Fallback content if video can't play -->
+  <p>
+    Your browser doesn't support HTML5 video.<br>
+    <a href="https://bankcoin.loan/new-faceless-video.mp4">Download the video</a> instead.
+  </p>
+</video>
             </div>
             <div class="feature-card">
                 <h3>Login to R2 buckets</h3>

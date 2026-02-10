@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free PDF417 Barcode Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1 {
+            text-align: center;
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #barcodePreview {
+            text-align: center;
+            margin-top: 20px;
+        }
+        #errorMessage {
+            color: red;
+            margin-top: 10px;
+        }
+        .tips {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+        }
+    </style>
+    <script src="https://unpkg.com/bwip-js@4.8.0/dist/bwip-js-min.js"></script>
+</head>
+<body>
+    <h1>Free PDF417 Barcode Generator</h1>
+    <p>Create professional PDF417 barcodes for your data. This tool runs entirely in your browser—no data is sent to any server.</p>
+
+    <div class="section">
+        <h2>Enter Your Data</h2>
+        <textarea id="dataInput" rows="5" placeholder="Enter text or data to encode (e.g., contact information, URLs, or product details)"></textarea>
+    </div>
+
+    <div class="section">
+        <h2>Customization Options</h2>
+        <label for="columns">Columns (1-30):</label>
+        <input type="number" id="columns" min="1" max="30" value="3">
+
+        <label for="rows">Rows (3-90):</label>
+        <input type="number" id="rows" min="3" max="90" value="10">
+
+        <label for="errorLevel">Error Correction Level (0-8, higher for better reliability):</label>
+        <select id="errorLevel">
+            <option value="0">0 (Lowest)</option>
+            <option value="1">1</option>
+            <option value="2" selected>2 (Default)</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8 (Highest)</option>
+        </select>
+
+        <p><strong>Recommendation:</strong> Use a higher error correction level (e.g., 3-5) for important data to ensure scannability even if the barcode is damaged.</p>
+    </div>
+
+    <div class="section">
+        <button onclick="generateBarcode()">Generate PDF417 Barcode</button>
+    </div>
+
+    <div id="barcodePreview">
+        <canvas id="barcodeCanvas" style="display: none;"></canvas>
+        <button id="downloadButton" style="display: none;" onclick="downloadBarcode()">Download Barcode (PNG)</button>
+        <div id="errorMessage"></div>
+    </div>
+
+    <div class="tips section">
+        <h2>Pro Tips</h2>
+        <ul>
+            <li>PDF417 barcodes can store up to 1,850 alphanumeric characters—ideal for detailed information.</li>
+            <li>Adjust columns and rows based on your data size; fewer columns make it narrower, more rows make it taller.</li>
+            <li>For best results, test the barcode with a scanner app after generation.</li>
+            <li>This tool is fully client-side: Your data stays private in your browser and never leaves nor stored in our servers. Free to download and generate.</li>
+        </ul>
+    </div>
+
+    <script>
+        let canvas = document.getElementById('barcodeCanvas');
+
+        function generateBarcode() {
+            const data = document.getElementById('dataInput').value.trim();
+            const columns = parseInt(document.getElementById('columns').value);
+            const rows = parseInt(document.getElementById('rows').value);
+            const errorLevel = parseInt(document.getElementById('errorLevel').value);
+            const errorMessage = document.getElementById('errorMessage');
+
+            errorMessage.textContent = '';
+            document.getElementById('downloadButton').style.display = 'none';
+            canvas.style.display = 'none';
+
+            if (!data) {
+                errorMessage.textContent = 'Please enter data to encode.';
+                return;
+            }
+
+            try {
+                bwipjs.toCanvas(canvas, {
+                    bcid: 'pdf417',
+                    text: data,
+                    scale: 3, // Scaling for clarity
+                    height: 10, // Bar height in mm
+                    columns: columns,
+                    rows: rows,
+                    errorlevel: errorLevel,
+                    includetext: true, // Include human-readable text
+                    textxalign: 'center' // Center text
+                });
+
+                canvas.style.display = 'block';
+                document.getElementById('downloadButton').style.display = 'inline-block';
+            } catch (e) {
+                errorMessage.textContent = 'Error generating barcode: ' + e.message;
+            }
+        }
+
+        function downloadBarcode() {
+            const dataURL = canvas.toDataURL('image/png');
+            const link = document.createElement('a');
+            link.href = dataURL;
+            link.download = 'pdf417-barcode.png';
+            link.click();
+        }
+    </script>
+</body>
+</html>

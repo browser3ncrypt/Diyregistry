@@ -103,7 +103,7 @@
             <li>PDF417 barcodes can store up to 1,850 alphanumeric characters—ideal for detailed information.</li>
             <li>Adjust columns and rows based on your data size; fewer columns make it narrower, more rows make it taller.</li>
             <li>For best results, test the barcode with a scanner app after generation.</li>
-            <li>This tool is fully client-side: Your data stays private in your browser.</li>
+            <li>This tool is fully client-side: Your data stays private in your browser and never leaves nor stored in our servers. Free to download and generate.</li>
         </ul>
     </div>
 

@@ -1,3 +1,5 @@
+// src/index.ts
+
 export interface Env {
   URL_SHORTENER: KVNamespace;
 }
@@ -24,24 +26,38 @@ export default {
       return handleRedirect(slug, request, env);
     }
 
+    // Fallback for root or unmatched paths
     return new Response("URL Shortener Service – Use /api/shorten", { status: 200 });
   },
 } satisfies ExportedHandler<Env>;
 
 async function handleShorten(request: Request, env: Env): Promise<Response> {
   try {
-    const body = (await request.json()) as { originalUrl?: string; customSlug?: string };
-    const { originalUrl, customSlug } = body;
+    const body = await request.json<any>();
 
-    if (!originalUrl || !URL.canParse(originalUrl)) {
-      return new Response(JSON.stringify({ error: "Valid URL required" }), {
-        status: 400,
-        headers: { "Content-Type": "application/json" },
-      });
+    // Debug: log the received body (visible in Worker logs in dashboard)
+    console.log("Received body:", JSON.stringify(body));
+
+    const originalUrl = body.originalUrl ?? body.original_url; // allow snake_case fallback
+    if (typeof originalUrl !== "string" || originalUrl.trim() === "") {
+      return new Response(
+        JSON.stringify({ error: "originalUrl must be a non-empty string" }),
+        { status: 400, headers: { "Content-Type": "application/json" } }
+      );
     }
 
-    let slug = customSlug
-      ? customSlug.toLowerCase().replace(/[^a-z0-9-]/g, "")
+    // Stricter check with new URL()
+    try {
+      new URL(originalUrl);
+    } catch {
+      return new Response(
+        JSON.stringify({ error: "Invalid URL format" }),
+        { status: 400, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
+    let slug = body.customSlug
+      ? String(body.customSlug).toLowerCase().replace(/[^a-z0-9-]/g, "")
       : generateSlug();
 
     if (slug.length < 3 || slug.length > 20) slug = generateSlug();
@@ -68,7 +84,8 @@ async function handleShorten(request: Request, env: Env): Promise<Response> {
       status: 201,
       headers: { "Content-Type": "application/json" },
     });
-  } catch {
+  } catch (err) {
+    console.error("Shorten error:", err);
     return new Response(JSON.stringify({ error: "Invalid request" }), {
       status: 400,
       headers: { "Content-Type": "application/json" },

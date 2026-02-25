@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sign In with Google – Example</title>
+
+  <!-- Google Identity Services library (required) -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      background-color: #f8f9fa;
+      color: #333;
+    }
+    h1 {
+      margin-bottom: 1.5rem;
+      color: #202124;
+    }
+    #button-container {
+      margin: 1rem;
+    }
+    #user-info {
+      margin-top: 2rem;
+      padding: 1.5rem;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      max-width: 400px;
+      display: none;
+    }
+    #user-info img {
+      border-radius: 50%;
+      width: 64px;
+      height: 64px;
+    }
+    pre {
+      background: #f1f3f4;
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Welcome</h1>
+
+  <!-- Container where the Google button will be rendered -->
+  <div id="button-container"></div>
+
+  <!-- Area that shows user information after successful sign-in -->
+  <div id="user-info">
+    <h2>Signed in as</h2>
+    <img id="user-picture" alt="Profile picture" />
+    <p><strong>Name:</strong> <span id="user-name"></span></p>
+    <p><strong>Email:</strong> <span id="user-email"></span></p>
+    **Summary:**
+Full credential (ID token) – for debugging
+      <pre id="credential"></pre>
+    <button onclick="google.accounts.id.disableAutoSelect(); google.accounts.id.revoke(); location.reload();">
+      Sign out
+    </button>
+  </div>
+
+  <script>
+    // Called when Google returns the credential (ID token)
+    function handleCredentialResponse(response) {
+      // response.credential = base64-encoded JWT (ID token)
+      console.log("Encoded ID token:", response.credential);
+
+      // Optional: decode the JWT to read user info in JavaScript
+      const data = JSON.parse(atob(response.credential.split('.')[1]));
+
+      document.getElementById("user-name").textContent   = data.name;
+      document.getElementById("user-email").textContent  = data.email;
+      document.getElementById("user-picture").src        = data.picture;
+      document.getElementById("credential").textContent  = response.credential;
+
+      document.getElementById("button-container").style.display = "none";
+      document.getElementById("user-info").style.display = "block";
+
+      // → Here you would typically send response.credential to your backend
+      //   via fetch('/api/auth/google', { method: 'POST', body: JSON.stringify({token: response.credential}) })
+    }
+
+    // initialize Google Identity Services when the page loads
+    window.onload = function () {
+      google.accounts.id.initialize({
+        client_id: "531373278831-aiqn69g8h2937ha0dff0vv448enoolpo.apps.googleusercontent.com.apps.googleusercontent.com",
+        callback: handleCredentialResponse,
+        auto_select: false,          // set to true to enable One Tap auto sign-in
+        cancel_on_tap_outside: true,
+        context: "signin",           // or "signup" / "use"
+        ux_mode: "popup",            // or "redirect"
+        login_hint: "user@example.com",   // optional pre-fill
+      });
+
+      // Render the standard Sign in with Google button
+      google.accounts.id.renderButton(
+        document.getElementById("button-container"),
+        {
+          type: "standard",          // standard / icon
+          theme: "outline",          // outline / filled_blue / filled_black
+          size: "large",             // small / medium / large
+          text: "signin_with",       // signin_with / signup_with / continue_with
+          shape: "rectangular",      // rectangular / pill / circle / square
+          logo_alignment: "left",
+          width: 320
+        }
+      );
+
+      // Optional: show the One Tap prompt (modern popup at top-right)
+      // google.accounts.id.prompt();
+    };
+  </script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+

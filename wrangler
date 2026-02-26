@@ -1,24 +1,31 @@
-# wrangler.toml
-# Optional: Reference the schema for editor validation (recommended)
-# $schema = "node_modules/wrangler/config-schema.json"
+use tauri::plugin::shell::{self, ShellExt};
 
-name = "email-signup-autoreply"          # Unique name for your Worker (used in dashboard and deployment)
-main = "src/index.js"                    # Path to your entry file (adjust if using .ts or different folder)
+#[tauri::command]
+async fn launch_crawler(app: tauri::AppHandle, args: Vec<String>) -> Result<String, String> {
+    let (mut rx, mut child) = app
+        .shell()
+        .command("python")
+        .args(["crawler.py"])
+        .args(args)
+        .spawn()
+        .map_err(|e| format!("Failed to spawn process: {}", e))?;
 
-compatibility_date = "2026-02-25"        # Use a recent date (or today's date) to access current runtime behavior
-                                         # Update periodically for new features/fixes
+    // Optional: capture output if you want to show progress / results in UI
+    let mut output = String::new();
+    while let Some(event) = rx.recv().await {
+        match event {
+            shell::process::Event::Stdout(line) => output.push_str(&format!("{}\n", line)),
+            shell::process::Event::Stderr(line) => output.push_str(&format!("Error: {}\n", line)),
+            shell::process::Event::Terminated(status) => {
+                return if status.code.unwrap_or(1) == 0 {
+                    Ok(format!("Crawler finished successfully.\nOutput:\n{}", output))
+                } else {
+                    Err(format!("Crawler exited with code {}\nOutput:\n{}", status.code.unwrap_or(-1), output))
+                }
+            }
+            _ => {}
+        }
+    }
 
-compatibility_flags = [ "nodejs_compat" ]  # Required for packages like 'mimetext' (which rely on Node APIs)
-                                           # Add "nodejs_compat_v2" if using newer Node features
-
-# Optional: If sending emails via a send_email binding (advanced outbound, not needed for message.reply())
-# send_email = [
-#   { name = "SEND_EMAIL", destination_address = "your-verified@yourdomain.com" }
-# ]
-
-# Optional: Environment-specific overrides (e.g., for staging/production)
-# [env.staging]
-#   name = "email-signup-autoreply-staging"
-#   compatibility_date = "2026-02-25"
-
-# Optional: If using secrets (e.g., API keys), add via dashboard or wrangler secret; do not hardcode here
+    Err("Process ended unexpectedly".to_string())
+}

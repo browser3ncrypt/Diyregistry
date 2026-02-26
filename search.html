@@ -195,9 +195,7 @@
           <th>Typical Processing Time</th>
         </tr>
       </thead>
-      <tbody id="tableBody">
-        <!-- Rows populated by JavaScript -->
-      </tbody>
+      <tbody id="tableBody"></tbody>
     </table>
   </div>
 
@@ -268,11 +266,11 @@ const themeToggle = document.getElementById("themeToggle");
 
 function escapeHtml(unsafe) {
   return String(unsafe)
-    .replace(/&/g, "&")
-    .replace(/</g, "<")
-    .replace(/>/g, ">")
-    .replace(/"/g, """)
-    .replace(/'/g, "'");
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 }
 
 function renderTable(filteredData = data) {
@@ -301,7 +299,10 @@ function renderTable(filteredData = data) {
 
 function filterTable() {
   const term = searchInput.value.toLowerCase().trim();
-  if (!term) return renderTable();
+  if (!term) {
+    renderTable();
+    return;
+  }
 
   const filtered = data.filter(item =>
     Object.values(item).some(val =>
@@ -319,7 +320,7 @@ renderTable();
 searchInput.addEventListener("input", filterTable);
 
 // Theme toggle
-const currentTheme = localStorage.getItem("theme") || "light";
+let currentTheme = localStorage.getItem("theme") || "light";
 if (currentTheme === "dark") {
   document.documentElement.setAttribute("data-theme", "dark");
   themeToggle.textContent = "Light Mode";

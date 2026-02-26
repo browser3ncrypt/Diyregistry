@@ -1,31 +1,21 @@
-use tauri::plugin::shell::{self, ShellExt};
-
-#[tauri::command]
-async fn launch_crawler(app: tauri::AppHandle, args: Vec<String>) -> Result<String, String> {
-    let (mut rx, mut child) = app
-        .shell()
-        .command("python")
-        .args(["crawler.py"])
-        .args(args)
-        .spawn()
-        .map_err(|e| format!("Failed to spawn process: {}", e))?;
-
-    // Optional: capture output if you want to show progress / results in UI
-    let mut output = String::new();
-    while let Some(event) = rx.recv().await {
-        match event {
-            shell::process::Event::Stdout(line) => output.push_str(&format!("{}\n", line)),
-            shell::process::Event::Stderr(line) => output.push_str(&format!("Error: {}\n", line)),
-            shell::process::Event::Terminated(status) => {
-                return if status.code.unwrap_or(1) == 0 {
-                    Ok(format!("Crawler finished successfully.\nOutput:\n{}", output))
-                } else {
-                    Err(format!("Crawler exited with code {}\nOutput:\n{}", status.code.unwrap_or(-1), output))
-                }
-            }
-            _ => {}
+{
+  "plugins": {
+    "shell": {
+      "scope": [
+        {
+          "name": "run-crawler",
+          "cmd": "python",
+          "args": true
+        },
+        {
+          "name": "run-crawler-with-args",
+          "cmd": "python",
+          "args": [
+            { "validator": "^crawler\\.py$" },
+            { "validator": ".*" }
+          ]
         }
+      ]
     }
-
-    Err("Process ended unexpectedly".to_string())
+  }
 }

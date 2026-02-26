@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>US Death Certificate Locator – 50 States</title>
+  <style>
+    :root {
+      --bg: #f8f9fa;
+      --text: #212529;
+      --card: #ffffff;
+      --border: #dee2e6;
+      --accent: #0d6efd;
+    }
+
+    [data-theme="dark"] {
+      --bg: #121212;
+      --text: #e0e0e0;
+      --card: #1e1e1e;
+      --border: #333;
+      --accent: #4da3ff;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 20px;
+      min-height: 100vh;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 1.8rem;
+    }
+
+    .controls {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    #searchInput {
+      padding: 0.6rem 1rem;
+      width: 380px;
+      max-width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 1rem;
+      background: var(--card);
+      color: var(--text);
+    }
+
+    #searchInput:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.15);
+    }
+
+    .theme-toggle {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.5rem 0.9rem;
+      cursor: pointer;
+      font-size: 0.95rem;
+      color: var(--text);
+    }
+
+    .theme-toggle:hover {
+      background: var(--border);
+    }
+
+    .table-container {
+      overflow-x: auto;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--card);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+    }
+
+    th, td {
+      padding: 12px 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    th {
+      background: rgba(0,0,0,0.04);
+      font-weight: 600;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    [data-theme="dark"] th {
+      background: rgba(255,255,255,0.06);
+    }
+
+    tr:hover {
+      background: rgba(0,0,0,0.03);
+    }
+
+    [data-theme="dark"] tr:hover {
+      background: rgba(255,255,255,0.05);
+    }
+
+    .no-results {
+      text-align: center;
+      padding: 3rem;
+      color: #6c757d;
+      font-style: italic;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      .controls {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      #searchInput {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <h1>US Death Certificate Locator – 50 States</h1>
+    <div class="controls">
+      <input type="text" id="searchInput" placeholder="Search by state, office, phone, address…" />
+      <button class="theme-toggle" id="themeToggle">Dark Mode</button>
+    </div>
+  </header>
+
+  <div class="table-container">
+    <table id="dataTable">
+      <thead>
+        <tr>
+          <th>State</th>
+          <th>Vital Records Office</th>
+          <th>Official Website</th>
+          <th>Phone Number</th>
+          <th>Mailing Address</th>
+          <th>Online Ordering</th>
+          <th>Fee (Certified Copy)</th>
+          <th>Typical Processing Time</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody">
+        <!-- Rows populated by JavaScript -->
+      </tbody>
+    </table>
+  </div>
+
+  <p style="margin-top: 1.5rem; font-size: 0.9rem; color: #6c757d; text-align: center;">
+    Information compiled from official state sources and CDC guidance as of February 2026. Fees and processing times are approximate and subject to change. Always verify directly on the official website. Many states partner with <a href="https://www.vitalchek.com" target="_blank" rel="noopener noreferrer">VitalChek</a> for expedited online orders.
+  </p>
+</div>
+
+<script>
+const data = [
+  { state: "Alabama", office: "Center for Health Statistics", website: "https://www.alabamapublichealth.gov/vitalrecords/", phone: "(334) 206-5418", mailing: "P.O. Box 5625, Montgomery, AL 36103-5625", online: "VitalChek / In-person", fee: "$15", processing: "2–4 weeks" },
+  { state: "Alaska", office: "Bureau of Vital Statistics", website: "https://dhss.alaska.gov/dph/VitalStats/Pages/default.aspx", phone: "(907) 465-3391", mailing: "P.O. Box 110675, Juneau, AK 99811-0675", online: "VitalChek", fee: "$25", processing: "2–4 weeks" },
+  { state: "Arizona", office: "Bureau of Vital Records", website: "https://www.azdhs.gov/licensing/vital-records/", phone: "(602) 364-1300", mailing: "P.O. Box 6018, Phoenix, AZ 85005", online: "VitalChek", fee: "$20", processing: "2–4 weeks" },
+  { state: "Arkansas", office: "Vital Records Section", website: "https://www.healthy.arkansas.gov/programs-services/topic/death-certificates", phone: "(501) 661-2134", mailing: "P.O. Box 9020, Little Rock, AR 72219", online: "VitalChek", fee: "$10", processing: "10–14 days" },
+  { state: "California", office: "Vital Records", website: "https://www.cdph.ca.gov/Programs/CHSI/Pages/Vital-Records.aspx", phone: "(916) 445-2684", mailing: "P.O. Box 997410, Sacramento, CA 95899-7410", online: "VitalChek / State portal", fee: "$26", processing: "5–7 weeks" },
+  { state: "Colorado", office: "Vital Records Section", website: "https://cdphe.colorado.gov/vital-records", phone: "(303) 692-2200", mailing: "P.O. Box 18280, Denver, CO 80218", online: "VitalChek", fee: "$25", processing: "30 business days" },
+  { state: "Connecticut", office: "Vital Records Section", website: "https://portal.ct.gov/DPH/Vital-Records/Death-Certificates", phone: "(860) 509-7700", mailing: "410 Capitol Ave, MS #11VRS, Hartford, CT 06134", online: "State portal", fee: "$30", processing: "2–4 weeks" },
+  { state: "Delaware", office: "Division of Public Health", website: "https://dhss.delaware.gov/dhss/dph/vital/", phone: "(302) 744-4700", mailing: "P.O. Box 637, Dover, DE 19903", online: "VitalChek", fee: "$25", processing: "2–4 weeks" },
+  { state: "Florida", office: "Bureau of Vital Statistics", website: "https://www.floridahealth.gov/certificates/certificates/death/", phone: "(904) 359-6900", mailing: "P.O. Box 210, Jacksonville, FL 32231", online: "VitalChek", fee: "$15", processing: "3–5 business days (recent)" },
+  { state: "Georgia", office: "Vital Records", website: "https://dph.georgia.gov/death-certificates", phone: "(404) 679-4702", mailing: "1680 Phoenix Blvd Suite 100, Atlanta, GA 30349", online: "VitalChek", fee: "$25", processing: "2–4 weeks" },
+  { state: "Hawaii", office: "Vital Records", website: "https://health.hawaii.gov/vitalrecords/death-certificates/", phone: "(808) 586-4533", mailing: "P.O. Box 3378, Honolulu, HI 96801", online: "VitalChek", fee: "$25", processing: "2–4 weeks" },
+  { state: "Idaho", office: "Vital Records", website: "https://healthandwelfare.idaho.gov/services-programs/birth-marriage-death-records", phone: "(208) 334-5980", mailing: "P.O. Box 83720, Boise, ID 83720-0036", online: "VitalChek", fee: "$20", processing: "3–4 weeks" },
+  { state: "Illinois", office: "Vital Records", website: "https://dph.illinois.gov/topics-services/birth-death-other-records/death-records", phone: "(217) 782-6554", mailing: "535 W. Jefferson St, Springfield, IL 62761", online: "VitalChek", fee: "$15", processing: "12 weeks" },
+  { state: "Indiana", office: "Vital Records", website: "https://www.in.gov/health/vital-records/death-certificates/", phone: "(317) 233-2700", mailing: "2 N. Meridian St, Indianapolis, IN 46204", online: "VitalChek", fee: "$15", processing: "2–4 weeks" },
+  { state: "Iowa", office: "Vital Records", website: "https://hhs.iowa.gov/vital-records", phone: "(515) 281-4944", mailing: "321 E. 12th St, Des Moines, IA 50319", online: "VitalChek", fee: "$20", processing: "2–4 weeks" },
+  { state: "Kansas", office: "Bureau of Vital Statistics", website: "https://www.kdhe.ks.gov/1193/Death-Certificate", phone: "(785) 296-1400", mailing: "P.O. Box 200, Topeka, KS 66601", online: "VitalChek", fee: "$20", processing: "3–5 business days expedited" },
+  { state: "Kentucky", office: "Office of Vital Statistics", website: "https://chfs.ky.gov/agencies/dph/dehp/vsb/Pages/death.aspx", phone: "(502) 564-4212", mailing: "275 E. Main St, Frankfort, KY 40621", online: "VitalChek", fee: "$10", processing: "2–4 weeks" },
+  { state: "Louisiana", office: "Vital Records Registry", website: "https://ldh.la.gov/page/vital-records", phone: "(225) 342-9500", mailing: "P.O. Box 60630, New Orleans, LA 70160", online: "VitalChek", fee: "$15", processing: "2–4 weeks" },
+  { state: "Maine", office: "Office of Data, Research, and Vital Statistics", website: "https://www.maine.gov/dhhs/mecdc/public-health-systems/data-research/vital-records/", phone: "(207) 287-3181", mailing: "11 State House Station, Augusta, ME 04333", online: "VitalChek", fee: "$30", processing: "2–4 weeks" },
+  { state: "Maryland", office: "Division of Vital Records", website: "https://health.maryland.gov/vsa/Pages/death.aspx", phone: "(410) 764-3038", mailing: "P.O. Box 68760, Baltimore, MD 21215", online: "VitalChek", fee: "$24", processing: "2–4 weeks" },
+  { state: "Massachusetts", office: "Registry of Vital Records", website: "https://www.mass.gov/death-certificates", phone: "(617) 740-2600", mailing: "150 Mt. Vernon St, Dorchester, MA 02125", online: "VitalChek", fee: "$28", processing: "2–4 weeks" },
+  { state: "Michigan", office: "Vital Records", website: "https://www.michigan.gov/mdhhs/0,5885,7-339-73970_2943---,00.html", phone: "(517) 335-8656", mailing: "P.O. Box 30721, Lansing, MI 48909", online: "VitalChek", fee: "$34", processing: "1–2 weeks expedited" },
+  { state: "Minnesota", office: "Office of Vital Records", website: "https://www.health.state.mn.us/people/vitalrecords/death.html", phone: "(651) 201-5970", mailing: "P.O. Box 64499, St. Paul, MN 55164", online: "VitalChek", fee: "$13", processing: "Days to weeks" },
+  { state: "Mississippi", office: "Vital Records", website: "https://msdh.ms.gov/page/31,0,109.html", phone: "(601) 576-7960", mailing: "P.O. Box 1700, Jackson, MS 39215", online: "VitalChek", fee: "$17", processing: "2–4 weeks" },
+  { state: "Missouri", office: "Bureau of Vital Records", website: "https://health.mo.gov/data/vitalstatistics/death.php", phone: "(573) 751-6387", mailing: "P.O. Box 570, Jefferson City, MO 65102", online: "VitalChek", fee: "$21", processing: "2–4 weeks" },
+  { state: "Montana", office: "Public Health & Safety", website: "https://dphhs.mt.gov/publichealth/vitalrecords/death", phone: "(406) 444-4228", mailing: "P.O. Box 202951, Helena, MT 59620", online: "VitalChek", fee: "$15", processing: "2–4 weeks" },
+  { state: "Nebraska", office: "Vital Records", website: "https://dhhs.ne.gov/Pages/Vital-Records.aspx", phone: "(402) 471-2311", mailing: "P.O. Box 95007, Lincoln, NE 68509", online: "VitalChek", fee: "$16", processing: "15 days in-office" },
+  { state: "Nevada", office: "Office of Vital Records", website: "https://dhhs.nv.gov/Programs/Vital_Records/", phone: "(775) 684-4242", mailing: "4150 Technology Way, Carson City, NV 89706", online: "VitalChek", fee: "$20", processing: "2–4 weeks" },
+  { state: "New Hampshire", office: "Bureau of Vital Records", website: "https://www.nh.gov/sos/bdm/death.htm", phone: "(603) 271-4654", mailing: "P.O. Box 3006, Concord, NH 03302", online: "VitalChek", fee: "$25", processing: "2–4 weeks" },
+  { state: "New Jersey", office: "Office of Vital Statistics", website: "https://www.nj.gov/health/vital/death/", phone: "(609) 292-4087", mailing: "P.O. Box 370, Trenton, NJ 08625", online: "VitalChek", fee: "$25", processing: "2–4 weeks" },
+  { state: "New Mexico", office: "Bureau of Vital Records", website: "https://www.nmhealth.org/about/phd/vrp/death/", phone: "(505) 827-0121", mailing: "P.O. Box 968, Santa Fe, NM 87504", online: "VitalChek", fee: "$20", processing: "2–4 weeks" },
+  { state: "New York", office: "Vital Records (outside NYC)", website: "https://www.health.ny.gov/vital_records/death.htm", phone: "(518) 474-7714", mailing: "P.O. Box 26011, Albany, NY 12226", online: "VitalChek", fee: "$30", processing: "2–4 weeks" },
+  { state: "North Carolina", office: "Vital Records", website: "https://vitalrecords.nc.gov/death.htm", phone: "(919) 733-3000", mailing: "1903 Mail Service Center, Raleigh, NC 27699", online: "VitalChek", fee: "$24", processing: "2–4 weeks" },
+  { state: "North Dakota", office: "Vital Records", website: "https://www.hhs.nd.gov/vital-records/death-certificates", phone: "(701) 328-2360", mailing: "600 E. Boulevard Ave, Bismarck, ND 58505", online: "VitalChek", fee: "$25", processing: "2–4 weeks" },
+  { state: "Ohio", office: "Bureau of Vital Statistics", website: "https://odh.ohio.gov/know-our-programs/vital-statistics/death-certificates", phone: "(614) 466-2531", mailing: "246 N. High St, Columbus, OH 43215", online: "VitalChek", fee: "$21.50", processing: "5 business days" },
+  { state: "Oklahoma", office: "Vital Records", website: "https://oklahoma.gov/health/services/birth-death-certificates.html", phone: "(405) 426-8880", mailing: "123 Robert S. Kerr Ave, Oklahoma City, OK 73102", online: "VitalChek", fee: "$20", processing: "2 business days" },
+  { state: "Oregon", office: "Center for Health Statistics", website: "https://www.oregon.gov/oha/PH/BIRTHDEATHCERTIFICATES/Pages/death.aspx", phone: "(971) 673-0200", mailing: "P.O. Box 14050, Portland, OR 97293", online: "VitalChek", fee: "$25", processing: "2–4 weeks" },
+  { state: "Pennsylvania", office: "Vital Records", website: "https://www.health.pa.gov/topics/certificates/Pages/Death-Certificates.aspx", phone: "(717) 787-5823", mailing: "P.O. Box 1528, New Castle, PA 16103", online: "VitalChek", fee: "$25", processing: "3 weeks online" },
+  { state: "Rhode Island", office: "Vital Records", website: "https://health.ri.gov/records/certificates/death.php", phone: "(401) 222-2811", mailing: "3 Capitol Hill, Providence, RI 02908", online: "VitalChek", fee: "$26", processing: "2–4 weeks" },
+  { state: "South Carolina", office: "Vital Records", website: "https://dph.sc.gov/public/vital-records/death-certificates", phone: "(803) 898-3630", mailing: "P.O. Box 2200, Columbia, SC 29202", online: "VitalChek", fee: "$17", processing: "5–7 business days" },
+  { state: "South Dakota", office: "Vital Records", website: "https://doh.sd.gov/records/death-certificates/", phone: "(605) 773-4961", mailing: "123 W. Missouri Ave, Pierre, SD 57501", online: "VitalChek", fee: "$25", processing: "2–4 weeks" },
+  { state: "Tennessee", office: "Office of Vital Records", website: "https://www.tn.gov/health/health-program-areas/vital-records/death-certificates.html", phone: "(615) 741-1763", mailing: "P.O. Box 100, Nashville, TN 37202", online: "VitalChek", fee: "$15", processing: "2–4 weeks" },
+  { state: "Texas", office: "Vital Statistics Unit", website: "https://www.dshs.texas.gov/vital-statistics/death-certificates", phone: "(512) 776-7111", mailing: "P.O. Box 12040, Austin, TX 78711", online: "Texas.gov / VitalChek", fee: "$20", processing: "20–30 days" },
+  { state: "Utah", office: "Office of Vital Records", website: "https://vitalrecords.utah.gov/death", phone: "(801) 538-6105", mailing: "P.O. Box 141012, Salt Lake City, UT 84114", online: "VitalChek", fee: "$22", processing: "2–4 weeks" },
+  { state: "Vermont", office: "Vital Records", website: "https://www.healthvermont.gov/vital-records/death-certificates", phone: "(802) 863-7275", mailing: "P.O. Box 70, Burlington, VT 05402", online: "VitalChek", fee: "$25", processing: "2–4 weeks" },
+  { state: "Virginia", office: "Division of Vital Records", website: "https://www.vdh.virginia.gov/vital-records/death-certificates/", phone: "(804) 662-6200", mailing: "P.O. Box 1000, Richmond, VA 23218", online: "VitalChek", fee: "$12", processing: "2–4 weeks" },
+  { state: "Washington", office: "Center for Health Statistics", website: "https://doh.wa.gov/licenses-permits-and-certificates/vital-records/death-certificates", phone: "(360) 236-4300", mailing: "P.O. Box 9709, Olympia, WA 98507", online: "VitalChek", fee: "$25", processing: "6–8 weeks" },
+  { state: "West Virginia", office: "Vital Registration Office", website: "https://dhhr.wv.gov/bph/Pages/vital-registration.aspx", phone: "(304) 558-2931", mailing: "350 Capitol St, Charleston, WV 25301", online: "VitalChek", fee: "$25", processing: "2–4 weeks" },
+  { state: "Wisconsin", office: "Vital Records", website: "https://www.dhs.wisconsin.gov/vitalrecords/death.htm", phone: "(608) 266-1371", mailing: "P.O. Box 309, Madison, WI 53701", online: "VitalChek", fee: "$30", processing: "2–4 weeks" },
+  { state: "Wyoming", office: "Vital Records Services", website: "https://health.wyo.gov/publichealth/vital-records/death-certificates/", phone: "(307) 777-7591", mailing: "2300 Capitol Ave, Cheyenne, WY 82002", online: "VitalChek", fee: "$25", processing: "2–4 weeks" }
+];
+
+const tableBody = document.getElementById("tableBody");
+const searchInput = document.getElementById("searchInput");
+const themeToggle = document.getElementById("themeToggle");
+
+function escapeHtml(unsafe) {
+  return String(unsafe)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+function renderTable(filteredData = data) {
+  tableBody.innerHTML = "";
+
+  if (filteredData.length === 0) {
+    tableBody.innerHTML = `<tr><td colspan="8" class="no-results">No matching records found</td></tr>`;
+    return;
+  }
+
+  filteredData.forEach(item => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${escapeHtml(item.state)}</td>
+      <td>${escapeHtml(item.office)}</td>
+      <td><a href="${escapeHtml(item.website)}" target="_blank" rel="noopener noreferrer">Visit Official Site</a></td>
+      <td>${escapeHtml(item.phone)}</td>
+      <td>${escapeHtml(item.mailing)}</td>
+      <td>${escapeHtml(item.online)}</td>
+      <td>${escapeHtml(item.fee)}</td>
+      <td>${escapeHtml(item.processing)}</td>
+    `;
+    tableBody.appendChild(row);
+  });
+}
+
+function filterTable() {
+  const term = searchInput.value.toLowerCase().trim();
+  if (!term) return renderTable();
+
+  const filtered = data.filter(item =>
+    Object.values(item).some(val =>
+      String(val ?? "").toLowerCase().includes(term)
+    )
+  );
+
+  renderTable(filtered);
+}
+
+// Initial render
+renderTable();
+
+// Event listeners
+searchInput.addEventListener("input", filterTable);
+
+// Theme toggle
+const currentTheme = localStorage.getItem("theme") || "light";
+if (currentTheme === "dark") {
+  document.documentElement.setAttribute("data-theme", "dark");
+  themeToggle.textContent = "Light Mode";
+}
+
+themeToggle.addEventListener("click", () => {
+  const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+  if (isDark) {
+    document.documentElement.removeAttribute("data-theme");
+    themeToggle.textContent = "Dark Mode";
+    localStorage.setItem("theme", "light");
+  } else {
+    document.documentElement.setAttribute("data-theme", "dark");
+    themeToggle.textContent = "Light Mode";
+    localStorage.setItem("theme", "dark");
+  }
+});
+</script>
+
+</body>
+</html>

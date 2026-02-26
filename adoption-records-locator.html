@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>US Adoption Records Locator – 50 States</title>
+  <style>
+    :root {
+      --bg: #f8f9fa;
+      --text: #212529;
+      --card: #ffffff;
+      --border: #dee2e6;
+      --accent: #0d6efd;
+    }
+
+    [data-theme="dark"] {
+      --bg: #121212;
+      --text: #e0e0e0;
+      --card: #1e1e1e;
+      --border: #333;
+      --accent: #4da3ff;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 20px;
+      min-height: 100vh;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 1.8rem;
+    }
+
+    .controls {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    #searchInput {
+      padding: 0.6rem 1rem;
+      width: 380px;
+      max-width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 1rem;
+      background: var(--card);
+      color: var(--text);
+    }
+
+    #searchInput:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.15);
+    }
+
+    .theme-toggle {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.5rem 0.9rem;
+      cursor: pointer;
+      font-size: 0.95rem;
+      color: var(--text);
+    }
+
+    .theme-toggle:hover {
+      background: var(--border);
+    }
+
+    .table-container {
+      overflow-x: auto;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--card);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+    }
+
+    th, td {
+      padding: 12px 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    th {
+      background: rgba(0,0,0,0.04);
+      font-weight: 600;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    [data-theme="dark"] th {
+      background: rgba(255,255,255,0.06);
+    }
+
+    tr:hover {
+      background: rgba(0,0,0,0.03);
+    }
+
+    [data-theme="dark"] tr:hover {
+      background: rgba(255,255,255,0.05);
+    }
+
+    .no-results {
+      text-align: center;
+      padding: 3rem;
+      color: #6c757d;
+      font-style: italic;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .note {
+      font-size: 0.95rem;
+      line-height: 1.5;
+      margin-top: 1.5rem;
+      padding: 1rem;
+      background: rgba(13, 110, 253, 0.05);
+      border-left: 4px solid var(--accent);
+      border-radius: 4px;
+    }
+
+    @media (max-width: 768px) {
+      .controls {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      #searchInput {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <h1>US Adoption Records Locator – 50 States</h1>
+    <div class="controls">
+      <input type="text" id="searchInput" placeholder="Search by state, office, registry, contact…" />
+      <button class="theme-toggle" id="themeToggle">Dark Mode</button>
+    </div>
+  </header>
+
+  <div class="table-container">
+    <table id="dataTable">
+      <thead>
+        <tr>
+          <th>State</th>
+          <th>Primary Contact / Registry</th>
+          <th>Official Website / Guidance</th>
+          <th>Phone Number</th>
+          <th>Address / Mailing</th>
+          <th>Access Type</th>
+          <th>Notes / Restrictions</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody">
+        <!-- Rows populated by JavaScript -->
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note">
+    <strong>Important:</strong> Adoption records are sealed in most states. Access is restricted to the adoptee (usually age 18 or 21+), birth parents (under certain conditions), or by court order. Many states offer mutual consent registries, non-identifying information, or limited OBC (original birth certificate) access for adult adoptees. County courts, adoption agencies, and private intermediaries may also hold records. Always verify current law and eligibility directly with the listed agency.
+  </div>
+
+  <p style="margin-top: 1.5rem; font-size: 0.9rem; color: #6c757d; text-align: center;">
+    Information current as of early 2026. Laws, contact information, and access rules change frequently. This table is for informational purposes only.
+  </p>
+</div>
+
+<script>
+const data = [
+  { state: "Alabama", office: "Department of Human Resources / Court", website: "https://dhr.alabama.gov/adoption/", phone: "(334) 242-9500", mailing: "Contact local DHR or probate court", access: "Closed", notes: "Court order usually required; no state OBC access" },
+  { state: "Alaska", office: "Bureau of Vital Statistics", website: "https://dhss.alaska.gov/dph/VitalStats/Pages/adoption.aspx", phone: "(907) 465-3391", mailing: "P.O. Box 110675, Juneau, AK 99811-0675", access: "Restricted", notes: "Non-identifying info available; mutual consent registry" },
+  { state: "Arizona", office: "Department of Child Safety / Court", website: "https://dcs.az.gov/services/adoption", phone: "(602) 255-2500", mailing: "Contact superior court or DCS", access: "Closed", notes: "Court order or agency consent required" },
+  { state: "Arkansas", office: "Department of Human Services", website: "https://humanservices.arkansas.gov/divisions-shared-services/adoption/", phone: "(501) 682-1550", mailing: "P.O. Box 1437, Little Rock, AR 72203", access: "Restricted", notes: "Non-identifying info; registry available" },
+  { state: "California", office: "Department of Social Services / Court", website: "https://www.cdss.ca.gov/adoptions", phone: "(916) 651-8848", mailing: "744 P Street, Sacramento, CA 95814", access: "Semi-open", notes: "Adult adoptees can petition court for OBC; mutual consent registry" },
+  { state: "Colorado", office: "Vital Records / Court", website: "https://cdphe.colorado.gov/adoption-records", phone: "(303) 692-2200", mailing: "P.O. Box 18280, Denver, CO 80218", access: "Restricted", notes: "Non-identifying info; some OBC access post-2014" },
+  { state: "Connecticut", office: "Department of Children and Families", website: "https://portal.ct.gov/DCF/Adoption", phone: "(860) 418-8000", mailing: "505 Hudson Street, Hartford, CT 06106", access: "Restricted", notes: "Mutual consent registry; limited OBC access" },
+  { state: "Delaware", office: "Department of Services for Children", website: "https://kids.delaware.gov/adoption/", phone: "(302) 577-3000", mailing: "1825 Faulkland Rd, Wilmington, DE 19805", access: "Closed", notes: "Court order typically required" },
+  { state: "Florida", office: "Department of Children and Families", website: "https://www.myflfamilies.com/services/abuse/adoption", phone: "(850) 487-1111", mailing: "2415 N. Monroe St, Tallahassee, FL 32303", access: "Restricted", notes: "Non-identifying info; registry available" },
+  { state: "Georgia", office: "Department of Human Services", website: "https://dfcs.georgia.gov/adoption", phone: "(404) 657-3400", mailing: "2 Peachtree St NW, Atlanta, GA 30303", access: "Closed", notes: "Court order usually required" },
+  { state: "Hawaii", office: "Department of Health / Court", website: "https://health.hawaii.gov/vitalrecords/adoption/", phone: "(808) 586-4533", mailing: "P.O. Box 3378, Honolulu, HI 96801", access: "Restricted", notes: "Non-identifying info available" },
+  { state: "Idaho", office: "Vital Records / Court", website: "https://healthandwelfare.idaho.gov/services-programs/adoption", phone: "(208) 334-5980", mailing: "P.O. Box 83720, Boise, ID 83720", access: "Restricted", notes: "Court order required" },
+  { state: "Illinois", office: "Department of Children and Family Services", website: "https://dcfs.illinois.gov/adoption.html", phone: "(800) 232-3793", mailing: "100 W. Randolph St, Chicago, IL 60601", access: "Restricted", notes: "Mutual consent registry; some OBC access" },
+  { state: "Indiana", office: "Department of Child Services", website: "https://www.in.gov/dcs/adoption/", phone: "(317) 234-5437", mailing: "402 W. Washington St, Indianapolis, IN 46204", access: "Closed", notes: "Non-identifying info; registry" },
+  { state: "Iowa", office: "Department of Health and Human Services", website: "https://hhs.iowa.gov/adoption", phone: "(515) 281-4944", mailing: "321 E. 12th St, Des Moines, IA 50319", access: "Restricted", notes: "Non-identifying info available" },
+  { state: "Kansas", office: "Department for Children and Families", website: "https://www.dcf.ks.gov/services/ees/Pages/Adoption.aspx", phone: "(785) 296-3271", mailing: "555 S. Kansas Ave, Topeka, KS 66603", access: "Closed", notes: "Court order required" },
+  { state: "Kentucky", office: "Cabinet for Health and Family Services", website: "https://chfs.ky.gov/agencies/dcbs/dpp/oohc/Pages/adoption.aspx", phone: "(502) 564-5497", mailing: "275 E. Main St, Frankfort, KY 40621", access: "Restricted", notes: "Non-identifying info; registry" },
+  { state: "Louisiana", office: "Department of Children and Family Services", website: "https://dcfs.louisiana.gov/page/adoption", phone: "(225) 342-4041", mailing: "P.O. Box 260036, Baton Rouge, LA 70826", access: "Closed", notes: "Court order typically required" },
+  { state: "Maine", office: "Department of Health and Human Services", website: "https://www.maine.gov/dhhs/ocfs/adoption", phone: "(207) 624-2600", mailing: "109 Capitol St, Augusta, ME 04333", access: "Restricted", notes: "Non-identifying info available" },
+  { state: "Maryland", office: "Department of Human Services", website: "https://dhs.maryland.gov/adoption/", phone: "(410) 767-7570", mailing: "311 W. Saratoga St, Baltimore, MD 21201", access: "Restricted", notes: "Mutual consent registry" },
+  { state: "Massachusetts", office: "Department of Children and Families", website: "https://www.mass.gov/orgs/department-of-children-and-families", phone: "(617) 727-0900", mailing: "600 Washington St, Boston, MA 02111", access: "Restricted", notes: "Non-identifying info; some OBC access" },
+  { state: "Michigan", office: "Department of Health and Human Services", website: "https://www.michigan.gov/mdhhs/adult-child-serv/adoption", phone: "(517) 241-3740", mailing: "P.O. Box 30721, Lansing, MI 48909", access: "Restricted", notes: "Central Adoption Registry" },
+  { state: "Minnesota", office: "Department of Human Services", website: "https://mn.gov/dhs/people-we-serve/children-and-families/services/adoption/", phone: "(651) 431-6500", mailing: "P.O. Box 64997, St. Paul, MN 55164", access: "Restricted", notes: "Non-identifying info; registry" },
+  { state: "Mississippi", office: "Department of Human Services", website: "https://www.mdhs.ms.gov/adoption/", phone: "(601) 359-4500", mailing: "P.O. Box 352, Jackson, MS 39205", access: "Closed", notes: "Court order required" },
+  { state: "Missouri", office: "Department of Social Services", website: "https://dss.mo.gov/children/foster-care-adoption/", phone: "(573) 751-4836", mailing: "P.O. Box 88, Jefferson City, MO 65103", access: "Restricted", notes: "Non-identifying info available" },
+  { state: "Montana", office: "Department of Public Health and Human Services", website: "https://dphhs.mt.gov/cfsd/adoption", phone: "(406) 444-5622", mailing: "P.O. Box 202951, Helena, MT 59620", access: "Restricted", notes: "Court order usually required" },
+  { state: "Nebraska", office: "Department of Health and Human Services", website: "https://dhhs.ne.gov/Pages/Adoption.aspx", phone: "(402) 471-3121", mailing: "P.O. Box 95026, Lincoln, NE 68509", access: "Restricted", notes: "Non-identifying info; registry" },
+  { state: "Nevada", office: "Division of Welfare and Supportive Services", website: "https://dwss.nv.gov/Child_Welfare/Adoption/", phone: "(775) 684-7200", mailing: "1470 E. College Pkwy, Carson City, NV 89706", access: "Restricted", notes: "Court order required" },
+  { state: "New Hampshire", office: "Department of Health and Human Services", website: "https://www.dhhs.nh.gov/programs-services/children-youth-families/adoption", phone: "(603) 271-4701", mailing: "129 Pleasant St, Concord, NH 03301", access: "Restricted", notes: "Non-identifying info available" },
+  { state: "New Jersey", office: "Department of Children and Families", website: "https://www.nj.gov/dcf/adoption/", phone: "(609) 292-9270", mailing: "P.O. Box 717, Trenton, NJ 08625", access: "Restricted", notes: "Mutual consent registry" },
+  { state: "New Mexico", office: "Children, Youth and Families Department", website: "https://cyfd.org/adoption", phone: "(505) 841-6100", mailing: "P.O. Box 546, Santa Fe, NM 87504", access: "Restricted", notes: "Non-identifying info available" },
+  { state: "New York", office: "Office of Children and Family Services", website: "https://ocfs.ny.gov/adopt/", phone: "(518) 473-7793", mailing: "52 Washington St, Rensselaer, NY 12144", access: "Restricted", notes: "Adoption registry; some OBC access" },
+  { state: "North Carolina", office: "Department of Health and Human Services", website: "https://www.ncdhhs.gov/divisions/social-services/adoption", phone: "(919) 733-7672", mailing: "2401 Mail Service Center, Raleigh, NC 27699", access: "Restricted", notes: "Non-identifying info; registry" },
+  { state: "North Dakota", office: "Department of Human Services", website: "https://www.hhs.nd.gov/adoption", phone: "(701) 328-2310", mailing: "600 E. Boulevard Ave, Bismarck, ND 58505", access: "Closed", notes: "Court order required" },
+  { state: "Ohio", office: "Department of Job and Family Services", website: "https://jfs.ohio.gov/children-families/adoption/", phone: "(614) 466-9274", mailing: "30 E. Broad St, Columbus, OH 43215", access: "Restricted", notes: "Non-identifying info; registry" },
+  { state: "Oklahoma", office: "Department of Human Services", website: "https://oklahoma.gov/okdhs/services/child-welfare/adoption.html", phone: "(405) 521-3646", mailing: "P.O. Box 25352, Oklahoma City, OK 73125", access: "Restricted", notes: "Court order usually required" },
+  { state: "Oregon", office: "Department of Human Services", website: "https://www.oregon.gov/odhs/adoption", phone: "(503) 945-5600", mailing: "500 Summer St NE, Salem, OR 97301", access: "Restricted", notes: "Non-identifying info; some OBC access" },
+  { state: "Pennsylvania", office: "Department of Human Services", website: "https://www.dhs.pa.gov/Services/Children/Pages/Adoption.aspx", phone: "(717) 783-5772", mailing: "P.O. Box 2675, Harrisburg, PA 17105", access: "Restricted", notes: "Mutual consent registry" },
+  { state: "Rhode Island", office: "Department of Children, Youth and Families", website: "https://dcyf.ri.gov/adoption", phone: "(401) 528-3502", mailing: "101 Friendship St, Providence, RI 02903", access: "Restricted", notes: "Non-identifying info available" },
+  { state: "South Carolina", office: "Department of Social Services", website: "https://dss.sc.gov/child-welfare/adoption/", phone: "(803) 898-9100", mailing: "P.O. Box 1520, Columbia, SC 29202", access: "Restricted", notes: "Court order typically required" },
+  { state: "South Dakota", office: "Department of Social Services", website: "https://dss.sd.gov/childprotection/adoption/", phone: "(605) 773-3227", mailing: "700 Governors Dr, Pierre, SD 57501", access: "Closed", notes: "Non-identifying info available" },
+  { state: "Tennessee", office: "Department of Children’s Services", website: "https://www.tn.gov/dcs/program-areas/adoption.html", phone: "(615) 741-9701", mailing: "315 Deaderick St, Nashville, TN 37243", access: "Restricted", notes: "Mutual consent registry" },
+  { state: "Texas", office: "Department of Family and Protective Services", website: "https://www.dfps.texas.gov/adoption/", phone: "(512) 776-7111", mailing: "P.O. Box 149030, Austin, TX 78714", access: "Restricted", notes: "Central Adoption Registry" },
+  { state: "Utah", office: "Department of Health and Human Services", website: "https://dhhs.utah.gov/adoption/", phone: "(801) 538-6105", mailing: "P.O. Box 141012, Salt Lake City, UT 84114", access: "Restricted", notes: "Non-identifying info; registry" },
+  { state: "Vermont", office: "Department for Children and Families", website: "https://dcf.vermont.gov/adoption", phone: "(802) 241-2131", mailing: "280 State Dr, Waterbury, VT 05671", access: "Restricted", notes: "Non-identifying info available" },
+  { state: "Virginia", office: "Department of Social Services", website: "https://www.dss.virginia.gov/family/adoption/", phone: "(804) 726-7000", mailing: "801 E. Main St, Richmond, VA 23219", access: "Restricted", notes: "Mutual consent registry" },
+  { state: "Washington", office: "Department of Children, Youth, and Families", website: "https://dcyf.wa.gov/services/adoption", phone: "(360) 407-2211", mailing: "P.O. Box 40900, Olympia, WA 98504", access: "Restricted", notes: "Non-identifying info; registry" },
+  { state: "West Virginia", office: "Department of Health and Human Resources", website: "https://dhhr.wv.gov/bcf/children-families/adoption/", phone: "(304) 558-0684", mailing: "350 Capitol St, Charleston, WV 25301", access: "Closed", notes: "Court order required" },
+  { state: "Wisconsin", office: "Department of Children and Families", website: "https://dcf.wisconsin.gov/adoption", phone: "(608) 266-3678", mailing: "201 W. Washington Ave, Madison, WI 53703", access: "Restricted", notes: "Non-identifying info; registry" },
+  { state: "Wyoming", office: "Department of Family Services", website: "https://dfs.wyo.gov/adoption/", phone: "(307) 777-7561", mailing: "2300 Capitol Ave, Cheyenne, WY 82002", access: "Restricted", notes: "Court order typically required" }
+];
+
+const tableBody = document.getElementById("tableBody");
+const searchInput = document.getElementById("searchInput");
+const themeToggle = document.getElementById("themeToggle");
+
+function escapeHtml(unsafe) {
+  return String(unsafe)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+function renderTable(filteredData = data) {
+  tableBody.innerHTML = "";
+
+  if (filteredData.length === 0) {
+    tableBody.innerHTML = `<tr><td colspan="7" class="no-results">No matching records found</td></tr>`;
+    return;
+  }
+
+  filteredData.forEach(item => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${escapeHtml(item.state)}</td>
+      <td>${escapeHtml(item.office)}</td>
+      <td><a href="${escapeHtml(item.website)}" target="_blank" rel="noopener noreferrer">View Guidance</a></td>
+      <td>${escapeHtml(item.phone)}</td>
+      <td>${escapeHtml(item.mailing)}</td>
+      <td>${escapeHtml(item.access)}</td>
+      <td>${escapeHtml(item.notes)}</td>
+    `;
+    tableBody.appendChild(row);
+  });
+}
+
+function filterTable() {
+  const term = searchInput.value.toLowerCase().trim();
+  if (!term) return renderTable();
+
+  const filtered = data.filter(item =>
+    Object.values(item).some(val =>
+      String(val ?? "").toLowerCase().includes(term)
+    )
+  );
+
+  renderTable(filtered);
+}
+
+// Initial render
+renderTable();
+
+// Event listeners
+searchInput.addEventListener("input", filterTable);
+
+// Theme toggle
+const currentTheme = localStorage.getItem("theme") || "light";
+if (currentTheme === "dark") {
+  document.documentElement.setAttribute("data-theme", "dark");
+  themeToggle.textContent = "Light Mode";
+}
+
+themeToggle.addEventListener("click", () => {
+  const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+  if (isDark) {
+    document.documentElement.removeAttribute("data-theme");
+    themeToggle.textContent = "Dark Mode";
+    localStorage.setItem("theme", "light");
+  } else {
+    document.documentElement.setAttribute("data-theme", "dark");
+    themeToggle.textContent = "Light Mode";
+    localStorage.setItem("theme", "dark");
+  }
+});
+</script>
+
+</body>
+</html>

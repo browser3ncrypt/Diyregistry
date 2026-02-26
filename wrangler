@@ -1,0 +1,24 @@
+# wrangler.toml
+# Optional: Reference the schema for editor validation (recommended)
+# $schema = "node_modules/wrangler/config-schema.json"
+
+name = "email-signup-autoreply"          # Unique name for your Worker (used in dashboard and deployment)
+main = "src/index.js"                    # Path to your entry file (adjust if using .ts or different folder)
+
+compatibility_date = "2026-02-25"        # Use a recent date (or today's date) to access current runtime behavior
+                                         # Update periodically for new features/fixes
+
+compatibility_flags = [ "nodejs_compat" ]  # Required for packages like 'mimetext' (which rely on Node APIs)
+                                           # Add "nodejs_compat_v2" if using newer Node features
+
+# Optional: If sending emails via a send_email binding (advanced outbound, not needed for message.reply())
+# send_email = [
+#   { name = "SEND_EMAIL", destination_address = "your-verified@yourdomain.com" }
+# ]
+
+# Optional: Environment-specific overrides (e.g., for staging/production)
+# [env.staging]
+#   name = "email-signup-autoreply-staging"
+#   compatibility_date = "2026-02-25"
+
+# Optional: If using secrets (e.g., API keys), add via dashboard or wrangler secret; do not hardcode here

@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>US Divorce Certificate / Decree Locator – 50 States</title>
+  <style>
+    :root {
+      --bg: #f8f9fa;
+      --text: #212529;
+      --card: #ffffff;
+      --border: #dee2e6;
+      --accent: #0d6efd;
+    }
+
+    [data-theme="dark"] {
+      --bg: #121212;
+      --text: #e0e0e0;
+      --card: #1e1e1e;
+      --border: #333;
+      --accent: #4da3ff;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 20px;
+      min-height: 100vh;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 1.8rem;
+    }
+
+    .controls {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    #searchInput {
+      padding: 0.6rem 1rem;
+      width: 380px;
+      max-width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 1rem;
+      background: var(--card);
+      color: var(--text);
+    }
+
+    #searchInput:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.15);
+    }
+
+    .theme-toggle {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.5rem 0.9rem;
+      cursor: pointer;
+      font-size: 0.95rem;
+      color: var(--text);
+    }
+
+    .theme-toggle:hover {
+      background: var(--border);
+    }
+
+    .table-container {
+      overflow-x: auto;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--card);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+    }
+
+    th, td {
+      padding: 12px 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    th {
+      background: rgba(0,0,0,0.04);
+      font-weight: 600;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    [data-theme="dark"] th {
+      background: rgba(255,255,255,0.06);
+    }
+
+    tr:hover {
+      background: rgba(0,0,0,0.03);
+    }
+
+    [data-theme="dark"] tr:hover {
+      background: rgba(255,255,255,0.05);
+    }
+
+    .no-results {
+      text-align: center;
+      padding: 3rem;
+      color: #6c757d;
+      font-style: italic;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      .controls {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      #searchInput {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <h1>US Divorce Certificate / Decree Locator – 50 States</h1>
+    <div class="controls">
+      <input type="text" id="searchInput" placeholder="Search by state, office, phone, address…" />
+      <button class="theme-toggle" id="themeToggle">Dark Mode</button>
+    </div>
+  </header>
+
+  <div class="table-container">
+    <table id="dataTable">
+      <thead>
+        <tr>
+          <th>State</th>
+          <th>Primary Office</th>
+          <th>Official Website / Guidance</th>
+          <th>Phone Number</th>
+          <th>Mailing / Contact Address</th>
+          <th>Online Ordering</th>
+          <th>Fee (Certified Copy)</th>
+          <th>Typical Processing Time</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody">
+        <!-- Rows populated by JavaScript -->
+      </tbody>
+    </table>
+  </div>
+
+  <p style="margin-top: 1.5rem; font-size: 0.9rem; color: #6c757d; text-align: center;">
+    Information compiled from official state sources and CDC guidance as of early 2026. Divorce decrees are court records and are usually obtained from the clerk of the court (district/circuit/superior) in the county where the divorce was granted. Divorce certificates (short-form abstracts) are issued by state vital records offices in only some states and for more recent years. Fees and processing times are approximate and subject to change. Eligibility is often restricted (parties to the divorce, attorneys, immediate family, etc.). Always verify directly on the official website. Many states partner with <a href="https://www.vitalchek.com" target="_blank" rel="noopener noreferrer">VitalChek</a> for expedited certificate orders where applicable.
+  </p>
+</div>
+
+<script>
+const data = [
+  { state: "Alabama", office: "Circuit Court Clerk", website: "https://www.alacourt.gov/", phone: "Varies by county", mailing: "Contact circuit clerk in county of divorce", online: "County-specific", fee: "$10–$30", processing: "Varies (days to weeks)" },
+  { state: "Alaska", office: "Bureau of Vital Statistics (certificate) / Court", website: "https://dhss.alaska.gov/dph/VitalStats/Pages/divorce.aspx", phone: "(907) 465-3391", mailing: "P.O. Box 110675, Juneau, AK 99811-0675", online: "VitalChek (certificate)", fee: "$25", processing: "2–4 weeks" },
+  { state: "Arizona", office: "Superior Court Clerk", website: "https://www.azcourts.gov/selfhelpcenter/Divorce", phone: "Varies by county", mailing: "Contact superior court clerk", online: "County portals", fee: "$10–$30", processing: "Varies" },
+  { state: "Arkansas", office: "Circuit / Chancery Clerk", website: "https://www.arcourts.gov/", phone: "Varies by county", mailing: "Contact circuit clerk", online: "County-specific", fee: "$10–$20", processing: "Varies" },
+  { state: "California", office: "Superior Court Clerk", website: "https://www.courts.ca.gov/selfhelp-divorce.htm", phone: "Varies by county", mailing: "Contact superior court in county of divorce", online: "County portals", fee: "$15–$40", processing: "Varies (weeks)" },
+  { state: "Colorado", office: "District Court Clerk", website: "https://www.courts.state.co.us/", phone: "Varies by county", mailing: "Contact district court clerk", online: "County-specific", fee: "$20–$35", processing: "Varies" },
+  { state: "Connecticut", office: "Superior Court Clerk", website: "https://www.jud.ct.gov/", phone: "Varies by judicial district", mailing: "Contact superior court", online: "State/county portals", fee: "$20–$50", processing: "Varies" },
+  { state: "Delaware", office: "Family Court / Vital Statistics", website: "https://courts.delaware.gov/family/", phone: "(302) 255-9290", mailing: "Contact Family Court", online: "VitalChek (limited)", fee: "$25", processing: "2–4 weeks" },
+  { state: "Florida", office: "Clerk of Circuit Court", website: "https://www.floridahealth.gov/certificates/certificates/divorce/", phone: "(904) 359-6900 (state)", mailing: "P.O. Box 210, Jacksonville, FL 32231", online: "VitalChek", fee: "$15", processing: "3–5 business days (recent)" },
+  { state: "Georgia", office: "Superior Court Clerk", website: "https://georgiacourts.gov/", phone: "Varies by county", mailing: "Contact superior court clerk", online: "County-specific", fee: "$10–$25", processing: "Varies" },
+  { state: "Hawaii", office: "Vital Records / Family Court", website: "https://health.hawaii.gov/vitalrecords/divorce-certificates/", phone: "(808) 586-4533", mailing: "P.O. Box 3378, Honolulu, HI 96801", online: "VitalChek", fee: "$10–$25", processing: "2–6 weeks" },
+  { state: "Idaho", office: "District Court Clerk", website: "https://courtselfhelp.idaho.gov/", phone: "Varies by county", mailing: "Contact district court", online: "VitalChek (limited)", fee: "$10–$30", processing: "Varies" },
+  { state: "Illinois", office: "Circuit Court Clerk", website: "https://www.illinoiscourts.gov/", phone: "Varies by county", mailing: "Contact circuit clerk", online: "County portals", fee: "$10–$30", processing: "Varies" },
+  { state: "Indiana", office: "Circuit / Superior Court Clerk", website: "https://www.in.gov/courts/", phone: "Varies by county", mailing: "Contact court clerk", online: "County-specific", fee: "$10–$25", processing: "Varies" },
+  { state: "Iowa", office: "District Court Clerk", website: "https://www.iowacourts.gov/", phone: "Varies by county", mailing: "Contact district clerk", online: "County portals", fee: "$15–$35", processing: "Varies" },
+  { state: "Kansas", office: "District Court Clerk", website: "https://www.kscourts.org/", phone: "Varies by county", mailing: "Contact district clerk", online: "County-specific", fee: "$15–$30", processing: "Varies" },
+  { state: "Kentucky", office: "Circuit Court Clerk", website: "https://kycourts.gov/", phone: "Varies by county", mailing: "Contact circuit clerk", online: "County portals", fee: "$10–$20", processing: "Varies" },
+  { state: "Louisiana", office: "District Court Clerk", website: "https://www.lasc.org/", phone: "Varies by parish", mailing: "Contact district clerk", online: "Parish-specific", fee: "$15–$50", processing: "Varies" },
+  { state: "Maine", office: "Vital Records / District Court", website: "https://www.maine.gov/dhhs/mecdc/public-health-systems/data-research/vital-records/", phone: "(207) 287-3184", mailing: "Contact vital records or court", online: "VitalChek", fee: "$15–$30", processing: "2–4 weeks" },
+  { state: "Maryland", office: "Circuit Court Clerk", website: "https://health.maryland.gov/vsa/Pages/divorce.aspx", phone: "(410) 764-3038", mailing: "P.O. Box 68760, Baltimore, MD 21215", online: "VitalChek", fee: "$24", processing: "2–4 weeks" },
+  { state: "Massachusetts", office: "Probate & Family Court / Registry", website: "https://www.mass.gov/divorce-certificates", phone: "(617) 740-2600", mailing: "150 Mt. Vernon St, Dorchester, MA 02125", online: "VitalChek", fee: "$20–$30", processing: "2–4 weeks" },
+  { state: "Michigan", office: "Circuit Court Clerk", website: "https://www.michigan.gov/mdhhs/doing-business/vitalrecords/divorce", phone: "(517) 335-8656", mailing: "P.O. Box 30721, Lansing, MI 48909", online: "VitalChek", fee: "$34", processing: "1–2 weeks expedited" },
+  { state: "Minnesota", office: "Court Administrator / Health Dept.", website: "https://www.health.state.mn.us/people/vitalrecords/divorce.html", phone: "(651) 201-5970", mailing: "P.O. Box 64499, St. Paul, MN 55164", online: "VitalChek", fee: "$13", processing: "Days to weeks" },
+  { state: "Mississippi", office: "Chancery Clerk", website: "https://www.ms.gov/mdhs/vital_records/", phone: "Varies by county", mailing: "Contact chancery clerk", online: "County-specific", fee: "$15–$25", processing: "Varies" },
+  { state: "Missouri", office: "Circuit Court Clerk", website: "https://health.mo.gov/data/vitalstatistics/divorce.php", phone: "(573) 751-6387", mailing: "P.O. Box 570, Jefferson City, MO 65102", online: "VitalChek", fee: "$15–$25", processing: "2–4 weeks" },
+  { state: "Montana", office: "District Court Clerk", website: "https://dphhs.mt.gov/publichealth/vitalrecords/divorce", phone: "(406) 444-4228", mailing: "Contact district court", online: "VitalChek (limited)", fee: "$10–$20", processing: "Varies" },
+  { state: "Nebraska", office: "District Court Clerk", website: "https://dhhs.ne.gov/Pages/Vital-Records.aspx", phone: "(402) 471-2311", mailing: "Contact district court", online: "VitalChek (limited)", fee: "$15–$25", processing: "Varies" },
+  { state: "Nevada", office: "County Clerk / Vital Records", website: "https://dhhs.nv.gov/Programs/Vital_Records/", phone: "(775) 684-4242", mailing: "4150 Technology Way, Carson City, NV 89706", online: "VitalChek", fee: "$20", processing: "2–4 weeks" },
+  { state: "New Hampshire", office: "Vital Records / Court", website: "https://www.nh.gov/sos/bdm/divorce.htm", phone: "(603) 271-4654", mailing: "P.O. Box 3006, Concord, NH 03302", online: "VitalChek", fee: "$15–$25", processing: "2–4 weeks" },
+  { state: "New Jersey", office: "Superior Court Clerk", website: "https://www.nj.gov/health/vital/divorce/", phone: "(609) 292-4087", mailing: "P.O. Box 370, Trenton, NJ 08625", online: "VitalChek", fee: "$25", processing: "2–4 weeks" },
+  { state: "New Mexico", office: "District Court Clerk", website: "https://www.nmhealth.org/about/phd/vrp/divorce/", phone: "(505) 827-0121", mailing: "Contact district court", online: "VitalChek (limited)", fee: "$10–$20", processing: "Varies" },
+  { state: "New York", office: "Supreme Court Clerk / Vital Records", website: "https://www.health.ny.gov/vital_records/divorce.htm", phone: "(518) 474-3075", mailing: "P.O. Box 2602, Albany, NY 12220", online: "VitalChek", fee: "$30", processing: "2–4 weeks" },
+  { state: "North Carolina", office: "Clerk of Superior Court", website: "https://vitalrecords.nc.gov/divorce.htm", phone: "(919) 733-3000", mailing: "1903 Mail Service Center, Raleigh, NC 27699", online: "VitalChek", fee: "$24", processing: "4 weeks standard" },
+  { state: "North Dakota", office: "State Department of Health", website: "https://www.hhs.nd.gov/vital-records/divorce-certificates", phone: "(701) 328-2360", mailing: "600 E. Boulevard Ave, Bismarck, ND 58505", online: "VitalChek", fee: "$25", processing: "2–4 weeks" },
+  { state: "Ohio", office: "Court of Common Pleas Clerk", website: "https://odh.ohio.gov/know-our-programs/vital-statistics/divorce-certificates", phone: "(614) 466-2531", mailing: "Contact common pleas court", online: "VitalChek", fee: "$10–$25", processing: "Varies" },
+  { state: "Oklahoma", office: "Court Clerk", website: "https://oklahoma.gov/health/services/birth-death-certificates.html", phone: "Varies by county", mailing: "Contact court clerk", online: "County-specific", fee: "$10–$20", processing: "Varies" },
+  { state: "Oregon", office: "Circuit Court Clerk", website: "https://www.oregon.gov/oha/PH/BIRTHDEATHCERTIFICATES/Pages/divorce.aspx", phone: "Varies by county", mailing: "Contact circuit court", online: "VitalChek (limited)", fee: "$25–$35", processing: "Varies" },
+  { state: "Pennsylvania", office: "Prothonotary / Register of Wills", website: "https://www.health.pa.gov/topics/certificates/Pages/Divorce-Certificates.aspx", phone: "Varies by county", mailing: "Contact prothonotary", online: "VitalChek", fee: "$10–$25", processing: "Varies" },
+  { state: "Rhode Island", office: "Vital Records / Family Court", website: "https://health.ri.gov/records/certificates/divorce.php", phone: "(401) 222-2811", mailing: "3 Capitol Hill, Providence, RI 02908", online: "VitalChek", fee: "$26", processing: "2–4 weeks" },
+  { state: "South Carolina", office: "Department of Public Health", website: "https://dph.sc.gov/public/vital-records/divorce-certificates", phone: "(803) 898-3630", mailing: "P.O. Box 2200, Columbia, SC 29202", online: "VitalChek", fee: "$12–$17", processing: "5–7 business days expedited" },
+  { state: "South Dakota", office: "Clerk of Courts", website: "https://doh.sd.gov/records/divorce-certificates/", phone: "Varies by county", mailing: "Contact clerk of courts", online: "VitalChek", fee: "$20–$30", processing: "Varies" },
+  { state: "Tennessee", office: "Circuit / Chancery Court Clerk", website: "https://www.tn.gov/health/health-program-areas/vital-records/divorce-certificates.html", phone: "Varies by county", mailing: "Contact court clerk", online: "VitalChek", fee: "$15", processing: "2–4 weeks" },
+  { state: "Texas", office: "District Clerk", website: "https://www.dshs.texas.gov/vital-statistics/divorce-records", phone: "(512) 776-7111", mailing: "Contact district clerk in county of divorce", online: "County portals", fee: "$10–$30", processing: "Varies" },
+  { state: "Utah", office: "District Court Clerk / Vital Records", website: "https://vitalrecords.utah.gov/divorce", phone: "(801) 538-6105", mailing: "P.O. Box 141012, Salt Lake City, UT 84114", online: "VitalChek", fee: "$22", processing: "2–4 weeks" },
+  { state: "Vermont", office: "Vital Records / Family Division", website: "https://www.healthvermont.gov/vital-records/divorce-certificates", phone: "(802) 863-7275", mailing: "P.O. Box 70, Burlington, VT 05402", online: "VitalChek", fee: "$10–$30", processing: "Varies" },
+  { state: "Virginia", office: "Circuit Court Clerk", website: "https://www.vdh.virginia.gov/vital-records/divorce-certificates/", phone: "(804) 662-6200", mailing: "P.O. Box 1000, Richmond, VA 23218", online: "VitalChek", fee: "$12", processing: "2–4 weeks" },
+  { state: "Washington", office: "County Auditor / Superior Court", website: "https://doh.wa.gov/licenses-permits-and-certificates/vital-records/divorce-certificates", phone: "(360) 236-4300", mailing: "P.O. Box 9709, Olympia, WA 98507", online: "VitalChek", fee: "$25", processing: "6–8 weeks" },
+  { state: "West Virginia", office: "Circuit Court Clerk", website: "https://dhhr.wv.gov/bph/Pages/vital-registration.aspx", phone: "(304) 558-2931", mailing: "Contact circuit clerk", online: "VitalChek", fee: "$15–$25", processing: "Varies" },
+  { state: "Wisconsin", office: "Register in Probate / Vital Records", website: "https://www.dhs.wisconsin.gov/vitalrecords/divorce.htm", phone: "(608) 266-1371", mailing: "P.O. Box 309, Madison, WI 53701", online: "VitalChek", fee: "$30", processing: "2–4 weeks" },
+  { state: "Wyoming", office: "District Court Clerk", website: "https://health.wyo.gov/publichealth/vital-records/divorce-certificates/", phone: "(307) 777-7591", mailing: "Contact district court", online: "VitalChek", fee: "$20–$30", processing: "Varies" }
+];
+
+const tableBody = document.getElementById("tableBody");
+const searchInput = document.getElementById("searchInput");
+const themeToggle = document.getElementById("themeToggle");
+
+function escapeHtml(unsafe) {
+  return String(unsafe)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+function renderTable(filteredData = data) {
+  tableBody.innerHTML = "";
+
+  if (filteredData.length === 0) {
+    tableBody.innerHTML = `<tr><td colspan="8" class="no-results">No matching records found</td></tr>`;
+    return;
+  }
+
+  filteredData.forEach(item => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${escapeHtml(item.state)}</td>
+      <td>${escapeHtml(item.office)}</td>
+      <td><a href="${escapeHtml(item.website)}" target="_blank" rel="noopener noreferrer">Visit Official Site</a></td>
+      <td>${escapeHtml(item.phone)}</td>
+      <td>${escapeHtml(item.mailing)}</td>
+      <td>${escapeHtml(item.online)}</td>
+      <td>${escapeHtml(item.fee)}</td>
+      <td>${escapeHtml(item.processing)}</td>
+    `;
+    tableBody.appendChild(row);
+  });
+}
+
+function filterTable() {
+  const term = searchInput.value.toLowerCase().trim();
+  if (!term) return renderTable();
+
+  const filtered = data.filter(item =>
+    Object.values(item).some(val =>
+      String(val ?? "").toLowerCase().includes(term)
+    )
+  );
+
+  renderTable(filtered);
+}
+
+// Initial render
+renderTable();
+
+// Event listeners
+searchInput.addEventListener("input", filterTable);
+
+// Theme toggle
+const currentTheme = localStorage.getItem("theme") || "light";
+if (currentTheme === "dark") {
+  document.documentElement.setAttribute("data-theme", "dark");
+  themeToggle.textContent = "Light Mode";
+}
+
+themeToggle.addEventListener("click", () => {
+  const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+  if (isDark) {
+    document.documentElement.removeAttribute("data-theme");
+    themeToggle.textContent = "Dark Mode";
+    localStorage.setItem("theme", "light");
+  } else {
+    document.documentElement.setAttribute("data-theme", "dark");
+    themeToggle.textContent = "Light Mode";
+    localStorage.setItem("theme", "dark");
+  }
+});
+</script>
+
+</body>
+</html>

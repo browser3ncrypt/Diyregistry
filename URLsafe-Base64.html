@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Base64 / URL-safe Base64 Encoder-Decoder</title>
+    <style>
+        :root {
+            --bg-body:        #f8f9fa;
+            --bg-panel:       white;
+            --text-primary:   #212529;
+            --text-secondary: #495057;
+            --text-muted:     #6c757d;
+            --border:         #ced4da;
+            --shadow:         0 2px 12px rgba(0,0,0,0.08);
+            --btn-primary:    #0d6efd;
+            --btn-primary-hover: #0b5ed7;
+            --btn-secondary:  #6c757d;
+            --btn-secondary-hover: #5c636a;
+            --textarea-bg:    #fdfdfe;
+            --file-bg:        #f1f3f5;
+        }
+
+        [data-theme="dark"] {
+            --bg-body:        #121212;
+            --bg-panel:       #1e1e1e;
+            --text-primary:   #e0e0e0;
+            --text-secondary: #bbbbbb;
+            --text-muted:     #888888;
+            --border:         #444;
+            --shadow:         0 2px 12px rgba(0,0,0,0.5);
+            --btn-primary:    #3d8aff;
+            --btn-primary-hover: #2e7aff;
+            --btn-secondary:  #555;
+            --btn-secondary-hover: #666;
+            --textarea-bg:    #181818;
+            --file-bg:        #2a2a2a;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: var(--bg-body);
+            color: var(--text-primary);
+            margin: 40px auto;
+            padding: 0 20px;
+            max-width: 960px;
+            min-height: 100vh;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        h1 {
+            color: var(--btn-primary);
+            text-align: center;
+            margin-bottom: 0.8em;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.6rem;
+        }
+
+        .variant-selector {
+            display: flex;
+            gap: 1.2rem;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+
+        .variant-selector label {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            cursor: pointer;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        @media (max-width: 800px) {
+            .container { grid-template-columns: 1fr; }
+            .variant-selector { flex-direction: column; gap: 0.6rem; }
+        }
+
+        .panel {
+            background: var(--bg-panel);
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            padding: 24px;
+        }
+
+        .panel h2 {
+            margin-top: 0;
+            color: var(--text-secondary);
+            font-size: 1.3rem;
+        }
+
+        textarea {
+            width: 100%;
+            height: 160px;
+            padding: 12px;
+            font-family: "Consolas", "Menlo", "Courier New", monospace;
+            font-size: 15px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            resize: vertical;
+            background: var(--textarea-bg);
+            color: var(--text-primary);
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--btn-primary);
+            box-shadow: 0 0 0 3px rgba(13,110,253,0.25);
+        }
+
+        .file-input-wrapper {
+            margin: 16px 0;
+            padding: 16px;
+            background: var(--file-bg);
+            border: 2px dashed var(--border);
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+
+        .file-input-wrapper:hover, .file-input-wrapper.dragover {
+            border-color: var(--btn-primary);
+        }
+
+        .file-input-wrapper.dragover {
+            background: rgba(13,110,253,0.08);
+        }
+
+        input[type="file"] { display: none; }
+
+        .file-name {
+            margin-top: 8px;
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            word-break: break-all;
+        }
+
+        .controls {
+            margin: 16px 0;
+            text-align: center;
+        }
+
+        button {
+            padding: 10px 24px;
+            font-size: 1rem;
+            margin: 0 10px 8px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            background: var(--btn-primary);
+            color: white;
+            transition: background 0.2s;
+        }
+
+        button:hover { background: var(--btn-primary-hover); }
+
+        button.secondary { background: var(--btn-secondary); }
+        button.secondary:hover { background: var(--btn-secondary-hover); }
+
+        button.download {
+            background: #198754;
+        }
+        button.download:hover {
+            background: #157347;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            padding: 8px 14px;
+            font-size: 0.95rem;
+        }
+
+        .theme-toggle:hover {
+            background: rgba(100,100,100,0.1);
+        }
+
+        .info {
+            font-size: 0.92rem;
+            color: var(--text-muted);
+            margin-top: 2.5em;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>Base64 Encoder / Decoder</h1>
+    <button class="theme-toggle" id="themeToggle">Dark Mode</button>
+</div>
+
+<div style="text-align:center; margin-bottom:1.8rem;">
+    <div class="variant-selector">
+        <label><input type="radio" name="variant" value="standard" id="variantStandard" checked> Standard Base64 (+/ =)</label>
+        <label><input type="radio" name="variant" value="urlsafe" id="variantUrlSafe"> URL-safe Base64 (-_ no padding)</label>
+    </div>
+</div>
+
+<div class="container">
+    <div class="panel">
+        <h2>Input</h2>
+        
+        <div class="file-input-wrapper" id="dropZone">
+            <p>Drag & drop file or click to select<br>(text or binary supported)</p>
+            <input type="file" id="fileInput" />
+            <div class="file-name" id="fileNameDisplay"></div>
+        </div>
+
+        <textarea id="input" placeholder="Paste text, Base64, or URL-safe Base64 here…"></textarea>
+        
+        <div class="controls">
+            <button onclick="encode()">Encode</button>
+            <button onclick="decode()" class="secondary">Decode</button>
+        </div>
+    </div>
+
+    <div class="panel">
+        <h2>Output</h2>
+        <textarea id="output" placeholder="Result appears here…" readonly></textarea>
+        
+        <div class="controls">
+            <button onclick="copyResult()">Copy Text</button>
+            <button onclick="downloadResult()" class="download" id="downloadBtn" disabled>Download Result</button>
+            <button onclick="clearAll()" class="secondary">Clear All</button>
+        </div>
+    </div>
+</div>
+
+<div class="info">
+    Browser-only • Supports standard & URL-safe Base64 • Binary files • UTF-8
+</div>
+
+<script>
+    // ── DOM elements ──────────────────────────────────────────
+    const inputEl     = document.getElementById('input');
+    const outputEl    = document.getElementById('output');
+    const fileInput   = document.getElementById('fileInput');
+    const dropZone    = document.getElementById('dropZone');
+    const fileNameDiv = document.getElementById('fileNameDisplay');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const themeToggle = document.getElementById('themeToggle');
+    const variantStandard = document.getElementById('variantStandard');
+    const variantUrlSafe  = document.getElementById('variantUrlSafe');
+    const html = document.documentElement;
+
+    let currentFile     = null;
+    let currentFileName = '';
+    let resultType      = 'text';
+    let resultData      = null;
+
+    // ── Variant persistence ───────────────────────────────────
+    function loadVariant() {
+        const saved = localStorage.getItem('base64Variant') || 'standard';
+        if (saved === 'urlsafe') {
+            variantUrlSafe.checked = true;
+        } else {
+            variantStandard.checked = true;
+        }
+    }
+
+    function getVariant() {
+        return variantUrlSafe.checked ? 'urlsafe' : 'standard';
+    }
+
+    [variantStandard, variantUrlSafe].forEach(radio => {
+        radio.addEventListener('change', () => {
+            localStorage.setItem('base64Variant', getVariant());
+        });
+    });
+
+    // ── Theme ─────────────────────────────────────────────────
+    function initTheme() {
+        const saved = localStorage.getItem('theme');
+        if (saved) {
+            html.setAttribute('data-theme', saved);
+        } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            html.setAttribute('data-theme', 'dark');
+        }
+        updateToggleText();
+    }
+
+    function updateToggleText() {
+        themeToggle.textContent = html.getAttribute('data-theme') === 'dark' ? 'Light Mode' : 'Dark Mode';
+    }
+
+    themeToggle.addEventListener('click', () => {
+        const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        html.setAttribute('data-theme', next);
+        localStorage.setItem('theme', next);
+        updateToggleText();
+    });
+
+    // ── File handling ─────────────────────────────────────────
+    function readFileAsText(file) {
+        return new Promise((res, rej) => {
+            const reader = new FileReader();
+            reader.onload = () => res(reader.result);
+            reader.onerror = rej;
+            reader.readAsText(file);
+        });
+    }
+
+    function readFileAsDataURL(file) {
+        return new Promise((res, rej) => {
+            const reader = new FileReader();
+            reader.onload = () => res(reader.result);
+            reader.onerror = rej;
+            reader.readAsDataURL(file);
+        });
+    }
+
+    async function handleFile(file) {
+        if (!file) return;
+        currentFile = file;
+        currentFileName = file.name;
+        fileNameDiv.textContent = `Selected: \( {file.name}  ( \){(file.size/1024).toFixed(1)} KB)`;
+
+        try {
+            const text = await readFileAsText(file);
+            inputEl.value = text;
+            resultType = 'text';
+        } catch {
+            const dataUrl = await readFileAsDataURL(file);
+            inputEl.value = dataUrl;
+            resultType = 'binary';
+        }
+    }
+
+    fileInput.addEventListener('change', e => handleFile(e.target.files[0]));
+    dropZone.addEventListener('click', () => fileInput.click());
+
+    dropZone.addEventListener('dragover', e => {
+        e.preventDefault();
+        dropZone.classList.add('dragover');
+    });
+
+    dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+
+    dropZone.addEventListener('drop', e => {
+        e.preventDefault();
+        dropZone.classList.remove('dragover');
+        handleFile(e.dataTransfer.files[0]);
+    });
+
+    // ── Base64 helpers ────────────────────────────────────────
+    function toUrlSafe(str) {
+        return str.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    }
+
+    function fromUrlSafe(str) {
+        str = str.replace(/-/g, '+').replace(/_/g, '/');
+        while (str.length % 4) str += '=';
+        return str;
+    }
+
+    function encodeBase64(text, variant) {
+        let encoded = btoa(unescape(encodeURIComponent(text)));
+        return variant === 'urlsafe' ? toUrlSafe(encoded) : encoded;
+    }
+
+    function decodeBase64(str, variant) {
+        let cleaned = variant === 'urlsafe' ? fromUrlSafe(str) : str;
+        return decodeURIComponent(escape(atob(cleaned)));
+    }
+
+    // ── Encode / Decode ───────────────────────────────────────
+    function encode() {
+        const value = inputEl.value.trim();
+        if (!value) return;
+
+        try {
+            let encoded;
+            if (resultType === 'binary' && value.startsWith('data:')) {
+                encoded = value.split(',')[1];
+                if (getVariant() === 'urlsafe') encoded = toUrlSafe(encoded);
+            } else {
+                encoded = encodeBase64(value, getVariant());
+            }
+            outputEl.value = encoded;
+            prepareDownload(encoded, currentFileName ? currentFileName + (getVariant()==='urlsafe'?'.urlsafe.b64':' .b64.txt') : 'encoded.txt', 'text/plain');
+        } catch (e) {
+            outputEl.value = `Encoding error:\n${e.message}`;
+            downloadBtn.disabled = true;
+        }
+    }
+
+    function decode() {
+        const value = inputEl.value.trim();
+        if (!value) return;
+
+        try {
+            const variant = getVariant();
+            const binaryStr = atob(variant === 'urlsafe' ? fromUrlSafe(value) : value);
+            const bytes = new Uint8Array(binaryStr.length);
+            for (let i = 0; i < binaryStr.length; i++) {
+                bytes[i] = binaryStr.charCodeAt(i);
+            }
+
+            try {
+                const text = new TextDecoder('utf-8', {fatal: true}).decode(bytes);
+                outputEl.value = text;
+                prepareDownload(text, currentFileName ? currentFileName.replace(/\.(b64|urlsafe\.b64|txt)$/i,'') : 'decoded.txt', 'text/plain');
+                resultData = text;
+                resultType = 'text';
+            } catch {
+                outputEl.value = `[Binary – ${bytes.length} bytes]\nUse Download button to save.`;
+                prepareDownload(bytes.buffer, currentFileName ? currentFileName.replace(/\.(b64|urlsafe\.b64|txt)$/i,'') : 'decoded.bin', 'application/octet-stream');
+                resultData = bytes.buffer;
+                resultType = 'binary';
+            }
+        } catch (e) {
+            outputEl.value = `Invalid Base64 string\n\n${e.message}`;
+            downloadBtn.disabled = true;
+        }
+    }
+
+    // ── Download / Clipboard ──────────────────────────────────
+    function prepareDownload(content, filename, mime) {
+        downloadBtn.disabled = false;
+        downloadBtn.dataset.filename = filename;
+        downloadBtn.dataset.mime = mime;
+        downloadBtn.dataset.textContent = (typeof content === 'string') ? content : null;
+        downloadBtn._arrayBuffer = (content instanceof ArrayBuffer) ? content : null;
+    }
+
+    function downloadResult() {
+        if (downloadBtn.disabled) return;
+
+        let blob;
+        if (downloadBtn._arrayBuffer) {
+            blob = new Blob([downloadBtn._arrayBuffer], {type: downloadBtn.dataset.mime});
+        } else {
+            blob = new Blob([downloadBtn.dataset.textContent], {type: downloadBtn.dataset.mime});
+        }
+
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = downloadBtn.dataset.filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+
+    function copyResult() {
+        if (!outputEl.value) return;
+        navigator.clipboard.writeText(outputEl.value).then(() => {
+            const orig = outputEl.value;
+            outputEl.value = "✓ Copied";
+            setTimeout(() => outputEl.value = orig, 1400);
+        }).catch(() => {
+            outputEl.select();
+            document.execCommand('copy');
+        });
+    }
+
+    function clearAll() {
+        inputEl.value = '';
+        outputEl.value = '';
+        fileInput.value = '';
+        fileNameDiv.textContent = '';
+        currentFile = null;
+        currentFileName = '';
+        downloadBtn.disabled = true;
+        downloadBtn._arrayBuffer = null;
+        inputEl.focus();
+    }
+
+    // Auto-decode likely Base64 on paste
+    inputEl.addEventListener('paste', () => {
+        setTimeout(() => {
+            const val = inputEl.value.trim();
+            if (val && outputEl.value === '' && val.match(/^[A-Za-z0-9+/=_-]{16,}$/)) {
+                decode();
+            }
+        }, 100);
+    });
+
+    // Initialize
+    loadVariant();
+    initTheme();
+</script>
+
+</body>
+</html>

@@ -1,57 +1,42 @@
-// src/index.ts
-import { TerminalSession } from "./terminal-object";
-
-export default {
-  async fetch(request: Request, env: Env): Promise<Response> {
-    const url = new URL(request.url);
-
-    if (url.pathname === "/ws") {
-      // Route WebSocket connections to Durable Object
-      const id = env.TERMINAL_SESSIONS.idFromName("global-terminal"); // or use user ID / session token
-      const obj = env.TERMINAL_SESSIONS.get(id);
-      return obj.fetch(request);
-    }
-
-    // Serve static client page (in production use Cloudflare Pages)
-    if (url.pathname === "/" || url.pathname === "/index.html") {
-      return new Response(HTML_CLIENT, {
-        headers: { "Content-Type": "text/html;charset=UTF-8" },
-      });
-    }
-
-    return new Response("Not found", { status: 404 });
-  },
-} satisfies ExportedHandler<Env>;
-
-interface Env {
-  TERMINAL_SESSIONS: DurableObjectNamespace<TerminalSession>;
-}
-
-// Minimal HTML client (you can serve this from Pages instead)
-const HTML_CLIENT = `<!DOCTYPE html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <title>Terminal</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@5.5.0/css/xterm.css"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Browser Terminal Emulator</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@5.5.0/css/xterm.css" />
   <script src="https://cdn.jsdelivr.net/npm/xterm@5.5.0/lib/xterm.js"></script>
-  <style>body{margin:0;background:#000}#terminal{height:100vh}</style>
+  <style>
+    body { margin: 0; background: #000; }
+    #terminal { height: 100vh; }
+  </style>
 </head>
 <body>
   <div id="terminal"></div>
   <script>
-    const term = new Terminal({ cursorBlink: true });
+    const term = new Terminal();
     term.open(document.getElementById('terminal'));
-    term.write('Connecting...\\r\\n');
+    term.write('Connecting to backend...\r\n');
 
-    const ws = new WebSocket(location.origin.replace('http', 'ws') + '/ws');
+    // Replace with your Cloudflare Worker URL
+    const ws = new WebSocket('wss://your-worker-domain.workers.dev/ws');
 
     ws.onopen = () => {
-      term.write('Connected.\\r\\n$ ');
-      term.onData(d => ws.send(d));
+      term.write('Connected. Type commands below.\r\n');
+      term.onData(data => ws.send(data));
     };
 
-    ws.onmessage = e => term.write(e.data);
-    ws.onclose = () => term.write('\\r\\n\\r\\nConnection closed.');
+    ws.onmessage = (evt) => {
+      term.write(evt.data);
+    };
+
+    ws.onclose = () => {
+      term.write('\r\nConnection closed.');
+    };
+
+    ws.onerror = (err) => {
+      term.write('\r\nError: ' + err.message);
+    };
   </script>
 </body>
-</html>`;
+</html>

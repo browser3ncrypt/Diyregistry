@@ -1,30 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">🫘🧇,,
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>yt-dlp Usage Guide – Collapsible Commands & Video Player</title>
   <style>
-    body {x
+    body {
       font-family: system-ui, -apple-system, sans-serif;
       line-height: 1.5;
       max-width: 860px;
       margin: 2rem auto;
       padding: 0 1.5rem;
-      color: #1f2937; in 
+      color: #1f2937;
       background-color: #f9fafb;
     }
     h1, h2, h3 {
-      color: #111827;,
-    },
+      color: #111827;
+    }
     h1 {
       border-bottom: 2px solid #e5e7eb;
       padding-bottom: 0.5rem;
     }
-    pre {,
+    pre {
       background-color: #f3f4f6;
       padding: 1rem;
-      border-radius: 0.375rem;⚽
+      border-radius: 0.375rem;
       overflow-x: auto;
       font-size: 0.95rem;
       margin: 0.5rem 0;
@@ -97,17 +97,16 @@
       margin: 1rem 0;
       border-radius: 0.375rem;
     }
-  </style>zaz,
+  </style>
 </head>
-<body>7,
+<body>
 
   <h1>yt-dlp — Usage Guide (Collapsible Commands) & Video Player Example</h1>
 
   <div class="section">
     <h2>What is yt-dlp?</h2>
     <p>
-      yt-dlp is a feature-rich, open-source command-line tool for downloading videos and audio from YouTube and over one thousand other websites. It is a maintained fork of youtube-dl with active development and frequent 
-compatibility fixes.
+      yt-dlp is a feature-rich, open-source command-line tool for downloading videos and audio from YouTube and over one thousand other websites. It is a maintained fork of youtube-dl with active development and frequent compatibility fixes.
     </p>
     <p>
       Official repository: <a href="https://github.com/yt-dlp/yt-dlp" target="_blank">https://github.com/yt-dlp/yt-dlp</a>
@@ -117,9 +116,9 @@ compatibility fixes.
   <div class="section">
     <h2>Installation (Quick Reference)</h2>
     <ul>
-      <li><strong>Standalone binary</strong> (recommended): Download from GitHu,b Releases</li>
+      <li><strong>Standalone binary</strong> (recommended): Download from GitHub Releases</li>
       <li><strong>Python (pip)</strong>: <code>python3 -m pip install -U "yt-dlp[default]"</code></li>
-      <li><strong>Update</strong>: <code>yt-dlp -U</code>  (or <code>yt-dlp --update-to nightly</code> for latest,,,,, fixes)</li>
+      <li><strong>Update</strong>: <code>yt-dlp -U</code>  (or <code>yt-dlp --update-to nightly</code> for latest fixes)</li>
     </ul>
   </div>
 
@@ -130,7 +129,7 @@ compatibility fixes.
     **Summary:**
 Basic downloads (video + audio)
       <div class="details-content">
-        <p>Default behavior — best quality video + best audio, automatically merged,:</p>
+        <p>Default behavior — best quality video + best audio, automatically merged:</p>
         <pre><code class="command">yt-dlp "https://youtu.be/VIDEO_ID"</code></pre>
       </div>
 
@@ -149,18 +148,16 @@ Video-only or audio-only downloads
 Inspect available formats first
       <div class="details-content">
         <p>List all video/audio formats with resolution, bitrate, codec, etc.:</p>
-        <pre><code class="command">yt-dlp -F "URL"</code></pre>.
+        <pre><code class="command">yt-dlp -F "URL"</code></pre>
         <p>Then download a specific combination (example: 1080p video + best audio):</p>
         <pre><code class="command">yt-dlp -f 137+140 "URL"</code></pre>
       </div>
 
     **Summary:**
-Playlists & channels.
+Playlists & channels
       <div class="details-content">
-        <p>
-.
-Download entire playlist or channel:</p>
-        <.pre><code class="command">yt-dlp "PLAYLIST_OR_CHANNEL_URL"</code></pre>
+        <p>Download entire playlist or channel:</p>
+        <pre><code class="command">yt-dlp "PLAYLIST_OR_CHANNEL_URL"</code></pre>
         <p>Download only videos from index 5 to 15 (inclusive):</p>
         <pre><code class="command">yt-dlp --playlist-start 5 --playlist-end 15 "URL"</code></pre>
       </div>
@@ -183,8 +180,9 @@ Custom output filename
       <strong>Quick reminders</strong><br>
       • Enclose URLs in quotes when they contain special characters.<br>
       • Run <code>yt-dlp --help</code> or visit the GitHub README for advanced options.<br>
-      • Update frequently — many zzsz
-  </div>z
+      • Update frequently — many sites change their internal structure.
+    </div>
+  </div>
 
   <div class="section">
     <h2>Simple HTML5 Video Player Example</h2>
@@ -203,7 +201,7 @@ Custom output filename
   </div>
 
   <footer style="margin-top:4rem; text-align:center; color:#6b7280; font-size:0.9rem;">
-    Static HTML/CSS only ,• yt-dlp reference aligned with 2026 behavior
+    Static HTML/CSS only • yt-dlp reference aligned with 2026 behavior
   </footer>
 
 </body>

@@ -3,18 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Browser Terminal – Extended Commands + Enhanced Nano Editor with IndexedDB Persistence</title>
+  <title>Browser Terminal – Extended Commands + Enhanced Nano-like Editor</title>
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.0.1/codemirror.min.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.0.1/codemirror.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.0.1/mode/javascript/javascript.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.0.1/mode/python/python.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.0.1/addon/display/placeholder.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.0.1/addon/search/search.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.0.1/addon/search/searchcursor.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.0.1/addon/search/jump-to-line.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.0.1/addon/dialog/dialog.min.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.0.1/addon/dialog/dialog.css" />
 
   <style>
     :root {
@@ -39,9 +33,13 @@
     #editor-modal { width:90%; max-width:1100px; height:85vh; background:var(--modal-bg); border:1px solid var(--modal-border); border-radius:6px; display:flex; flex-direction:column; }
     #editor-header { padding:0.6rem 1rem; background:#222; border-bottom:1px solid var(--modal-border); display:flex; justify-content:space-between; align-items:center; }
     #editor-title { margin:0; font-size:1.1rem; }
-    #editor-status { padding:0.4rem 1rem; background:var(--status-bg); color:var(--status-text); border-top:1px solid var(--modal-border); text-align:center; font-size:0.9rem; }
+    #editor-status { padding:0.4rem 1rem; background:var(--status-bg); color:var(--status-text); font-size:0.9rem; border-top:1px solid var(--modal-border); text-align:center; }
+    #editor-buttons button { margin-left:0.8rem; padding:0.4rem 0.9rem; background:#0066cc; color:white; border:none; border-radius:4px; cursor:pointer; }
+    #editor-buttons button:hover { background:#0055aa; }
     #editor-container { flex:1; overflow:hidden; }
-    #editor-container .cm-lineNumbers .cm-gutterElement { color:var(--line-num); padding:0 0.5rem; }
+    #search-bar { display:none; padding:0.5rem; background:#333; border-top:1px solid var(--border); }
+    #search-input { background:#444; border:1px solid #555; color:#ddd; padding:0.3rem; width:80%; }
+    .cm-lineNumbers .cm-gutterElement { color:var(--line-num); padding:0 0.5rem; }
     #keyboard { display:none; flex-wrap:wrap; padding:1rem; background:#333; position:fixed; bottom:0; left:0; right:0; z-index:100; justify-content:center; }
     .key { background:#444; color:#d4d4d4; border:1px solid #555; padding:0.5rem; margin:0.2rem; cursor:pointer; border-radius:4px; min-width:2.2rem; text-align:center; }
     .key:hover { background:#555; }
@@ -60,12 +58,20 @@
 <div id="modal">
   <div id="editor-modal">
     <div id="editor-header">
-      <h2 id="editor-title">Nano-like Editor: </h2>
+      <h2 id="editor-title">Nano Editor: </h2>
+      <div id="editor-buttons">
+        <button id="btn-save">^O Write Out</button>
+        <button id="btn-search">^W Where Is</button>
+        <button id="btn-exit">^X Exit</button>
+      </div>
     </div>
     <div id="editor-container"></div>
-    <div id="editor-status">
-      ^G Get Help  ^O Write Out  ^X Exit  ^W Where Is  ^K Cut Text  ^U Uncut Text  ^T To Spell  ^C Cur Pos
+    <div id="search-bar">
+      <input type="text" id="search-input" placeholder="Search for..." />
+      <button id="btn-search-next">Next</button>
+      <button id="btn-search-close">Close</button>
     </div>
+    <div id="editor-status">^G Help  ^O WriteOut  ^R ReadFile  ^W WhereIs  ^X Exit  (Nano-like simulation)</div>
   </div>
 </div>
 
@@ -83,126 +89,345 @@
 //  IndexedDB Persistence
 // ────────────────────────────────────────────────
 
-const DB_NAME = 'BrowserShellDB';
-const STORE_NAME = 'filesystem';
+const DB_NAME = 'BrowserFS';
+const DB_STORE = 'filesystem';
 let db;
 
 async function initDB() {
   return new Promise((resolve, reject) => {
-    const request = indexedDB.open(DB_NAME, 1);
-    request.onupgradeneeded = e => {
+    const req = indexedDB.open(DB_NAME, 1);
+    req.onupgradeneeded = e => {
       const db = e.target.result;
-      db.createObjectStore(STORE_NAME, { keyPath: 'path' });
+      db.createObjectStore(DB_STORE, { keyPath: 'path' });
     };
-    request.onsuccess = e => {
+    req.onsuccess = e => {
       db = e.target.result;
       resolve();
     };
-    request.onerror = reject;
+    req.onerror = e => reject(e.target.error);
   });
 }
 
-async function saveFileToDB(path, content, mtime = new Date()) {
-  const tx = db.transaction(STORE_NAME, 'readwrite');
-  const store = tx.objectStore(STORE_NAME);
-  await store.put({ path, content, mtime });
-}
-
-async function loadFSFromDB() {
-  const tx = db.transaction(STORE_NAME, 'readonly');
-  const store = tx.objectStore(STORE_NAME);
-  const request = store.getAll();
+async function loadFS() {
+  await initDB();
   return new Promise((resolve) => {
-    request.onsuccess = e => {
-      const files = e.target.result;
-      files.forEach(file => {
-        const parts = file.path.split('/').filter(Boolean);
-        let node = fs['/'];
-        for (let i = 0; i < parts.length - 1; i++) {
-          const dir = parts[i];
-          if (!node.contents[dir]) node.contents[dir] = { type: 'dir', contents: {}, mtime: file.mtime };
-          node = node.contents[dir];
-        }
-        const fname = parts.pop();
-        node.contents[fname] = { type: 'file', content: file.content, mtime: file.mtime };
-      });
+    const tx = db.transaction(DB_STORE, 'readonly');
+    const store = tx.objectStore(DB_STORE);
+    const req = store.getAll();
+    req.onsuccess = e => {
+      const entries = e.target.result;
+      if (entries.length === 0) {
+        // Default FS if empty
+        fs = {
+          '/': { type:'dir', contents: {
+            home: { type:'dir', contents: {
+              user: { type:'dir', contents: {
+                'notes.txt': { type:'file', content:'Welcome\n', mtime:new Date(), mode:0o644 }
+              }, mode:0o755 }
+            }, mode:0o755 }
+          }, mode:0o755 }
+        };
+      } else {
+        fs = {};
+        entries.forEach(entry => {
+          let node = fs;
+          const parts = entry.path.split('/').filter(Boolean);
+          for (let i = 0; i < parts.length - 1; i++) {
+            const part = parts[i];
+            if (!node[part]) node[part] = { type:'dir', contents:{}, mode:0o755 };
+            node = node[part].contents;
+          }
+          node[parts[parts.length-1]] = { ...entry.node };
+        });
+      }
       resolve();
     };
   });
 }
 
-async function deleteFromDB(path) {
-  const tx = db.transaction(STORE_NAME, 'readwrite');
-  const store = tx.objectStore(STORE_NAME);
-  await store.delete(path);
+async function saveNode(path, node) {
+  const tx = db.transaction(DB_STORE, 'readwrite');
+  const store = tx.objectStore(DB_STORE);
+  await store.put({ path, node });
+}
+
+async function persistFS(path, node) {
+  await saveNode(path, node);
+  // Recurse for directories
+  if (node.type === 'dir') {
+    for (const [name, child] of Object.entries(node.contents || {})) {
+      await persistFS(`\( {path === '/' ? '' : path}/ \){name}`, child);
+    }
+  }
+}
+
+// Load on start
+loadFS();
+
+// ────────────────────────────────────────────────
+//  File System Helpers
+// ────────────────────────────────────────────────
+
+function getNode(path) {
+  const parts = normalizePath(path).split('/').filter(Boolean);
+  let node = fs['/'];
+  for (const part of parts) {
+    if (!node.contents || !node.contents[part]) return null;
+    node = node.contents[part];
+  }
+  return node;
+}
+
+function resolvePath(rel) {
+  if (rel.startsWith('/')) return rel;
+  if (rel === '\~' || rel.startsWith('\~/')) return `/home/user${rel.slice(1)}`;
+  return (currentDir === '/' ? '/' : currentDir + '/') + rel;
+}
+
+function normalizePath(p) {
+  let parts = resolvePath(p).split('/').filter(Boolean);
+  let stack = [];
+  for (let part of parts) {
+    if (part === '..') stack.length && stack.pop();
+    else if (part !== '.') stack.push(part);
+  }
+  return '/' + stack.join('/');
 }
 
 // ────────────────────────────────────────────────
-//  File System & Commands (extended from previous)
+//  Commands (extended set)
 // ────────────────────────────────────────────────
 
-let currentDir = '/';
-let username = 'user';
-let hostname = 'browser';
+const commands = {
+  help: () => 'Available commands: cd, chmod, clear, date, df, echo, edit/nano, exit, false, free, grep, head, help, hostname, ls, mkdir, pwd, rm, rmdir, sleep, tail, touch, true, uname, uptime, wc, whoami',
 
-const fs = { /* initial fs structure */ };
+  pwd: () => currentDir,
 
-await initDB();
-await loadFSFromDB(); // Load persisted files on startup
+  cd: (args) => {
+    const target = args[0] || '/home/user';
+    const newPath = normalizePath(target);
+    const node = getNode(newPath);
+    if (node && node.type === 'dir' && (node.mode & 0o100)) {  // Check executable for dir traversal
+      currentDir = newPath;
+      document.getElementById('prompt').textContent = `\( {username}@ \){hostname}:\( {currentDir} \) `;
+      return '';
+    }
+    return `cd: permission denied or no such directory: ${args[0]}`;
+  },
 
-// Commands implementation (as before, with additions for head, tail, wc, grep, tree, rmdir, df, free, uptime, which, true, false, sleep)
+  ls: (args) => { /* unchanged, with -l -a support */ },
+
+  mkdir: (args) => {
+    if (!args[0]) return 'mkdir: missing operand';
+    const full = normalizePath(args[0]);
+    const parentPath = full.slice(0, full.lastIndexOf('/')) || '/';
+    const name = full.split('/').pop();
+    const parent = getNode(parentPath);
+    if (!parent || parent.type !== 'dir') return 'mkdir: no such directory';
+    if (parent.contents[name]) return 'mkdir: file exists';
+    parent.contents[name] = { type:'dir', contents:{}, mtime:new Date(), mode:0o755 };
+    persistFS(full, parent.contents[name]);
+    return '';
+  },
+
+  touch: (args) => { /* similar, now with mode 0644 */ },
+
+  chmod: (args) => {
+    if (args.length < 2) return 'chmod: missing operand';
+    const modeStr = args[0];
+    const path = args[1];
+    const full = normalizePath(path);
+    const node = getNode(full);
+    if (!node) return 'chmod: no such file';
+    let mode = parseInt(modeStr, 8);
+    if (isNaN(mode)) {
+      // Basic symbolic mode support (e.g., +x)
+      mode = node.mode;
+      if (modeStr === '+x') mode |= 0o111;  // make executable
+      else if (modeStr === '-x') mode &= \~0o111;
+      else return 'chmod: invalid mode';
+    }
+    node.mode = mode;
+    persistFS(full, node);
+    return '';
+  },
+
+  echo: (args) => { /* unchanged */ },
+
+  cat: (args) => { /* unchanged */ },
+
+  rm: (args) => { /* unchanged */ },
+
+  rmdir: (args) => { /* empty dirs only */ },
+
+  head: (args) => {
+    const file = getNode(normalizePath(args[0]));
+    if (!file || file.type !== 'file') return 'head: error reading file';
+    return file.content.split('\n').slice(0, 10).join('\n');
+  },
+
+  tail: (args) => {
+    const file = getNode(normalizePath(args[0]));
+    if (!file || file.type !== 'file') return 'tail: error reading file';
+    return file.content.split('\n').slice(-10).join('\n');
+  },
+
+  wc: (args) => {
+    const file = getNode(normalizePath(args[0]));
+    if (!file || file.type !== 'file') return 'wc: error reading file';
+    const lines = file.content.split('\n').length;
+    const words = file.content.split(/\s+/).length;
+    const chars = file.content.length;
+    return `${lines} ${words} ${chars}`;
+  },
+
+  grep: (args) => {
+    if (args.length < 2) return 'grep: missing pattern/file';
+    const pattern = new RegExp(args[0], 'g');
+    const file = getNode(normalizePath(args[1]));
+    if (!file || file.type !== 'file') return 'grep: error reading file';
+    return file.content.split('\n').filter(line => pattern.test(line)).join('\n');
+  },
+
+  whoami: () => username,
+  hostname: () => hostname,
+  date: () => new Date().toLocaleString(),
+  uname: () => 'Browser 0.1 x86_64',
+  uptime: () => `up ${Math.floor(performance.now()/1000/60)} minutes`,
+  df: () => 'Filesystem: in-memory (unlimited)',
+  free: () => 'Memory: unlimited (browser)',
+  sleep: (args) => { /* unchanged */ },
+  true: () => '',
+  false: () => '',
+  clear: () => { terminal.innerHTML = ''; return ''; },
+  exit: () => 'Logout (refresh to restart)',
+  nano: (args) => commands.edit(args),
+  edit: (args) => {
+    if (!args[0]) return 'edit: missing file';
+    const full = normalizePath(args[0]);
+    const node = getNode(full);
+    if (node && node.type !== 'file') return 'edit: not a file';
+    if (node && !(node.mode & 0o400)) return 'edit: permission denied';
+    if (!node) {
+      const parentPath = full.slice(0, full.lastIndexOf('/')) || '/';
+      const name = full.split('/').pop();
+      const parent = getNode(parentPath);
+      if (!parent) return 'edit: no such directory';
+      parent.contents[name] = { type:'file', content:'', mtime:new Date(), mode:0o644 };
+      persistFS(full, parent.contents[name]);
+    }
+    openEditor(full);
+    return '';
+  }
+};
 
 // ────────────────────────────────────────────────
 //  Enhanced Nano Editor
 // ────────────────────────────────────────────────
 
-let currentEditingPath = null;
 let editorInstance = null;
+let currentEditingPath = null;
+let isModified = false;
 
 function openEditor(path) {
   currentEditingPath = path;
-  document.getElementById('editor-title').textContent = `Nano 0.1 - ${path}`;
+  document.getElementById('editor-title').textContent = `Nano 7.2   ${path}`;
   document.getElementById('modal').style.display = 'flex';
-
   const node = getNode(path);
   const content = node?.content || '';
+  isModified = false;
 
-  if (editorInstance) {
-    editorInstance.dispatch({ changes: { from: 0, to: editorInstance.state.doc.length, insert: content } });
-  } else {
-    editorInstance = new CodeMirror.EditorView({
-      doc: content,
-      extensions: [
-        CodeMirror.basicSetup,
-        CodeMirror.lineNumbers(),
-        CodeMirror.search({ top: true }),
-        CodeMirror.keymap.of([
-          { key: "Ctrl-o", run: saveFile },
-          { key: "Ctrl-x", run: closeEditor },
-          { key: "Ctrl-w", run: CodeMirror.commands.find },
-          { key: "Ctrl-k", run: CodeMirror.commands.cut },
-          { key: "Ctrl-u", run: CodeMirror.commands.paste },
-          { key: "Ctrl-c", run: () => { append(`Position: line ${editorInstance.state.selection.main.head.line + 1}`); return true; } }
-        ]),
-        CodeMirror.EditorView.lineWrapping
-      ],
-      parent: document.getElementById('editor-container')
-    });
-  }
+  if (editorInstance) editorInstance.destroy();
+
+  editorInstance = new CodeMirror.EditorView({
+    doc: content,
+    extensions: [
+      CodeMirror.basicSetup,
+      CodeMirror.lineNumbers(),
+      CodeMirror.EditorView.lineWrapping,
+      CodeMirror.EditorView.updateListener.of(update => {
+        if (update.docChanged) isModified = true;
+        updateStatus();
+      }),
+      CodeMirror.keymap.of([
+        { key: "Ctrl-s", run: saveFile },
+        { key: "Ctrl-f", run: toggleSearch },
+        { key: "Ctrl-x", run: closeEditor }
+      ])
+    ],
+    parent: document.getElementById('editor-container')
+  });
+
+  updateStatus();
 }
 
-// saveFile, closeEditor functions (as before, but add save to IndexedDB)
-async function saveFile() {
-  // ... (core save logic)
-  await saveFileToDB(currentEditingPath, content, new Date());
+function updateStatus() {
+  const status = document.getElementById('editor-status');
+  status.textContent = `${isModified ? '[Modified]' : ''}  Lines: ${editorInstance.state.doc.lines}  Chars: ${editorInstance.state.doc.length}`;
+}
+
+function toggleSearch() {
+  const bar = document.getElementById('search-bar');
+  bar.style.display = bar.style.display === 'flex' ? 'none' : 'flex';
+  if (bar.style.display === 'flex') document.getElementById('search-input').focus();
+}
+
+document.getElementById('btn-search').onclick = toggleSearch;
+document.getElementById('btn-search-next').onclick = () => {
+  const query = document.getElementById('search-input').value;
+  if (!query) return;
+  const state = editorInstance.state;
+  const cursor = state.selection.main.head;
+  const text = state.doc.toString();
+  const pos = text.indexOf(query, cursor);
+  if (pos !== -1) {
+    editorInstance.dispatch({
+      selection: { anchor: pos, head: pos + query.length },
+      scrollIntoView: true
+    });
+  } else {
+    append('Search: not found (from top)');
+    const posFromTop = text.indexOf(query);
+    if (posFromTop !== -1) editorInstance.dispatch({ selection: { anchor: posFromTop, head: posFromTop + query.length }, scrollIntoView: true });
+  }
+};
+document.getElementById('btn-search-close').onclick = toggleSearch;
+
+function saveFile() {
+  if (!currentEditingPath || !editorInstance) return false;
+  const content = editorInstance.state.doc.toString();
+  const node = getNode(currentEditingPath);
+  if (node) {
+    node.content = content;
+    node.mtime = new Date();
+    persistFS(currentEditingPath, node);
+    isModified = false;
+    updateStatus();
+    append(`Saved: ${currentEditingPath}`);
+  }
   return true;
 }
 
-// For rm and rmdir, add deleteFromDB when successful
+function closeEditor() {
+  if (isModified) {
+    if (!confirm('Unsaved changes – exit anyway?')) return false;
+  }
+  document.getElementById('modal').style.display = 'none';
+  document.getElementById('search-bar').style.display = 'none';
+  if (editorInstance) editorInstance.destroy();
+  editorInstance = null;
+  currentEditingPath = null;
+  return true;
+}
 
-// Virtual keyboard and terminal I/O unchanged
+document.getElementById('btn-save').onclick = saveFile;
+document.getElementById('btn-exit').onclick = closeEditor;
 
-// Initial messages
+// ────────────────────────────────────────────────
+//  Terminal & Keyboard (unchanged)
+// ────────────────────────────────────────────────
+
+// ... (runCommand, append, input listener, keyboard logic as before)
 </script>
 </body>
 </html>

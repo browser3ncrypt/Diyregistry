@@ -3,190 +3,279 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>yt-dlp Usage Guide – Collapsible Commands & Video Player</title>
+  <title>yt-dlp Usage Guide – Collapsible Commands & Animated Sun/Moon Toggle</title>
   <style>
+    :root {
+      --bg: #f9fafb;
+      --text: #1f2937;
+      --text-light: #4b5563;
+      --heading: #111827;
+      --card: white;
+      --border: #d1d5db;
+      --pre-bg: #f3f4f6;
+      --code-bg: #f3f4f6;
+      --accent: #dbeafe;
+      --note-bg: #fef3c7;
+      --note-border: #f59e0b;
+      --shadow: rgba(0,0,0,0.1);
+    }
+
+    [data-theme="dark"] {
+      --bg: #111827;
+      --text: #f3f4f6;
+      --text-light: #9ca3af;
+      --heading: #f9fafb;
+      --card: #1f2937;
+      --border: #374151;
+      --pre-bg: #1e293b;
+      --code-bg: #1e293b;
+      --accent: #1e40af;
+      --note-bg: #78350f;
+      --note-border: #fbbf24;
+      --shadow: rgba(0,0,0,0.4);
+    }
+
     body {
       font-family: system-ui, -apple-system, sans-serif;
       line-height: 1.5;
-      max-width: 860px;
+      max-width: 900px;
       margin: 2rem auto;
       padding: 0 1.5rem;
-      color: #1f2937;
-      background-color: #f9fafb;
+      color: var(--text);
+      background-color: var(--bg);
+      transition: background-color 0.3s, color 0.3s;
     }
-    h1, h2, h3 {
-      color: #111827;
-    }
-    h1 {
-      border-bottom: 2px solid #e5e7eb;
-      padding-bottom: 0.5rem;
-    }
+
+    h1, h2, h3 { color: var(--heading); }
+    h1 { border-bottom: 2px solid var(--border); padding-bottom: 0.5rem; }
+
     pre {
-      background-color: #f3f4f6;
+      background-color: var(--pre-bg);
       padding: 1rem;
       border-radius: 0.375rem;
       overflow-x: auto;
       font-size: 0.95rem;
       margin: 0.5rem 0;
     }
+
     code {
       font-family: ui-monospace, 'Cascadia Code', 'Source Code Pro', monospace;
-      background-color: #f3f4f6;
+      background-color: var(--code-bg);
       padding: 0.15rem 0.3rem;
       border-radius: 0.25rem;
     }
+
     .command {
-      background-color: #dbeafe;
+      background-color: var(--accent);
       padding: 0.1rem 0.35rem;
       border-radius: 0.25rem;
       font-weight: 500;
     }
-    .section {
-      margin-bottom: 2.5rem;
-    }
+
+    .section { margin-bottom: 2.5rem; }
+
     details {
       margin: 0.75rem 0;
-      border: 1px solid #d1d5db;
+      border: 1px solid var(--border);
       border-radius: 0.375rem;
       overflow: hidden;
-      background-color: white;
+      background-color: var(--card);
     }
+
     summary {
       padding: 0.9rem 1.2rem;
-      background-color: #f3f4f6;
+      background-color: var(--pre-bg);
       cursor: pointer;
       font-weight: 600;
       user-select: none;
     }
-    summary:hover {
-      background-color: #e5e7eb;
-    }
-    .details-content {
-      padding: 1rem 1.2rem;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
+
+    summary:hover { background-color: color-mix(in srgb, var(--pre-bg) 90%, var(--heading)); }
+
+    .details-content { padding: 1rem 1.2rem; }
+
+    .note {
+      background-color: var(--note-bg);
+      border-left: 4px solid var(--note-border);
+      padding: 1rem;
       margin: 1rem 0;
+      border-radius: 0.375rem;
     }
-    th, td {
-      padding: 0.75rem;
-      text-align: left;
-      border-bottom: 1px solid #e5e7eb;
-    }
-    th {
-      background-color: #e5e7eb;
-      font-weight: 600;
-    }
+
     .player-container {
       margin-top: 2rem;
-      background: white;
+      background: var(--card);
       padding: 1.5rem;
       border-radius: 0.5rem;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      box-shadow: 0 1px 3px var(--shadow);
     }
+
     video {
       width: 100%;
       max-height: 540px;
       background: #000;
     }
-    .note {
-      background-color: #fef3c7;
-      border-left: 4px solid #f59e0b;
-      padding: 1rem;
-      margin: 1rem 0;
-      border-radius: 0.375rem;
+
+    /* Theme toggle */
+    .theme-toggle {
+      position: fixed;
+      top: 1.5rem;
+      right: 2rem;
+      z-index: 1000;
+    }
+
+    .toggle-btn {
+      background: none;
+      border: none;
+      font-size: 1.75rem;
+      cursor: pointer;
+      padding: 0.5rem;
+      border-radius: 50%;
+      transition: background-color 0.2s;
+      color: var(--text);
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .toggle-btn:hover {
+      background-color: color-mix(in srgb, var(--pre-bg) 70%, transparent);
+    }
+
+    .toggle-btn:focus {
+      outline: 2px solid #3b82f6;
+      outline-offset: 2px;
+    }
+
+    .icon {
+      display: inline-block;
+      transition: transform 0.6s ease-in-out;
+    }
+
+    .icon.spin {
+      transform: rotate(180deg);
+    }
+
+    footer {
+      margin-top: 4rem;
+      text-align: center;
+      color: var(--text-light);
+      font-size: 0.9rem;
     }
   </style>
 </head>
-<body>
+<body data-theme="light">
 
-  <h1>yt-dlp — Usage Guide (Collapsible Commands) & Video Player Example</h1>
+  <button class="theme-toggle" id="themeToggleBtn" aria-label="Toggle dark mode">
+    <span class="icon">☀️</span>
+  </button>
+
+  <h1>yt-dlp — Extended Usage Guide (Collapsible Sections) & Animated Sun/Moon Toggle</h1>
 
   <div class="section">
-    <h2>What is yt-dlp?</h2>
-    <p>
-      yt-dlp is a feature-rich, open-source command-line tool for downloading videos and audio from YouTube and over one thousand other websites. It is a maintained fork of youtube-dl with active development and frequent compatibility fixes.
-    </p>
-    <p>
-      Official repository: <a href="https://github.com/yt-dlp/yt-dlp" target="_blank">https://github.com/yt-dlp/yt-dlp</a>
-    </p>
+    <h2>Overview</h2>
+    <p>yt-dlp is a command-line program to download videos and audio from YouTube and thousands of other websites. It is actively maintained with frequent compatibility updates.</p>
+    <p>Official repository: <a href="https://github.com/yt-dlp/yt-dlp" target="_blank">https://github.com/yt-dlp/yt-dlp</a></p>
   </div>
 
   <div class="section">
-    <h2>Installation (Quick Reference)</h2>
+    <h2>Installation & Update</h2>
     <ul>
-      <li><strong>Standalone binary</strong> (recommended): Download from GitHub Releases</li>
-      <li><strong>Python (pip)</strong>: <code>python3 -m pip install -U "yt-dlp[default]"</code></li>
-      <li><strong>Update</strong>: <code>yt-dlp -U</code>  (or <code>yt-dlp --update-to nightly</code> for latest fixes)</li>
+      <li>Standalone binary: Download from GitHub Releases</li>
+      <li>Via pip: <code>python3 -m pip install -U "yt-dlp[default]"</code></li>
+      <li>Update: <code>yt-dlp -U</code> (or <code>--update-to nightly</code> for latest fixes)</li>
     </ul>
   </div>
 
   <div class="section">
-    <h2>Command Examples</h2>
+    <h2>Command Categories</h2>
     <p>General syntax: <code>yt-dlp [OPTIONS] "URL"</code></p>
 
     **Summary:**
-Basic downloads (video + audio)
+Basic video + audio downloads
       <div class="details-content">
-        <p>Default behavior — best quality video + best audio, automatically merged:</p>
         <pre><code class="command">yt-dlp "https://youtu.be/VIDEO_ID"</code></pre>
       </div>
 
     **Summary:**
-Video-only or audio-only downloads
+Video-only or audio-only extraction
       <div class="details-content">
-        <table>
-          <tr><th>Goal</th><th>Command</th></tr>
-          <tr><td>Best video only (no audio)</td><td><code class="command">yt-dlp -f bestvideo "URL"</code></td></tr>
-          <tr><td>Best audio only (usually m4a / opus)</td><td><code class="command">yt-dlp -f bestaudio "URL"</code></td></tr>
-          <tr><td>Extract audio → convert to MP3</td><td><code class="command">yt-dlp -x --audio-format mp3 "URL"</code></td></tr>
-        </table>
+        <pre><code class="command">yt-dlp -f bestvideo "URL"</code></pre>
+        <pre><code class="command">yt-dlp -f bestaudio "URL"</code></pre>
+        <pre><code class="command">yt-dlp -x --audio-format mp3 "URL"</code></pre>
       </div>
 
     **Summary:**
-Inspect available formats first
+Listing and selecting specific formats
       <div class="details-content">
-        <p>List all video/audio formats with resolution, bitrate, codec, etc.:</p>
         <pre><code class="command">yt-dlp -F "URL"</code></pre>
-        <p>Then download a specific combination (example: 1080p video + best audio):</p>
         <pre><code class="command">yt-dlp -f 137+140 "URL"</code></pre>
       </div>
 
     **Summary:**
-Playlists & channels
+Playlists & range selection
       <div class="details-content">
-        <p>Download entire playlist or channel:</p>
-        <pre><code class="command">yt-dlp "PLAYLIST_OR_CHANNEL_URL"</code></pre>
-        <p>Download only videos from index 5 to 15 (inclusive):</p>
-        <pre><code class="command">yt-dlp --playlist-start 5 --playlist-end 15 "URL"</code></pre>
+        <pre><code class="command">yt-dlp "PLAYLIST_URL"</code></pre>
+        <pre><code class="command">yt-dlp --playlist-items 1,5,10-15 "URL"</code></pre>
       </div>
 
     **Summary:**
-Subtitles & metadata
+Subtitles, chapters & metadata
       <div class="details-content">
-        <p>Download auto-generated English subtitles (if available):</p>
         <pre><code class="command">yt-dlp --write-auto-sub --sub-lang en --convert-subs srt "URL"</code></pre>
+        <pre><code class="command">yt-dlp --write-thumbnail --embed-thumbnail "URL"</code></pre>
+        <pre><code class="command">yt-dlp --embed-chapters --embed-metadata "URL"</code></pre>
       </div>
 
     **Summary:**
-Custom output filename
+SponsorBlock integration
       <div class="details-content">
-        <p>Common flexible template:</p>
+        <pre><code class="command">yt-dlp --sponsorblock-remove all "URL"</code></pre>
+      </div>
+
+    **Summary:**
+Download archive (avoid re-downloads)
+      <div class="details-content">
+        <pre><code class="command">yt-dlp --download-archive archive.txt "URL"</code></pre>
+      </div>
+
+    **Summary:**
+Rate limiting & retries
+      <div class="details-content">
+        <pre><code class="command">yt-dlp --limit-rate 2M "URL"</code></pre>
+        <pre><code class="command">yt-dlp --retries 10 "URL"</code></pre>
+      </div>
+
+    **Summary:**
+Cookies & authentication
+      <div class="details-content">
+        <pre><code class="command">yt-dlp --cookies-from-browser chrome "URL"</code></pre>
+      </div>
+
+    **Summary:**
+Batch downloading
+      <div class="details-content">
+        <pre><code class="command">yt-dlp -a urls.txt</code></pre>
+      </div>
+
+    **Summary:**
+Custom output templates
+      <div class="details-content">
         <pre><code class="command">yt-dlp -o "%(upload_date)s - %(title)s [%(id)s].%(ext)s" "URL"</code></pre>
       </div>
 
     <div class="note">
-      <strong>Quick reminders</strong><br>
+      <strong>Important reminders</strong><br>
       • Enclose URLs in quotes when they contain special characters.<br>
-      • Run <code>yt-dlp --help</code> or visit the GitHub README for advanced options.<br>
-      • Update frequently — many sites change their internal structure.
+      • Use <code>yt-dlp --help</code> for complete documentation.<br>
+      • Update frequently — many sites change their structure regularly.
     </div>
   </div>
 
   <div class="section">
-    <h2>Simple HTML5 Video Player Example</h2>
-    <p>This player works with local files (MP4, WebM, etc.). Replace the <code>src</code> path or drag & drop a downloaded video onto the page in most browsers.</p>
+    <h2>Local Video Player Example</h2>
+    <p>Preview downloaded files here. Update the <code>src</code> attribute or drag-and-drop a video file (MP4, WebM, etc.) into the browser.</p>
 
     <div class="player-container">
       <video controls>
@@ -194,15 +283,66 @@ Custom output filename
         <source src="example-video.webm" type="video/webm">
         Your browser does not support the video tag.
       </video>
-      <p style="margin-top:1rem; font-size:0.95rem; color:#4b5563;">
-        <em>Note:</em> After downloading with yt-dlp, update the <code>src</code> attribute or use drag-and-drop.
+      <p style="margin-top:1rem; font-size:0.95rem; color:var(--text-light);">
+        Replace <code>src</code> with the path to your downloaded file.
       </p>
     </div>
   </div>
 
-  <footer style="margin-top:4rem; text-align:center; color:#6b7280; font-size:0.9rem;">
-    Static HTML/CSS only • yt-dlp reference aligned with 2026 behavior
+  <footer>
+    Static HTML/CSS/JS document • Command patterns aligned with yt-dlp behavior as of 2026
   </footer>
+
+  <script>
+    const toggleBtn = document.getElementById('themeToggleBtn');
+    const html = document.documentElement;
+    const icon = toggleBtn.querySelector('.icon');
+
+    function updateIcon(theme) {
+      icon.textContent = theme === 'dark' ? '🌙' : '☀️';
+      toggleBtn.setAttribute('aria-label', theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
+    }
+
+    function animateToggle() {
+      icon.classList.add('spin');
+      setTimeout(() => {
+        icon.classList.remove('spin');
+      }, 600); // match animation duration
+    }
+
+    function loadTheme() {
+      let theme = localStorage.getItem('theme');
+      if (!theme) {
+        theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        localStorage.setItem('theme', theme);
+      }
+      html.setAttribute('data-theme', theme);
+      updateIcon(theme);
+    }
+
+    function toggleTheme() {
+      const current = html.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+      updateIcon(next);
+      animateToggle();
+    }
+
+    // Initialize
+    loadTheme();
+    toggleBtn.addEventListener('click', toggleTheme);
+
+    // Listen for system preference changes (only if user hasn't set preference)
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+      if (!localStorage.getItem('theme')) {
+        const theme = e.matches ? 'dark' : 'light';
+        html.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
+        updateIcon(theme);
+      }
+    });
+  </script>
 
 </body>
 </html>

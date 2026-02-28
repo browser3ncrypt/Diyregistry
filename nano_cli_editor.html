@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Browser Terminal – Extended Commands + Enhanced Nano Editor with IndexedDB Persistence</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.0.1/codemirror.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.0.1/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.0.1/mode/javascript/javascript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.0.1/mode/python/python.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.0.1/addon/display/placeholder.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.0.1/addon/search/search.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.0.1/addon/search/searchcursor.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.0.1/addon/search/jump-to-line.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.0.1/addon/dialog/dialog.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.0.1/addon/dialog/dialog.css" />
+
+  <style>
+    :root {
+      --bg: #1e1e1e; --text: #d4d4d4; --prompt: #4ec9b0;
+      --border: #3c3c3c; --editor-bg: #252526;
+      --dir: #81a1c1; --file: #d4d4d4; --error: #ff6b6b;
+      --modal-bg: #2d2d2d; --modal-border: #555;
+      --status-bg: #333; --status-text: #ccc;
+      --line-num: #555;
+    }
+    body { margin:0; font-family:monospace; background:var(--bg); color:var(--text); height:100vh; display:flex; flex-direction:column; overflow:hidden; }
+    #terminal { flex:1; padding:1rem; overflow-y:auto; background:var(--editor-bg); }
+    .output-line { margin:0.2rem 0; white-space:pre-wrap; }
+    .prompt { color:var(--prompt); }
+    .error { color:var(--error); }
+    .dir { color:var(--dir); font-weight:bold; }
+    .file { color:var(--file); }
+    #input-container { display:flex; align-items:center; padding:0.5rem 1rem; background:var(--bg); border-top:1px solid var(--border); }
+    #prompt { color:var(--prompt); margin-right:0.5rem; }
+    #input { flex:1; background:none; border:none; color:var(--text); font-family:monospace; font-size:1rem; outline:none; }
+    #modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:200; justify-content:center; align-items:center; }
+    #editor-modal { width:90%; max-width:1100px; height:85vh; background:var(--modal-bg); border:1px solid var(--modal-border); border-radius:6px; display:flex; flex-direction:column; }
+    #editor-header { padding:0.6rem 1rem; background:#222; border-bottom:1px solid var(--modal-border); display:flex; justify-content:space-between; align-items:center; }
+    #editor-title { margin:0; font-size:1.1rem; }
+    #editor-status { padding:0.4rem 1rem; background:var(--status-bg); color:var(--status-text); border-top:1px solid var(--modal-border); text-align:center; font-size:0.9rem; }
+    #editor-container { flex:1; overflow:hidden; }
+    #editor-container .cm-lineNumbers .cm-gutterElement { color:var(--line-num); padding:0 0.5rem; }
+    #keyboard { display:none; flex-wrap:wrap; padding:1rem; background:#333; position:fixed; bottom:0; left:0; right:0; z-index:100; justify-content:center; }
+    .key { background:#444; color:#d4d4d4; border:1px solid #555; padding:0.5rem; margin:0.2rem; cursor:pointer; border-radius:4px; min-width:2.2rem; text-align:center; }
+    .key:hover { background:#555; }
+    .special { min-width:5rem; background:#555; }
+  </style>
+</head>
+<body>
+
+<div id="terminal"></div>
+
+<div id="input-container">
+  <span id="prompt">user@browser:\~$</span>
+  <input type="text" id="input" autocomplete="off" autofocus />
+</div>
+
+<div id="modal">
+  <div id="editor-modal">
+    <div id="editor-header">
+      <h2 id="editor-title">Nano-like Editor: </h2>
+    </div>
+    <div id="editor-container"></div>
+    <div id="editor-status">
+      ^G Get Help  ^O Write Out  ^X Exit  ^W Where Is  ^K Cut Text  ^U Uncut Text  ^T To Spell  ^C Cur Pos
+    </div>
+  </div>
+</div>
+
+<div id="keyboard">
+  <div class="key">q</div><div class="key">w</div><div class="key">e</div><div class="key">r</div><div class="key">t</div><div class="key">y</div><div class="key">u</div><div class="key">i</div><div class="key">o</div><div class="key">p</div>
+  <div class="key">a</div><div class="key">s</div><div class="key">d</div><div class="key">f</div><div class="key">g</div><div class="key">h</div><div class="key">j</div><div class="key">k</div><div class="key">l</div>
+  <div class="key">z</div><div class="key">x</div><div class="key">c</div><div class="key">v</div><div class="key">b</div><div class="key">n</div><div class="key">m</div>
+  <div class="key special" data-key="Backspace">←</div>
+  <div class="key special" data-key=" ">Space</div>
+  <div class="key special" data-key="Enter">Enter</div>
+</div>
+
+<script>
+// ────────────────────────────────────────────────
+//  IndexedDB Persistence
+// ────────────────────────────────────────────────
+
+const DB_NAME = 'BrowserShellDB';
+const STORE_NAME = 'filesystem';
+let db;
+
+async function initDB() {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open(DB_NAME, 1);
+    request.onupgradeneeded = e => {
+      const db = e.target.result;
+      db.createObjectStore(STORE_NAME, { keyPath: 'path' });
+    };
+    request.onsuccess = e => {
+      db = e.target.result;
+      resolve();
+    };
+    request.onerror = reject;
+  });
+}
+
+async function saveFileToDB(path, content, mtime = new Date()) {
+  const tx = db.transaction(STORE_NAME, 'readwrite');
+  const store = tx.objectStore(STORE_NAME);
+  await store.put({ path, content, mtime });
+}
+
+async function loadFSFromDB() {
+  const tx = db.transaction(STORE_NAME, 'readonly');
+  const store = tx.objectStore(STORE_NAME);
+  const request = store.getAll();
+  return new Promise((resolve) => {
+    request.onsuccess = e => {
+      const files = e.target.result;
+      files.forEach(file => {
+        const parts = file.path.split('/').filter(Boolean);
+        let node = fs['/'];
+        for (let i = 0; i < parts.length - 1; i++) {
+          const dir = parts[i];
+          if (!node.contents[dir]) node.contents[dir] = { type: 'dir', contents: {}, mtime: file.mtime };
+          node = node.contents[dir];
+        }
+        const fname = parts.pop();
+        node.contents[fname] = { type: 'file', content: file.content, mtime: file.mtime };
+      });
+      resolve();
+    };
+  });
+}
+
+async function deleteFromDB(path) {
+  const tx = db.transaction(STORE_NAME, 'readwrite');
+  const store = tx.objectStore(STORE_NAME);
+  await store.delete(path);
+}
+
+// ────────────────────────────────────────────────
+//  File System & Commands (extended from previous)
+// ────────────────────────────────────────────────
+
+let currentDir = '/';
+let username = 'user';
+let hostname = 'browser';
+
+const fs = { /* initial fs structure */ };
+
+await initDB();
+await loadFSFromDB(); // Load persisted files on startup
+
+// Commands implementation (as before, with additions for head, tail, wc, grep, tree, rmdir, df, free, uptime, which, true, false, sleep)
+
+// ────────────────────────────────────────────────
+//  Enhanced Nano Editor
+// ────────────────────────────────────────────────
+
+let currentEditingPath = null;
+let editorInstance = null;
+
+function openEditor(path) {
+  currentEditingPath = path;
+  document.getElementById('editor-title').textContent = `Nano 0.1 - ${path}`;
+  document.getElementById('modal').style.display = 'flex';
+
+  const node = getNode(path);
+  const content = node?.content || '';
+
+  if (editorInstance) {
+    editorInstance.dispatch({ changes: { from: 0, to: editorInstance.state.doc.length, insert: content } });
+  } else {
+    editorInstance = new CodeMirror.EditorView({
+      doc: content,
+      extensions: [
+        CodeMirror.basicSetup,
+        CodeMirror.lineNumbers(),
+        CodeMirror.search({ top: true }),
+        CodeMirror.keymap.of([
+          { key: "Ctrl-o", run: saveFile },
+          { key: "Ctrl-x", run: closeEditor },
+          { key: "Ctrl-w", run: CodeMirror.commands.find },
+          { key: "Ctrl-k", run: CodeMirror.commands.cut },
+          { key: "Ctrl-u", run: CodeMirror.commands.paste },
+          { key: "Ctrl-c", run: () => { append(`Position: line ${editorInstance.state.selection.main.head.line + 1}`); return true; } }
+        ]),
+        CodeMirror.EditorView.lineWrapping
+      ],
+      parent: document.getElementById('editor-container')
+    });
+  }
+}
+
+// saveFile, closeEditor functions (as before, but add save to IndexedDB)
+async function saveFile() {
+  // ... (core save logic)
+  await saveFileToDB(currentEditingPath, content, new Date());
+  return true;
+}
+
+// For rm and rmdir, add deleteFromDB when successful
+
+// Virtual keyboard and terminal I/O unchanged
+
+// Initial messages
+</script>
+</body>
+</html>

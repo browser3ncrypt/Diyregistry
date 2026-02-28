@@ -1,104 +1,57 @@
-// src/terminal-object.ts
-export class TerminalSession {
-  state: DurableObjectState;
-  wsClients: Set<WebSocket> = new Set();
-  shellBuffer: string[] = [];           // command history / output buffer
-  currentCommand: string = "";
+// src/index.ts
+import { TerminalSession } from "./terminal-object";
 
-  constructor(state: DurableObjectState) {
-    this.state = state;
-    // Optional: load previous state from storage
-    this.state.blockConcurrencyWhile(async () => {
-      const saved = await this.state.storage.get<string[]>("history");
-      if (saved) this.shellBuffer = saved;
-    });
-  }
+export default {
+  async fetch(request: Request, env: Env): Promise<Response> {
+    const url = new URL(request.url);
 
-  async fetch(request: Request): Promise<Response> {
-    const upgradeHeader = request.headers.get("Upgrade");
-    if (!upgradeHeader || upgradeHeader !== "websocket") {
-      return new Response("Expected Upgrade: websocket", { status: 426 });
+    if (url.pathname === "/ws") {
+      // Route WebSocket connections to Durable Object
+      const id = env.TERMINAL_SESSIONS.idFromName("global-terminal"); // or use user ID / session token
+      const obj = env.TERMINAL_SESSIONS.get(id);
+      return obj.fetch(request);
     }
 
-    const webSocketPair = new WebSocketPair();
-    const [client, server] = Object.values(webSocketPair);
-
-    server.accept();
-
-    this.wsClients.add(server);
-
-    server.addEventListener("message", (event) => {
-      const data = event.data;
-      if (typeof data !== "string") return;
-
-      // Very basic shell simulation — extend this part significantly
-      if (data === "\r" || data === "\n") {
-        // Enter pressed → "execute" command
-        const cmd = this.currentCommand.trim();
-        this.currentCommand = "";
-
-        let output = "";
-
-        switch (cmd) {
-          case "help":
-            output = "Commands: help, ls, echo <text>, date, whoami, clear\r\n";
-            break;
-          case "ls":
-            output = "file1.txt  notes.md  script.js\r\n";
-            break;
-          case "clear":
-            output = "\x1bc"; // ANSI clear screen
-            break;
-          case "date":
-            output = new Date().toISOString() + "\r\n";
-            break;
-          case "whoami":
-            output = "user (browser session)\r\n";
-            break;
-          default:
-            if (cmd.startsWith("echo ")) {
-              output = cmd.slice(5) + "\r\n";
-            } else if (cmd) {
-              output = `command not found: ${cmd}\r\n`;
-            }
-        }
-
-        this.shellBuffer.push(`$ ${cmd}`);
-        this.shellBuffer.push(output);
-        this.broadcast(`$ \( {cmd}\r\n \){output}`);
-      } else if (data === "\u007f" || data === "\b") {
-        // Backspace
-        if (this.currentCommand.length > 0) {
-          this.currentCommand = this.currentCommand.slice(0, -1);
-          this.broadcast("\b \b"); // erase char visually
-        }
-      } else {
-        this.currentCommand += data;
-        this.broadcast(data); // echo typed character
-      }
-    });
-
-    server.addEventListener("close", () => {
-      this.wsClients.delete(server);
-    });
-
-    // Send welcome message + history on connect
-    server.send("\r\n=== Terminal Session ===\r\n");
-    for (const line of this.shellBuffer) {
-      server.send(line);
+    // Serve static client page (in production use Cloudflare Pages)
+    if (url.pathname === "/" || url.pathname === "/index.html") {
+      return new Response(HTML_CLIENT, {
+        headers: { "Content-Type": "text/html;charset=UTF-8" },
+      });
     }
 
-    return new Response(null, {
-      status: 101,
-      webSocket: client,
-    });
-  }
+    return new Response("Not found", { status: 404 });
+  },
+} satisfies ExportedHandler<Env>;
 
-  broadcast(message: string) {
-    for (const ws of this.wsClients) {
-      try {
-        ws.send(message);
-      } catch {}
-    }
-  }
+interface Env {
+  TERMINAL_SESSIONS: DurableObjectNamespace<TerminalSession>;
 }
+
+// Minimal HTML client (you can serve this from Pages instead)
+const HTML_CLIENT = `<!DOCTYPE html>
+<html>
+<head>
+  <title>Terminal</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@5.5.0/css/xterm.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/xterm@5.5.0/lib/xterm.js"></script>
+  <style>body{margin:0;background:#000}#terminal{height:100vh}</style>
+</head>
+<body>
+  <div id="terminal"></div>
+  <script>
+    const term = new Terminal({ cursorBlink: true });
+    term.open(document.getElementById('terminal'));
+    term.write('Connecting...\\r\\n');
+
+    const ws = new WebSocket(location.origin.replace('http', 'ws') + '/ws');
+
+    ws.onopen = () => {
+      term.write('Connected.\\r\\n$ ');
+      term.onData(d => ws.send(d));
+    };
+
+    ws.onmessage = e => term.write(e.data);
+    ws.onclose = () => term.write('\\r\\n\\r\\nConnection closed.');
+  </script>
+</body>
+</html>`;

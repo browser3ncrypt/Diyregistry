@@ -1,21 +1,12 @@
-{
-  "plugins": {
-    "shell": {
-      "scope": [
-        {
-          "name": "run-crawler",
-          "cmd": "python",
-          "args": true
-        },
-        {
-          "name": "run-crawler-with-args",
-          "cmd": "python",
-          "args": [
-            { "validator": "^crawler\\.py$" },
-            { "validator": ".*" }
-          ]
-        }
-      ]
-    }
-  }
-}
+name = "terminal-with-durable-objects"
+main = "src/index.ts"
+compatibility_date = "2025-02-01"
+
+[durable_objects]
+bindings = [
+  { name = "TERMINAL_SESSIONS", class_name = "TerminalSession" }
+]
+
+[[migrations]]
+tag = "v1"
+new_classes = ["TerminalSession"]

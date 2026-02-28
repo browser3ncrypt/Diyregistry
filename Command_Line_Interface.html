@@ -3,239 +3,212 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Browser Terminal Playground</title>
-
-  <!-- xterm.js CDN (latest stable as of early 2026) -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@5/css/xterm.css" integrity="sha384-8S2AHJ7moN6A3S4d6vT6U6kW2l5z3l5z3l5z3l5z3l5z3l5z3l5z3l5z3l5z3l5z" crossorigin="anonymous"/>
-  <script src="https://cdn.jsdelivr.net/npm/xterm@5/lib/xterm.min.js" integrity="sha384-...check-cdn-for-latest..." crossorigin="anonymous"></script>
-
+  <title>Browser Terminal Playground (xterm.js simulation)</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@5/css/xterm.css" integrity="sha256-oS7knOK+3s3D8vSKM9FazL0oYQ3sEHDpGq0kD+3GqS0=" crossorigin="anonymous"/>
   <style>
     body {
       margin: 0;
       padding: 0;
       height: 100vh;
-      background: #1e1e1e;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', monospace;
-      color: #d4d4d4;
+      background: #000;
+      font-family: 'Courier New', Courier, monospace;
+      overflow: hidden;
     }
     #terminal {
       width: 100%;
       height: 100%;
-      padding: 8px;
-      box-sizing: border-box;
     }
     .header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      background: rgba(30,30,30,0.85);
-      color: #9cdcfe;
-      padding: 8px 16px;
-      font-size: 0.9rem;
+      position: absolute;
+      top: 8px;
+      left: 16px;
+      color: #0f0;
+      font-size: 14px;
       z-index: 10;
-      border-bottom: 1px solid #3c3c3c;
+      pointer-events: none;
     }
   </style>
 </head>
 <body>
 
-<div class="header">
-  Browser Terminal Playground  —  type <strong>help</strong> for commands
-</div>
+<div class="header">Browser Terminal Playground  —  type 'help' for commands</div>
 
 <div id="terminal"></div>
 
-<script>
-// ────────────────────────────────────────────────
-const term = new Terminal({
-  cursorBlink: true,
-  theme: {
-    background: '#1e1e1e',
-    foreground: '#d4d4d4',
-    cursor:     '#ffffff',
-    selection:  'rgba(255,255,255,0.2)',
-    black:      '#000000',
-    red:        '#f44747',
-    green:      '#6a9955',
-    yellow:     '#d7ba7d',
-    blue:       '#569cd6',
-    magenta:    '#c586c0',
-    cyan:       '#4ec9b0',
-    white:      '#d4d4d4',
-    brightBlack:   '#808080',
-    brightRed:     '#ff6b6b',
-    brightGreen:   '#98c379',
-    brightYellow:  '#e5c07b',
-    brightBlue:    '#61afef',
-    brightMagenta: '#d3869b',
-    brightCyan:    '#56b6c2',
-    brightWhite:   '#ffffff'
-  },
-  fontFamily: 'Menlo, Monaco, "Courier New", monospace',
-  fontSize: 14,
-  lineHeight: 1.2,
-  scrollback: 1000
-});
+<script src="https://cdn.jsdelivr.net/npm/xterm@5/+esm"></script>
+<script type="module">
+  const { Terminal } = XTerm;
 
-term.open(document.getElementById('terminal'));
-term.write('\x1b[?25h'); // show cursor
+  // ──────────────────────────────────────────────
+  // Virtual File System & State
+  // ──────────────────────────────────────────────
+  let currentDir = '/home/user';
+  const fileSystem = {
+    '/':          ['home', 'etc', 'tmp'],
+    '/home':      ['user'],
+    '/home/user': ['Documents', 'Downloads', 'Desktop', 'README.md'],
+    '/etc':       ['hosts', 'passwd'],
+    '/tmp':       []
+  };
 
-// ────────────────────────────────────────────────
-// Simulated filesystem & state
-// ────────────────────────────────────────────────
-const files = ['about.txt', 'projects/', 'contact.md', 'README.md'];
-let currentDir = '\~';
+  const filesContent = {
+    '/home/user/README.md': 'Welcome to the browser terminal playground.\nThis is a static simulation.\nHave fun!'
+  };
 
-// ────────────────────────────────────────────────
-// Command handler
-// ────────────────────────────────────────────────
-const commands = {
-  help() {
-    term.writeln('');
-    term.writeln('Available commands:');
-    term.writeln('  help               Show this help');
-    term.writeln('  clear              Clear the terminal');
-    term.writeln('  echo [text]        Print text');
-    term.writeln('  date               Show current date/time');
-    term.writeln('  ls                 List files');
-    term.writeln('  pwd                Print working directory');
-    term.writeln('  cd [dir]           Change directory (simulated)');
-    term.writeln('  whoami             Current user');
-    term.writeln('  exit / quit        Close simulation');
-    term.writeln('');
-  },
+  // ──────────────────────────────────────────────
+  // Terminal Setup
+  // ──────────────────────────────────────────────
+  const term = new Terminal({
+    cursorBlink: true,
+    theme: {
+      background: '#000000',
+      foreground: '#00ff41',
+      cursor:     '#00ff41'
+    },
+    fontFamily: "'Courier New', monospace",
+    fontSize: 15,
+    lineHeight: 1.2
+  });
 
-  clear() {
-    term.clear();
-  },
+  term.open(document.getElementById('terminal'));
+  term.resize(Math.floor(window.innerWidth / 9.2), Math.floor(window.innerHeight / 18));
 
-  echo(...args) {
-    term.writeln(args.join(' '));
-  },
+  window.addEventListener('resize', () => {
+    term.resize(Math.floor(window.innerWidth / 9.2), Math.floor(window.innerHeight / 18));
+  });
 
-  date() {
-    term.writeln(new Date().toLocaleString());
-  },
+  // Prompt
+  function prompt() {
+    term.write(`\r\n\x1b[32muser@playground\x1b[0m:\x1b[34m\( {currentDir}\x1b[0m \) `);
+  }
 
-  ls() {
-    term.writeln(files.join('  '));
-  },
+  term.write('\x1b[32mBrowser Terminal Playground\x1b[0m — static simulation\r\n');
+  prompt();
 
-  pwd() {
-    term.writeln(currentDir);
-  },
+  // ──────────────────────────────────────────────
+  // Command Handler
+  // ──────────────────────────────────────────────
+  let commandBuffer = '';
 
-  cd(dir = '') {
-    if (!dir || dir === '\~' || dir === '/') {
-      currentDir = '\~';
-      term.writeln('');
-      return;
-    }
-    if (dir === '..') {
-      currentDir = currentDir === '\~' ? '\~' : currentDir.split('/').slice(0,-1).join('/') || '\~';
-      term.writeln('');
-      return;
-    }
-    if (files.includes(dir + '/')) {
-      currentDir = `\( {currentDir === '\~' ? '' : currentDir}/ \){dir}`;
-      term.writeln('');
-    } else {
-      term.writeln(`cd: ${dir}: No such directory`);
-    }
-  },
+  term.onKey(({ key, domEvent }) => {
+    if (domEvent.key === 'Enter') {
+      term.write('\r\n');
+      const cmd = commandBuffer.trim();
+      commandBuffer = '';
 
-  whoami() {
-    term.writeln('guest');
-  },
-
-  exit() { term.writeln('\r\nGoodbye.\r\n'); setTimeout(() => term.dispose(), 1200); },
-  quit()  { this.exit(); }
-};
-
-// ────────────────────────────────────────────────
-// Input handling
-// ────────────────────────────────────────────────
-let input = '';
-let history = [];
-let historyIndex = -1;
-
-function prompt() {
-  term.write('\r\n\x1b[32mguest@playground\x1b[39m:\x1b[34m' + currentDir + '\x1b[39m$ ');
-}
-
-term.onKey(({ key, domEvent }) => {
-  const ev = domEvent;
-
-  if (ev.key === 'Enter') {
-    term.write('\r\n');
-    const cmd = input.trim();
-    if (cmd) {
-      history.push(cmd);
-      historyIndex = history.length;
-      const [name, ...args] = cmd.split(/\s+/);
-      const handler = commands[name];
-      if (handler) {
-        handler(...args);
-      } else if (name) {
-        term.writeln(`command not found: ${name}`);
+      if (cmd) {
+        executeCommand(cmd);
       }
+      prompt();
     }
-    input = '';
-    prompt();
-  }
-  else if (ev.key === 'Backspace') {
-    if (input.length > 0) {
-      input = input.slice(0, -1);
-      term.write('\b \b');
+    else if (domEvent.key === 'Backspace') {
+      if (commandBuffer.length > 0) {
+        commandBuffer = commandBuffer.slice(0, -1);
+        term.write('\b \b');
+      }
+      domEvent.preventDefault();
+    }
+    else if (domEvent.ctrlKey && domEvent.key.toLowerCase() === 'c') {
+      term.write('^C\r\n');
+      commandBuffer = '';
+      prompt();
+      domEvent.preventDefault();
+    }
+    else if (!domEvent.ctrlKey && !domEvent.metaKey && key.length === 1) {
+      commandBuffer += key;
+      term.write(key);
+    }
+  });
+
+  function executeCommand(input) {
+    const parts = input.split(/\s+/);
+    const cmd = parts[0].toLowerCase();
+    const args = parts.slice(1);
+
+    switch (cmd) {
+      case 'help':
+        term.writeln('Available commands:');
+        term.writeln('  help          — show this help');
+        term.writeln('  clear         — clear the screen');
+        term.writeln('  pwd           — print working directory');
+        term.writeln('  ls            — list directory contents');
+        term.writeln('  cd <dir>      — change directory (cd .., cd /, cd Documents)');
+        term.writeln('  echo <text>   — print text');
+        term.writeln('  cat <file>    — show file content (only README.md exists)');
+        term.writeln('  date          — show current date/time');
+        term.writeln('  whoami        — show current user');
+        break;
+
+      case 'clear':
+        term.clear();
+        break;
+
+      case 'pwd':
+        term.writeln(currentDir);
+        break;
+
+      case 'ls':
+        const dir = currentDir === '/' ? '/' : currentDir;
+        const items = fileSystem[dir] || [];
+        if (items.length === 0) {
+          term.writeln('(empty directory)');
+        } else {
+          term.writeln(items.join('  '));
+        }
+        break;
+
+      case 'cd':
+        if (args.length === 0) {
+          currentDir = '/home/user';
+          break;
+        }
+        let target = args[0];
+        if (target === '..') {
+          if (currentDir !== '/') {
+            currentDir = currentDir.split('/').slice(0, -1).join('/') || '/';
+          }
+        } else if (target.startsWith('/')) {
+          currentDir = target;
+        } else {
+          currentDir = currentDir === '/' ? `/\( {target}` : ` \){currentDir}/${target}`;
+        }
+        if (!fileSystem[currentDir]) {
+          term.writeln(`cd: ${target}: No such file or directory`);
+          currentDir = currentDir.split('/').slice(0, -1).join('/') || '/'; // revert
+        }
+        break;
+
+      case 'echo':
+        term.writeln(args.join(' '));
+        break;
+
+      case 'cat':
+        if (args.length === 0) {
+          term.writeln('cat: missing operand');
+          break;
+        }
+        const filePath = args[0].startsWith('/') ? args[0] : `\( {currentDir}/ \){args[0]}`;
+        if (filesContent[filePath]) {
+          term.writeln(filesContent[filePath]);
+        } else {
+          term.writeln(`cat: ${args[0]}: No such file or directory`);
+        }
+        break;
+
+      case 'date':
+        term.writeln(new Date().toLocaleString());
+        break;
+
+      case 'whoami':
+        term.writeln('user');
+        break;
+
+      default:
+        if (cmd) {
+          term.writeln(`${cmd}: command not found`);
+        }
     }
   }
-  else if (ev.key === 'ArrowUp') {
-    if (historyIndex > 0) {
-      historyIndex--;
-      overwriteLine(history[historyIndex]);
-    }
-  }
-  else if (ev.key === 'ArrowDown') {
-    if (historyIndex < history.length - 1) {
-      historyIndex++;
-      overwriteLine(history[historyIndex]);
-    } else {
-      historyIndex = history.length;
-      overwriteLine('');
-    }
-  }
-  else if (ev.key === 'Tab') {
-    ev.preventDefault();
-    term.write('\t'); // stub — can implement completion later
-  }
-  else if (ev.key.length === 1 && !ev.ctrlKey && !ev.metaKey) {
-    input += key;
-    term.write(key);
-  }
-});
-
-function overwriteLine(newText) {
-  // Clear current line
-  term.write('\r\x1b[K');
-  // Re-print prompt + new text
-  term.write(`guest@playground:\( {currentDir} \) ${newText}`);
-  input = newText;
-}
-
-// Initial prompt
-term.writeln('Browser Terminal Playground');
-term.writeln('Type "help" to see available commands.');
-prompt();
-
-// Make terminal fit window
-function fit() {
-  const dims = term.element.getBoundingClientRect();
-  term.fit(dims.width, dims.height);
-}
-window.addEventListener('resize', fit);
-fit();
-
 </script>
 </body>
 </html>

@@ -131,85 +131,8 @@
   </div>
 
   <script>
-    let qrcode = null;
-    let currentTab = 'encode';
-
-    function showTab(tab) {
-      currentTab = tab;
-      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-      document.querySelector(`.tab[onclick="showTab('${tab}')"]`).classList.add('active');
-
-      document.getElementById('encode-tab').style.display = tab === 'encode' ? 'block' : 'none';
-      document.getElementById('decode-tab').style.display = tab === 'decode' ? 'block' : 'none';
-
-      document.getElementById('output').textContent = '';
-      if (tab === 'encode') document.getElementById('qrcode').innerHTML = '';
-    }
-
-    function generateQR() {
-      const input = document.getElementById('encode-input').value.trim();
-      const output = document.getElementById('output');
-      const qrDiv = document.getElementById('qrcode');
-
-      if (!input) {
-        output.textContent = "Please enter some text first.";
-        qrDiv.innerHTML = "";
-        return;
-      }
-
-      // Proper Base64 encoding (handles unicode)
-      const base64 = btoa(unescape(encodeURIComponent(input)));
-
-      output.textContent = `Base64:\n${base64}`;
-
-      qrDiv.innerHTML = "";
-      try {
-        qrcode = new QRCode(qrDiv, {
-          text: base64,
-          width: 280,
-          height: 280,
-          colorDark: "#000000",
-          colorLight: "#ffffff",
-          correctLevel: QRCode.CorrectLevel.H
-        });
-      } catch (err) {
-        output.textContent = "Error generating QR: " + err.message;
-      }
-    }
-
-    function decodeBase64() {
-      const input = document.getElementById('decode-input').value.trim();
-      const output = document.getElementById('output');
-
-      if (!input) {
-        output.textContent = "Please paste a Base64 string.";
-        return;
-      }
-
-      try {
-        // Reverse the encoding process
-        const decoded = decodeURIComponent(escape(atob(input)));
-        output.textContent = `Decoded result:\n${decoded}`;
-      } catch (err) {
-        output.textContent = `Invalid Base64 string\nError: ${err.message}`;
-      }
-    }
-
-    // Enter key shortcuts
-    document.getElementById('encode-input').addEventListener('keydown', e => {
-      if (e.key === 'Enter' && !e.shiftKey && currentTab === 'encode') {
-        e.preventDefault();
-        generateQR();
-      }
-    });
-
-    document.getElementById('decode-input').addEventListener('keydown', e => {
-      if (e.key === 'Enter' && !e.shiftKey && currentTab === 'decode') {
-        e.preventDefault();
-        decodeBase64();
-      }
-    });
-  </script>
+   <script  src="base64-tool.obf.js></script>
+      </script>
 
 </body>
 </html>

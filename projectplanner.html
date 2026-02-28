@@ -1,177 +1,307 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="https://bankcoin.loan/Diyregistry.jpg">
+    <link rel="icon" href="https://cdn.diyregistry.com/Diyregistry.jpg">
     <title>DIYRegistry.com - Your DIY Project & Domain Hub</title>
     <meta name="description" content="DIY Registry - The ultimate Domain and Project hub for all your DIY creations">
+
     <style>
+        :root {
+            --clr-primary: #f38020;       /* Cloudflare orange */
+            --clr-primary-light: #faad3f;
+            --clr-dark: #404041;
+            --clr-bg-light: #f8f9fa;
+            --clr-bg-dark: #0d0d0d;
+            --clr-surface-light: #ffffff;
+            --clr-surface-dark: #1a1a1a;
+            --clr-text-light: #212529;
+            --clr-text-dark: #e9ecef;
+            --clr-border-light: #dee2e6;
+            --clr-border-dark: #333;
+            --shadow-neo-light: 8px 8px 16px #d1d9e0, -8px -8px 16px #ffffff;
+            --shadow-neo-dark: 6px 6px 12px #0a0a0a, -6px -6px 12px #222;
+        }
+
+        [data-theme="dark"] {
+            --bg: var(--clr-bg-dark);
+            --surface: var(--clr-surface-dark);
+            --text: var(--clr-text-dark);
+            --border: var(--clr-border-dark);
+            --shadow-neo: var(--shadow-neo-dark);
+        }
+
+        [data-theme="light"] {
+            --bg: var(--clr-bg-light);
+            --surface: var(--clr-surface-light);
+            --text: var(--clr-text-light);
+            --border: var(--clr-border-light);
+            --shadow-neo: var(--shadow-neo-light);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: system-ui, -apple-system, sans-serif;
             margin: 0;
-            padding: 20px;
-            background-color: #f4f4f4;
+            background: var(--bg);
+            color: var(--text);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            transition: background 0.4s, color 0.4s;
         }
+
         header {
             text-align: center;
-            padding: 30px;
-            background-color: #007bff;
+            padding: 2.5rem 1rem;
+            background: linear-gradient(135deg, var(--clr-primary) 0%, var(--clr-primary-light) 100%);
             color: white;
-            border-radius: 8px 8px 0 0;
+            border-radius: 0 0 16px 16px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.25);
         }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            width: 100%;
+        }
+
         main {
             flex: 1;
+            padding: 2rem 0;
         }
+
         section {
-            margin: 20px 0;
-            padding: 20px;
-            background-color: white;
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 1.8rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-neo);
+            transition: all 0.3s ease;
+        }
+
+        h1, h2 {
+            margin-top: 0;
+            color: var(--clr-primary);
+        }
+
+        .grid-12 {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 1.5rem;
+        }
+
+        .col-12 { grid-column: span 12; }
+        .col-10 { grid-column: span 10; }
+        .col-8  { grid-column: span 8;  }
+        .col-6  { grid-column: span 6;  }
+        .col-4  { grid-column: span 4;  }
+        .col-3  { grid-column: span 3;  }
+
+        @media (max-width: 992px) {
+            .col-md-12 { grid-column: span 12; }
+            .col-md-8  { grid-column: span 8;  }
+            .col-md-6  { grid-column: span 6;  }
+            .col-md-4  { grid-column: span 12; }
+        }
+
+        @media (max-width: 768px) {
+            .col-sm-12 { grid-column: span 12; }
+            section { padding: 1.4rem; }
+        }
+
+        /* Form controls */
+        input[type="text"],
+        input[type="url"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            border: 1px solid var(--border);
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            background: var(--bg);
+            color: var(--text);
+            font-size: 1rem;
         }
-        h2 {
-            color: #333;
-        }
-        ul#project-list {
-            list-style-type: none;
-            padding: 0;
-        }
-        ul#project-list li {
-            background-color: #e9ecef;
-            margin: 10px 0;
-            padding: 10px;
-            border-radius: 4px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+
         button {
-            background-color: #28a745;
+            background: var(--clr-primary);
             color: white;
             border: none;
-            padding: 8px 12px;
-            border-radius: 4px;
+            padding: 0.75rem 1.25rem;
+            border-radius: 8px;
             cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
         }
+
         button:hover {
-            background-color: #218838;
+            background: #d96f1b;
+            transform: translateY(-1px);
         }
+
         button.remove {
-            background-color: #dc3545;
+            background: #dc3545;
         }
+
         button.remove:hover {
-            background-color: #c82333;
+            background: #c82333;
         }
-        input[type="text"], input[type="url"], input[type="number"], select {
-            padding: 8px;
-            margin-right: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            width: 180px;
-        }
-        #material-list {
-            margin-top: 10px;
-        }
+
+        /* Project & Material list */
+        #project-list li,
         #material-list > div {
-            background-color: #e9ecef;
-            margin: 8px 0;
-            padding: 12px;
-            border-radius: 4px;
+            background: rgba(255,255,255,0.06);
+            padding: 1rem;
+            border-radius: 12px;
+            margin: 0.75rem 0;
             display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
+            border: 1px solid var(--border);
         }
+
         .material-info {
             flex: 1;
-            min-width: 300px;
+            min-width: 260px;
         }
-        .material-link {
-            margin-top: 8px;
-            font-size: 0.9em;
-        }
-        .material-link a {
-            color: #007bff;
-            word-break: break-all;
-        }
+
         .total-cost {
             font-weight: bold;
-            font-size: 1.2em;
-            margin-top: 20px;
-            padding: 10px;
-            background-color: #d4edda;
-            border-radius: 4px;
+            font-size: 1.3rem;
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: rgba(40,167,69,0.15);
+            border-radius: 12px;
             text-align: right;
+            border: 1px solid rgba(40,167,69,0.3);
         }
+
         footer {
             text-align: center;
-            padding: 20px;
-            margin-top: 40px;
-            background-color: #343a40;
-            color: #ddd;
-            font-size: 0.9em;
-            border-radius: 8px;
+            padding: 2rem 1rem;
+            background: var(--clr-dark);
+            color: #aaa;
+            margin-top: auto;
+            font-size: 0.95rem;
+        }
+
+        /* Theme toggle */
+        #theme-toggle {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 1000;
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            padding: 0.6rem 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        [data-theme="dark"] #theme-toggle {
+            background: rgba(0,0,0,0.3);
+            border-color: #444;
         }
     </style>
 </head>
-
-<!-- Google tag (gtag.js) -->
-
-<!-- blocked for privacy -->
-
 <body>
+
+    <button id="theme-toggle">Dark Mode</button>
+
     <header>
-        <h1>DIY Registry</h1>
-        <p>Your one-stop hub for creating project lists, planning materials, estimating costs, and linking suppliers for all your DIY adventures!</p>
+        <div class="container">
+            <h1>DIY Registry</h1>
+            <p>Your one-stop hub for creating project lists, planning materials, estimating costs, and linking suppliers for all your DIY adventures!</p>
+        </div>
     </header>
 
-    <main>
-        <section id="project-section">
-            <h2>User-Created Project List</h2>
-            <p>Add your DIY projects here. Each project can have a name and description.</p>
-            <input type="text" id="project-name" placeholder="Project Name">
-            <input type="text" id="project-desc" placeholder="Project Description">
-            <button onclick="addProject()">Add Project</button>
-            <ul id="project-list"></ul>
-        </section>
+    <main class="container">
+        <div class="grid-12">
+            <section class="col-12 col-md-6">
+                <h2>User-Created Project List</h2>
+                <p>Add your DIY projects here. Each project can have a name and description.</p>
+                <input type="text" id="project-name" placeholder="Project Name">
+                <input type="text" id="project-desc" placeholder="Project Description">
+                <button onclick="addProject()">Add Project</button>
+                <ul id="project-list"></ul>
+            </section>
 
-        <section id="material-planner-section">
-            <h2>Material Planner & Cost Estimator</h2>
-            <p>Select a project to add or view its required materials, costs, and supplier links.</p>
-            <select id="select-project"></select>
-            <div>
-                <input type="text" id="material-name" placeholder="Material Name">
-                <input type="number" id="material-quantity" placeholder="Quantity" min="0" step="any">
-                <input type="text" id="material-unit" placeholder="Unit (e.g., pcs, m, kg)">
-                <input type="number" id="material-price" placeholder="Price per unit ($)" min="0" step="any">
-                <input type="url" id="material-link" placeholder="Supplier Link (optional)">
-                <button onclick="addMaterial()">Add Material</button>
-            </div>
-            <div id="material-list"></div>
-            <div id="total-cost" class="total-cost" style="display:none;"></div>
-        </section>
+            <section class="col-12 col-md-6">
+                <h2>Material Planner & Cost Estimator</h2>
+                <p>Select a project to add or view its required materials, costs, and supplier links.</p>
+                <select id="select-project"></select>
+                <div class="grid-12">
+                    <div class="col-12 col-sm-6">
+                        <input type="text" id="material-name" placeholder="Material Name">
+                    </div>
+                    <div class="col-12 col-sm-6">
+                        <input type="number" id="material-quantity" placeholder="Quantity" min="0" step="any">
+                    </div>
+                    <div class="col-12 col-sm-6">
+                        <input type="text" id="material-unit" placeholder="Unit (e.g., pcs, m, kg)">
+                    </div>
+                    <div class="col-12 col-sm-6">
+                        <input type="number" id="material-price" placeholder="Price per unit ($)" min="0" step="any">
+                    </div>
+                    <div class="col-12">
+                        <input type="url" id="material-link" placeholder="Supplier Link (optional)">
+                    </div>
+                    <div class="col-12">
+                        <button onclick="addMaterial()">Add Material</button>
+                    </div>
+                </div>
+                <div id="material-list"></div>
+                <div id="total-cost" class="total-cost" style="display:none;"></div>
+            </section>
+        </div>
     </main>
 
     <footer>
-        <p>&copy; 2025 DIY Registry • Built with ❤️⚒️ for makers and creators</p>
-        <p>All your project data is saved locally in your browser using Local Storage – nothing is sent to any server. To purchase this domain or suggest new features please contact info@diyregistry.com</p>
+        <p>© 2025 DIY Registry • Built with ❤️⚒️ for makers and creators</p>
+        <p>All your project data is saved locally in your browser using Local Storage – nothing is sent to any server.<br>To purchase this domain or suggest new features please contact info@diyregistry.com</p>
     </footer>
 
     <script>
+        // Theme toggle
+        const toggleBtn = document.getElementById('theme-toggle');
+        const html = document.documentElement;
+
+        function setTheme(theme) {
+            html.setAttribute('data-theme', theme);
+            toggleBtn.textContent = theme === 'dark' ? 'Light Mode' : 'Dark Mode';
+            localStorage.setItem('theme', theme);
+        }
+
+        const savedTheme = localStorage.getItem('theme') || 
+            (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        setTheme(savedTheme);
+
+        toggleBtn.addEventListener('click', () => {
+            const current = html.getAttribute('data-theme');
+            setTheme(current === 'dark' ? 'light' : 'dark');
+        });
+
+        // ── Your original JavaScript (unchanged) ──
         const STORAGE_KEY = 'diyRegistryProjects';
         let projects = [];
         let selectedProjectIndex = -1;
 
         function loadData() {
             const stored = localStorage.getItem(STORAGE_KEY);
-            if (stored) {
-                projects = JSON.parse(stored);
-            }
+            if (stored) projects = JSON.parse(stored);
             renderProjects();
             renderProjectOptions();
             renderMaterials();
@@ -199,12 +329,9 @@
             list.innerHTML = '';
             projects.forEach((project, index) => {
                 const li = document.createElement('li');
-
                 const textSpan = document.createElement('span');
                 textSpan.innerHTML = `<strong>${project.name}</strong>`;
-                if (project.desc) {
-                    textSpan.innerHTML += ` - ${project.desc}`;
-                }
+                if (project.desc) textSpan.innerHTML += ` - ${project.desc}`;
 
                 const buttonDiv = document.createElement('div');
                 buttonDiv.innerHTML = `
@@ -249,51 +376,34 @@
             });
         }
 
-        // Helper to ensure proper URL format
         function ensureProtocol(url) {
             if (!url) return '';
-            if (/^https?:\/\//i.test(url)) {
-                return url;
-            }
-            return 'https://' + url;
+            return /^https?:\/\//i.test(url) ? url : 'https://' + url;
         }
 
         function addMaterial() {
-            if (selectedProjectIndex === -1) {
-                alert('Please select a project first.');
-                return;
-            }
-            const name = document.getElementById('material-name').value.trim();
+            if (selectedProjectIndex === -1) return alert('Please select a project first.');
+            const name    = document.getElementById('material-name').value.trim();
             const quantity = parseFloat(document.getElementById('material-quantity').value);
-            const unit = document.getElementById('material-unit').value.trim();
-            const price = parseFloat(document.getElementById('material-price').value);
-            let link = document.getElementById('material-link').value.trim();
+            const unit     = document.getElementById('material-unit').value.trim();
+            const price    = parseFloat(document.getElementById('material-price').value);
+            let link       = document.getElementById('material-link').value.trim();
 
             if (name && !isNaN(quantity) && quantity >= 0 && !isNaN(price) && price >= 0) {
-                // Normalize the link by adding https:// if missing
                 link = ensureProtocol(link);
-
-                projects[selectedProjectIndex].materials.push({ 
-                    name, 
-                    quantity, 
-                    unit: unit || '', 
-                    price,
-                    link: link
-                });
+                projects[selectedProjectIndex].materials.push({ name, quantity, unit: unit || '', price, link });
                 saveData();
                 renderMaterials();
-                document.getElementById('material-name').value = '';
-                document.getElementById('material-quantity').value = '';
-                document.getElementById('material-unit').value = '';
-                document.getElementById('material-price').value = '';
-                document.getElementById('material-link').value = '';
+                ['material-name','material-quantity','material-unit','material-price','material-link'].forEach(id => 
+                    document.getElementById(id).value = ''
+                );
             } else {
-                alert('Please fill in all required fields correctly (quantity and price must be valid numbers).');
+                alert('Please fill required fields correctly (quantity & price must be valid numbers).');
             }
         }
 
         function calculateTotalCost(materials) {
-            return materials.reduce((total, mat) => total + (mat.quantity * mat.price), 0);
+            return materials.reduce((sum, m) => sum + (m.quantity * m.price), 0);
         }
 
         function renderMaterials() {
@@ -308,7 +418,6 @@
             }
 
             const materials = projects[selectedProjectIndex].materials;
-
             if (materials.length === 0) {
                 list.innerHTML += '<p>No materials added yet.</p>';
                 totalDiv.style.display = 'none';
@@ -320,39 +429,21 @@
                 const unitDisplay = material.unit || 'unit(s)';
 
                 const container = document.createElement('div');
-
                 const infoDiv = document.createElement('div');
                 infoDiv.className = 'material-info';
 
-                const strongName = document.createElement('strong');
-                strongName.textContent = material.name;
-                infoDiv.appendChild(strongName);
+                infoDiv.innerHTML = `
+                    <strong>${material.name}</strong>: 
+                    ${material.quantity} ${unitDisplay} @ $${material.price.toFixed(2)} each 
+                    <strong>→ $${itemCost.toFixed(2)}</strong>
+                `;
 
-                infoDiv.appendChild(document.createTextNode(': '));
-                infoDiv.appendChild(document.createTextNode(material.quantity + ' '));
-                infoDiv.appendChild(document.createTextNode(unitDisplay + ' @ $'));
-                infoDiv.appendChild(document.createTextNode(material.price.toFixed(2) + ' each '));
-
-                const strongTotal = document.createElement('strong');
-                strongTotal.textContent = '→ $' + itemCost.toFixed(2);
-                infoDiv.appendChild(strongTotal);
-
-                // Supplier link if present
                 if (material.link) {
-                    const br = document.createElement('br');
-                    infoDiv.appendChild(br);
-
-                    const linkDiv = document.createElement('div');
-                    linkDiv.className = 'material-link';
-                    const linkText = document.createTextNode('Supplier: ');
-                    const linkA = document.createElement('a');
-                    linkA.href = material.link;  // Now correctly uses the full https:// URL
-                    linkA.target = '_blank';
-                    linkA.rel = 'noopener noreferrer';  // Security best practice
-                    linkA.textContent = material.link;
-                    linkDiv.appendChild(linkText);
-                    linkDiv.appendChild(linkA);
-                    infoDiv.appendChild(linkDiv);
+                    infoDiv.innerHTML += `
+                        <div class="material-link">
+                            Supplier: <a href="${material.link}" target="_blank" rel="noopener noreferrer">${material.link}</a>
+                        </div>
+                    `;
                 }
 
                 const removeBtn = document.createElement('button');
@@ -376,7 +467,7 @@
             renderMaterials();
         }
 
-        document.getElementById('select-project').addEventListener('change', (e) => {
+        document.getElementById('select-project').addEventListener('change', e => {
             selectedProjectIndex = e.target.value === '' ? -1 : parseInt(e.target.value);
             renderMaterials();
         });

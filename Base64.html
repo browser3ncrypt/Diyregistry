@@ -46,8 +46,40 @@
             max-width: 960px;
             min-height: 100vh;
             transition: background 0.3s, color 0.3s;
+            display: flex;
+            flex-direction: column;
         }
 
+        main {
+            flex: 1;
+        }
+
+        footer {
+            margin-top: 3rem;
+            padding: 1.5rem 0;
+            text-align: center;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .doc-button {
+            display: inline-block;
+            padding: 10px 24px;
+            background: var(--btn-primary);
+            color: white;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+
+        .doc-button:hover {
+            background: var(--btn-primary-hover);
+            color: white;
+        }
+
+        /* Existing styles remain unchanged below */
         h1 {
             color: var(--btn-primary);
             text-align: center;
@@ -195,6 +227,8 @@
 </head>
 <body>
 
+<main>
+
 <div class="header">
     <h1>Base64 Encode / Decode</h1>
     <button class="theme-toggle" id="themeToggle">Dark Mode</button>
@@ -203,7 +237,7 @@
 <div class="container">
     <div class="panel">
         <h2>Input</h2>
-        
+
         <div class="file-input-wrapper" id="dropZone">
             <p>Drag & drop a file here<br>or click to select</p>
             <input type="file" id="fileInput" />
@@ -211,7 +245,7 @@
         </div>
 
         <textarea id="input" placeholder="…or paste text / Base64 directly here"></textarea>
-        
+
         <div class="controls">
             <button onclick="encode()">Encode to Base64</button>
             <button onclick="decode()" class="secondary">Decode Base64</button>
@@ -221,7 +255,7 @@
     <div class="panel">
         <h2>Output</h2>
         <textarea id="output" placeholder="Result will appear here..." readonly></textarea>
-        
+
         <div class="controls">
             <button onclick="copyResult()">Copy Text</button>
             <button onclick="downloadResult()" class="download" id="downloadBtn" disabled>Download Result</button>
@@ -234,7 +268,14 @@
     Works entirely in your browser • Supports text & binary files • UTF-8 compatible
 </div>
 
+</main>
+
+<footer>
+    <a href="/base64_explained.html" class="doc-button">Base64 Documentation</a>
+</footer>
+
 <script>
+    // ── Your existing JavaScript remains unchanged ──
     const inputEl     = document.getElementById('input');
     const outputEl    = document.getElementById('output');
     const fileInput   = document.getElementById('fileInput');
@@ -246,10 +287,9 @@
 
     let currentFile     = null;
     let currentFileName = '';
-    let resultType      = 'text'; // 'text' | 'binary'
-    let resultData      = null;   // string or ArrayBuffer
+    let resultType      = 'text';
+    let resultData      = null;
 
-    // ── Theme handling ────────────────────────────────────────
     function initTheme() {
         const saved = localStorage.getItem('theme');
         if (saved) {
@@ -274,7 +314,6 @@
 
     initTheme();
 
-    // ── File handling ─────────────────────────────────────────
     function readFileAsDataURL(file) {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
@@ -300,22 +339,18 @@
         fileNameDiv.textContent = `Selected: \( {file.name} ( \){(file.size/1024).toFixed(1)} KB)`;
 
         try {
-            // Try reading as text first (most common case)
             const text = await readFileAsText(file);
             inputEl.value = text;
             resultType = 'text';
         } catch (e) {
-            // Fallback to binary → Data URL
             const dataUrl = await readFileAsDataURL(file);
             inputEl.value = dataUrl;
             resultType = 'binary';
         }
     }
 
-    // File input events
     fileInput.addEventListener('change', e => handleFile(e.target.files[0]));
 
-    // Drag & drop
     dropZone.addEventListener('dragover', e => {
         e.preventDefault();
         dropZone.classList.add('dragover');
@@ -333,7 +368,6 @@
 
     dropZone.addEventListener('click', () => fileInput.click());
 
-    // ── Base64 operations ─────────────────────────────────────
     function encode() {
         const value = inputEl.value.trim();
         if (!value) return;
@@ -341,10 +375,8 @@
         try {
             let encoded;
             if (resultType === 'binary' && value.startsWith('data:')) {
-                // Already a data URL → extract base64 part
                 encoded = value.split(',')[1];
             } else {
-                // Text → encode
                 encoded = btoa(unescape(encodeURIComponent(value)));
             }
             outputEl.value = encoded;
@@ -366,7 +398,6 @@
                 bytes[i] = binary.charCodeAt(i);
             }
 
-            // Try to detect if it's likely UTF-8 text
             try {
                 const decoder = new TextDecoder('utf-8', {fatal: true});
                 const text = decoder.decode(bytes);
@@ -375,7 +406,6 @@
                 resultData = text;
                 resultType = 'text';
             } catch {
-                // Binary data → offer as downloadable blob
                 outputEl.value = `[Binary file – ${bytes.length} bytes]\nCannot display directly. Use Download button.`;
                 prepareDownload(bytes.buffer, currentFileName ? currentFileName.replace(/\.b64\.txt$/i,'') : 'decoded.bin', 'application/octet-stream');
                 resultData = bytes.buffer;
@@ -387,12 +417,11 @@
         }
     }
 
-    // ── Download & clipboard ──────────────────────────────────
     function prepareDownload(data, filename, mimeType) {
         downloadBtn.disabled = false;
         downloadBtn.dataset.filename = filename;
         downloadBtn.dataset.mime = mimeType;
-        downloadBtn.dataset.content = data instanceof ArrayBuffer ? null : data; // ArrayBuffer stored separately
+        downloadBtn.dataset.content = data instanceof ArrayBuffer ? null : data;
         downloadBtn._arrayBuffer = data instanceof ArrayBuffer ? data : null;
     }
 
@@ -444,7 +473,6 @@
         inputEl.focus();
     }
 
-    // Auto-decode attempt on paste of Base64-like content
     inputEl.addEventListener('paste', () => {
         setTimeout(() => {
             const val = inputEl.value.trim();

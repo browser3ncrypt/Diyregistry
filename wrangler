@@ -1,12 +1,104 @@
-name = "terminal-with-durable-objects"
-main = "src/index.ts"
-compatibility_date = "2025-02-01"
+// src/terminal-object.ts
+export class TerminalSession {
+  state: DurableObjectState;
+  wsClients: Set<WebSocket> = new Set();
+  shellBuffer: string[] = [];           // command history / output buffer
+  currentCommand: string = "";
 
-[durable_objects]
-bindings = [
-  { name = "TERMINAL_SESSIONS", class_name = "TerminalSession" }
-]
+  constructor(state: DurableObjectState) {
+    this.state = state;
+    // Optional: load previous state from storage
+    this.state.blockConcurrencyWhile(async () => {
+      const saved = await this.state.storage.get<string[]>("history");
+      if (saved) this.shellBuffer = saved;
+    });
+  }
 
-[[migrations]]
-tag = "v1"
-new_classes = ["TerminalSession"]
+  async fetch(request: Request): Promise<Response> {
+    const upgradeHeader = request.headers.get("Upgrade");
+    if (!upgradeHeader || upgradeHeader !== "websocket") {
+      return new Response("Expected Upgrade: websocket", { status: 426 });
+    }
+
+    const webSocketPair = new WebSocketPair();
+    const [client, server] = Object.values(webSocketPair);
+
+    server.accept();
+
+    this.wsClients.add(server);
+
+    server.addEventListener("message", (event) => {
+      const data = event.data;
+      if (typeof data !== "string") return;
+
+      // Very basic shell simulation — extend this part significantly
+      if (data === "\r" || data === "\n") {
+        // Enter pressed → "execute" command
+        const cmd = this.currentCommand.trim();
+        this.currentCommand = "";
+
+        let output = "";
+
+        switch (cmd) {
+          case "help":
+            output = "Commands: help, ls, echo <text>, date, whoami, clear\r\n";
+            break;
+          case "ls":
+            output = "file1.txt  notes.md  script.js\r\n";
+            break;
+          case "clear":
+            output = "\x1bc"; // ANSI clear screen
+            break;
+          case "date":
+            output = new Date().toISOString() + "\r\n";
+            break;
+          case "whoami":
+            output = "user (browser session)\r\n";
+            break;
+          default:
+            if (cmd.startsWith("echo ")) {
+              output = cmd.slice(5) + "\r\n";
+            } else if (cmd) {
+              output = `command not found: ${cmd}\r\n`;
+            }
+        }
+
+        this.shellBuffer.push(`$ ${cmd}`);
+        this.shellBuffer.push(output);
+        this.broadcast(`$ \( {cmd}\r\n \){output}`);
+      } else if (data === "\u007f" || data === "\b") {
+        // Backspace
+        if (this.currentCommand.length > 0) {
+          this.currentCommand = this.currentCommand.slice(0, -1);
+          this.broadcast("\b \b"); // erase char visually
+        }
+      } else {
+        this.currentCommand += data;
+        this.broadcast(data); // echo typed character
+      }
+    });
+
+    server.addEventListener("close", () => {
+      this.wsClients.delete(server);
+    });
+
+    // Send welcome message + history on connect
+    server.send("\r\n=== Terminal Session ===\r\n");
+    for (const line of this.shellBuffer) {
+      server.send(line);
+    }
+
+    return new Response(null, {
+      status: 101,
+      webSocket: client,
+    });
+  }
+
+  broadcast(message: string) {
+    for (const ws of this.wsClients) {
+      try {
+        ws.send(message);
+      } catch {}
+    }
+  }
+}

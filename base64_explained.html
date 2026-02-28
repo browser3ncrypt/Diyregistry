@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Base64 Encoding Explained – Standard vs URL-safe</title>
+  <style>
+    :root {
+      --bg: #f8f9fa;
+      --fg: #212529;
+      --panel: white;
+      --border: #dee2e6;
+      --muted: #6c757d;
+      --accent: #0d6efd;
+      --accent-dark: #0b5ed7;
+      --success: #198754;
+    }
+    [data-theme="dark"] {
+      --bg: #121212;
+      --fg: #e0e0e0;
+      --panel: #1e1e1e;
+      --border: #444;
+      --muted: #a0a0a0;
+      --accent: #4d9aff;
+      --accent-dark: #3a88ff;
+      --success: #2ecc71;
+    }
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      margin: 0;
+      padding: 40px 20px;
+      line-height: 1.6;
+      max-width: 960px;
+      margin-inline: auto;
+    }
+    h1, h2, h3 { color: var(--accent); }
+    h1 { text-align: center; margin-bottom: 0.8em; }
+    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem; }
+    .theme-toggle {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--fg);
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .theme-toggle:hover { background: rgba(100,100,100,0.1); }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 24px;
+      margin: 24px 0;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5em 0;
+      font-size: 0.98rem;
+    }
+    th, td {
+      padding: 12px 16px;
+      border: 1px solid var(--border);
+      text-align: left;
+    }
+    th { background: rgba(13,110,253,0.08); color: var(--accent); }
+    .demo-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin: 32px 0;
+    }
+    @media (max-width: 800px) {
+      .demo-grid { grid-template-columns: 1fr; }
+    }
+    textarea {
+      width: 100%;
+      height: 110px;
+      padding: 12px;
+      font-family: "Consolas", monospace;
+      font-size: 15px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--bg);
+      color: var(--fg);
+      resize: vertical;
+    }
+    button {
+      padding: 10px 20px;
+      margin: 8px 12px 8px 0;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1rem;
+      background: var(--accent);
+      color: white;
+    }
+    button:hover { background: var(--accent-dark); }
+    button.secondary { background: var(--muted); }
+    button.secondary:hover { background: #5c636a; }
+    .output {
+      min-height: 110px;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+    .info { color: var(--muted); font-size: 0.95rem; text-align: center; margin-top: 3rem; }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Base64 Encoding – Standard vs URL-safe</h1>
+  <button class="theme-toggle" id="themeToggle">Dark Mode</button>
+</div>
+
+<div class="card">
+  <h2>What is Base64?</h2>
+  <p>Base64 is a binary-to-text encoding scheme that converts binary data (images, files, bytes) into a string using only 64 printable ASCII characters. It is widely used when binary data must be embedded in text-based formats such as JSON, XML, email (MIME), HTML data URIs, or HTTP requests.</p>
+
+  <h3>Standard Base64 alphabet (RFC 4648)</h3>
+  <p><strong>Characters:</strong> A–Z a–z 0–9 <strong>+</strong> <strong>/</strong><br>
+     <strong>Padding:</strong> = (added so length is multiple of 4)</p>
+
+  <h3>URL-safe Base64 variant (RFC 4648 §5)</h3>
+  <p>A modified version designed to be safe in URLs, URIs, filenames, and query strings:</p>
+  <ul>
+    <li><strong>+</strong> → replaced with <strong>-</strong></li>
+    <li><strong>/</strong> → replaced with <strong>_</strong></li>
+    <li>Padding (<strong>=</strong>) → usually <strong>omitted</strong> (most common in modern usage)</li>
+  </ul>
+  <p>This avoids characters that have special meaning in URLs or need escaping.</p>
+</div>
+
+<div class="card">
+  <h2>Comparison Table</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Property</th>
+        <th>Standard Base64</th>
+        <th>URL-safe Base64</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Alphabet</td><td>A–Z a–z 0–9 + /</td><td>A–Z a–z 0–9 - _</td></tr>
+      <tr><td>Padding</td><td>= (usually present)</td><td>Omitted in most implementations</td></tr>
+      <tr><td>Safe in URL path/query?</td><td>No (requires %2B %2F %3D escaping)</td><td>Yes (no escaping needed)</td></tr>
+      <tr><td>Common usage</td><td>Email (MIME), data URIs, basic auth</td><td>JWT, OAuth tokens, API keys, URL parameters</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="card">
+  <h2>Encoding Examples</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Input bytes (text)</th>
+        <th>Standard Base64</th>
+        <th>URL-safe Base64 (no padding)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Hello</td><td>SGVsbG8=</td><td>SGVsbG8</td></tr>
+      <tr><td>Man</td><td>TWFu</td><td>TWFu</td></tr>
+      <tr><td>Ma</td><td>TWE=</td><td>TWE</td></tr>
+      <tr><td>M</td><td>TQ==</td><td>TQ</td></tr>
+      <tr><td>😊 (UTF-8)</td><td>8J+Yig==</td><td>8J-Yig</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="card">
+  <h2>Live Demo – Encode / Decode</h2>
+  <div class="demo-grid">
+    <div>
+      <h3>Input</h3>
+      <textarea id="input" placeholder="Type or paste text here...">Hello world 😊</textarea>
+      <div style="margin: 16px 0;">
+        <button onclick="encode('standard')">Encode Standard</button>
+        <button onclick="encode('urlsafe')">Encode URL-safe</button>
+      </div>
+    </div>
+
+    <div>
+      <h3>Output</h3>
+      <div id="output" class="output output-box"></div>
+      <div style="margin: 16px 0;">
+        <button onclick="decode()">Decode (auto-detects variant)</button>
+        <button class="secondary" onclick="clearAll()">Clear</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="info">
+  Pure client-side JavaScript • No data leaves your browser • Works offline
+</div>
+
+<script>
+  const input = document.getElementById('input');
+  const output = document.getElementById('output');
+  const html = document.documentElement;
+  const themeToggle = document.getElementById('themeToggle');
+
+  // Theme
+  function initTheme() {
+    const saved = localStorage.getItem('theme') ||
+                  (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    html.setAttribute('data-theme', saved);
+    themeToggle.textContent = saved === 'dark' ? 'Light Mode' : 'Dark Mode';
+  }
+
+  themeToggle.addEventListener('click', () => {
+    const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+    themeToggle.textContent = next === 'dark' ? 'Light Mode' : 'Dark Mode';
+  });
+
+  initTheme();
+
+  // Helpers
+  function toUrlSafe(str) {
+    return str.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  }
+
+  function fromUrlSafe(str) {
+    str = str.replace(/-/g, '+').replace(/_/g, '/');
+    while (str.length % 4) str += '=';
+    return str;
+  }
+
+  function encode(variant) {
+    const text = input.value;
+    if (!text) return;
+
+    try {
+      let b64 = btoa(unescape(encodeURIComponent(text)));
+      if (variant === 'urlsafe') b64 = toUrlSafe(b64);
+      output.textContent = b64;
+    } catch (e) {
+      output.textContent = `Error: ${e.message}`;
+    }
+  }
+
+  function decode() {
+    let str = input.value.trim();
+    if (!str) return;
+
+    try {
+      // Try URL-safe first (more permissive)
+      let standard = fromUrlSafe(str);
+      let decoded = decodeURIComponent(escape(atob(standard)));
+      output.textContent = decoded;
+    } catch (e) {
+      output.textContent = `Invalid Base64 (tried both variants)\n\n${e.message}`;
+    }
+  }
+
+  function clearAll() {
+    input.value = '';
+    output.textContent = '';
+    input.focus();
+  }
+</script>
+
+</body>
+</html>

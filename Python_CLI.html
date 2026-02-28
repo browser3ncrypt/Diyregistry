@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Browser Playground — Terminal + Editor (JS + Python via Pyodide)</title>
+
+  <!-- CodeMirror -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.0.1/codemirror.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.0.1/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.0.1/mode/javascript/javascript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.0.1/mode/python/python.min.js"></script>
+
+  <!-- Pyodide -->
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.29.3/full/pyodide.js"></script>
+
+  <style>
+    :root {
+      --bg: #1e1e1e;
+      --text: #d4d4d4;
+      --prompt: #4ec9b0;
+      --border: #3c3c3c;
+      --editor-bg: #252526;
+      --btn-bg: #007acc;
+      --btn-hover: #005f99;
+      --loading: #f39c12;
+      --dir: #81a1c1;
+      --file: #d4d4d4;
+    }
+    body {
+      margin: 0; padding: 0;
+      font-family: monospace;
+      background: var(--bg);
+      color: var(--text);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    header {
+      padding: 0.6rem 1rem;
+      background: #2d2d2d;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    h1 { margin: 0; font-size: 1.1rem; }
+    main {
+      flex: 1;
+      display: flex;
+      min-height: 0;
+    }
+    #editor-container, #terminal-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid var(--border);
+    }
+    #terminal-container { border-right: none; }
+    #editor { flex: 1; overflow: hidden; }
+    #terminal {
+      flex: 1;
+      padding: 1rem;
+      overflow-y: auto;
+      background: var(--editor-bg);
+    }
+    .output-line {
+      margin: 0.2rem 0;
+      white-space: pre-wrap;
+    }
+    .prompt { color: var(--prompt); }
+    .error   { color: #ff6b6b; }
+    .loading { color: var(--loading); font-style: italic; }
+    .dir     { color: var(--dir); font-weight: bold; }
+    .file    { color: var(--file); }
+    #input-container {
+      display: flex;
+      align-items: center;
+      padding: 0.5rem 1rem;
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+    }
+    #prompt { color: var(--prompt); margin-right: 0.5rem; }
+    #input {
+      flex: 1;
+      background: none;
+      border: none;
+      color: var(--text);
+      font-family: monospace;
+      font-size: 1rem;
+      outline: none;
+    }
+    #controls {
+      padding: 0.6rem 1rem;
+      background: #2d2d2d;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    button {
+      background: var(--btn-bg);
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover { background: var(--btn-hover); }
+    #keyboard {
+      display: none;
+      flex-wrap: wrap;
+      padding: 1rem;
+      background: #333;
+      justify-content: center;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+    }
+    .key {
+      background: #444;
+      color: #d4d4d4;
+      border: 1px solid #555;
+      padding: 0.5rem;
+      margin: 0.2rem;
+      cursor: pointer;
+      border-radius: 4px;
+      min-width: 2.2rem;
+      text-align: center;
+    }
+    .key:hover { background: #555; }
+    .key:active { background: #666; }
+    .special { background: #555; min-width: 5rem; }
+    #toggle-keyboard {
+      position: fixed;
+      bottom: 1rem;
+      right: 1rem;
+      z-index: 101;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Browser Playground — Terminal + Editor (JS & Python)</h1>
+  <button id="toggle-keyboard">Show Virtual Keyboard</button>
+</header>
+
+<main>
+  <div id="editor-container">
+    <div id="editor"></div>
+  </div>
+
+  <div id="terminal-container">
+    <div id="terminal"></div>
+    <div id="input-container">
+      <span id="prompt">american@browser:\~$</span>
+      <input type="text" id="input" autocomplete="off" autofocus />
+    </div>
+  </div>
+</main>
+
+<div id="controls">
+  <button id="run-js">Run JavaScript</button>
+  <button id="run-py">Run Python</button>
+  <span style="color:#aaa; font-size:0.9rem;">
+    Editor supports JS/Python highlighting • Python via Pyodide v0.29.3
+  </span>
+</div>
+
+<div id="keyboard">
+  <div class="key">q</div><div class="key">w</div><div class="key">e</div><div class="key">r</div><div class="key">t</div>
+  <div class="key">y</div><div class="key">u</div><div class="key">i</div><div class="key">o</div><div class="key">p</div>
+  <div class="key">a</div><div class="key">s</div><div class="key">d</div><div class="key">f</div><div class="key">g</div>
+  <div class="key">h</div><div class="key">j</div><div class="key">k</div><div class="key">l</div>
+  <div class="key">z</div><div class="key">x</div><div class="key">c</div><div class="key">v</div><div class="key">b</div>
+  <div class="key">n</div><div class="key">m</div>
+  <div class="key special" data-key="Backspace">← Backspace</div>
+  <div class="key special" data-key=" ">Space</div>
+  <div class="key special" data-key="Enter">⏎ Enter</div>
+</div>
+
+<script>
+// ────────────────────────────────────────────────
+//  Enhanced Simulated File System & Shell
+// ────────────────────────────────────────────────
+
+let currentDir = '/';
+let username = 'american';
+let hostname = 'browser';
+
+const fs = {
+  '/': {
+    type: 'dir',
+    contents: {
+      home: {
+        type: 'dir',
+        contents: {
+          [username]: {
+            type: 'dir',
+            contents: {
+              'welcome.txt': {
+                type: 'file',
+                content: 'Welcome to the in-browser terminal playground.\nType help to see available commands.',
+                mtime: new Date()
+              }
+            }
+          }
+        }
+      }
+    },
+    mtime: new Date()
+  }
+};
+
+function getNode(path) {
+  if (path === '/' || path === '') return fs['/'];
+  const parts = path.split('/').filter(Boolean);
+  let node = fs['/'];
+  for (const part of parts) {
+    if (!node.contents || !node.contents[part]) return null;
+    node = node.contents[part];
+  }
+  return node;
+}
+
+function resolvePath(rel) {
+  if (rel.startsWith('/')) return rel;
+  if (rel === '\~') return `/home/${username}`;
+  if (rel.startsWith('\~/')) return `/home/\( {username}/ \){rel.slice(2)}`;
+  return (currentDir === '/' ? '/' : currentDir + '/') + rel;
+}
+
+function normalizePath(p) {
+  let abs = resolvePath(p);
+  let parts = abs.split('/').filter(Boolean);
+  let stack = [];
+  for (let part of parts) {
+    if (part === '..') {
+      if (stack.length) stack.pop();
+    } else if (part !== '.') {
+      stack.push(part);
+    }
+  }
+  return '/' + stack.join('/');
+}
+
+function ls(path = '.', opts = {}) {
+  const target = getNode(normalizePath(path));
+  if (!target || target.type !== 'dir') return 'No such directory';
+
+  const entries = Object.entries(target.contents || {});
+  if (opts.l) {
+    return entries.map(([name, node]) => {
+      const type = node.type === 'dir' ? 'd' : '-';
+      const time = node.mtime.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+      const size = node.type === 'file' ? node.content.length : 0;
+      const colorClass = node.type === 'dir' ? 'dir' : 'file';
+      return `<span class="\( {colorClass}"> \){type} ${name.padEnd(20)} ${size.toString().padStart(6)}  ${time}</span>`;
+    }).join('\n');
+  } else {
+    return entries.map(([name, node]) => {
+      const cls = node.type === 'dir' ? 'dir' : 'file';
+      return `<span class="\( {cls}"> \){name}</span>`;
+    }).join('  ');
+  }
+}
+
+function mkdir(name) {
+  if (!name) return 'mkdir: missing operand';
+  const full = resolvePath(name);
+  const parentPath = full.substring(0, full.lastIndexOf('/')) || '/';
+  const baseName = full.split('/').pop();
+  const parent = getNode(parentPath);
+  if (!parent || parent.type !== 'dir') return 'mkdir: cannot create directory: No such file or directory';
+  if (parent.contents[baseName]) return `mkdir: cannot create directory ‘${baseName}’: File exists`;
+  parent.contents[baseName] = { type: 'dir', contents: {}, mtime: new Date() };
+  return '';
+}
+
+function touch(name) {
+  if (!name) return 'touch: missing file operand';
+  const full = resolvePath(name);
+  const parentPath = full.substring(0, full.lastIndexOf('/')) || '/';
+  const baseName = full.split('/').pop();
+  const parent = getNode(parentPath);
+  if (!parent || parent.type !== 'dir') return 'touch: cannot touch ‘${baseName}’: No such file or directory';
+  if (!parent.contents[baseName]) {
+    parent.contents[baseName] = { type: 'file', content: '', mtime: new Date() };
+  } else {
+    parent.contents[baseName].mtime = new Date();
+  }
+  return '';
+}
+
+function echo(args) {
+  let text = args.join(' ');
+  let redirect = null;
+  if (text.includes('>')) {
+    const parts = text.split('>');
+    text = parts[0].trim();
+    const rest = parts.slice(1).join('>').trim();
+    if (rest.startsWith('>')) {
+      redirect = { path: rest.slice(1).trim(), append: true };
+    } else {
+      redirect = { path: rest, append: false };
+    }
+  }
+
+  let output = text.replace(/^["']|["']$/g, '');
+
+  if (redirect) {
+    const fullPath = resolvePath(redirect.path);
+    const parentPath = fullPath.substring(0, fullPath.lastIndexOf('/')) || '/';
+    const fname = fullPath.split('/').pop();
+    const parent = getNode(parentPath);
+    if (!parent || parent.type !== 'dir') return `echo: redirection error: No such directory`;
+    let file = parent.contents[fname];
+    if (!file || file.type !== 'file') {
+      file = { type: 'file', content: '', mtime: new Date() };
+      parent.contents[fname] = file;
+    }
+    if (redirect.append) {
+      file.content += output + '\n';
+    } else {
+      file.content = output + '\n';
+    }
+    file.mtime = new Date();
+    return '';
+  }
+  return output;
+}
+
+function cat(path) {
+  if (!path) return 'cat: missing operand';
+  const node = getNode(resolvePath(path));
+  if (!node) return `cat: ${path}: No such file or directory`;
+  if (node.type !== 'file') return `cat: ${path}: Is a directory`;
+  return node.content;
+}
+
+function rm(path) {
+  if (!path) return 'rm: missing operand';
+  const full = resolvePath(path);
+  const parentPath = full.substring(0, full.lastIndexOf('/')) || '/';
+  const name = full.split('/').pop();
+  const parent = getNode(parentPath);
+  if (!parent || !parent.contents?.[name]) return `rm: cannot remove '${path}': No such file or directory`;
+  if (parent.contents[name].type === 'dir') return `rm: cannot remove '${path}': Is a directory`;
+  delete parent.contents[name];
+  return '';
+}
+
+const commands = {
+  help:   () => 'Available commands: help, ls [-l], pwd, cd, mkdir, touch, echo > / >>, cat, rm, clear, whoami, date, uname',
+  ls:     (args) => {
+    let path = '.', long = false;
+    if (args[0] === '-l') { long = true; path = args[1] || '.'; }
+    else if (args[0] === '-la' || args[0] === '-al') { long = true; path = args[1] || '.'; }
+    else if (args[0]) path = args[0];
+    return ls(path, { l: long });
+  },
+  pwd:    () => currentDir,
+  cd:     (args) => {
+    const target = args[0] || `\~`;
+    const newPath = normalizePath(target);
+    const node = getNode(newPath);
+    if (!node || node.type !== 'dir') return `cd: no such directory: ${target}`;
+    currentDir = newPath;
+    document.getElementById('prompt').textContent = `\( {username}@ \){hostname}:\( {currentDir} \)`;
+    return '';
+  },
+  mkdir:  (args) => mkdir(args[0]),
+  touch:  (args) => touch(args[0]),
+  echo:   (args) => echo(args),
+  cat:    (args) => cat(args[0]),
+  rm:     (args) => rm(args[0]),
+  clear:  () => { terminal.innerHTML = ''; return ''; },
+  whoami: () => username,
+  date:   () => new Date().toLocaleString(),
+  uname:  () => 'Browser Playground 1.0\nKernel: WebAssembly\nShell: simulated POSIX-like'
+};
+
+// ────────────────────────────────────────────────
+//  Terminal output & input handling
+// ────────────────────────────────────────────────
+
+function append(html, cls = 'output-line') {
+  const div = document.createElement('div');
+  div.className = cls;
+  div.innerHTML = html;
+  terminal.appendChild(div);
+  terminal.scrollTop = terminal.scrollHeight;
+}
+
+function runCommand(cmd) {
+  if (!cmd.trim()) return;
+  append(`<span class="prompt">\( {username}@ \){hostname}:\( {currentDir} \)</span> ${cmd}`);
+  const parts = cmd.trim().split(/\s+/);
+  const command = parts[0];
+  const args = parts.slice(1);
+
+  if (command === 'exit' || command === 'logout') {
+    append('logout');
+    append('Session still active — feel free to continue.');
+    return;
+  }
+
+  if (commands[command]) {
+    const result = commands[command](args);
+    if (result) append(result);
+  } else if (command) {
+    append(`<span class="error">command not found: ${command}</span>`);
+  }
+}
+
+input.addEventListener('keydown', e => {
+  if (e.key === 'Enter') {
+    runCommand(input.value);
+    input.value = '';
+  }
+});
+
+// ────────────────────────────────────────────────
+//  Code Editor & Execution (JS + Pyodide) — unchanged from previous version
+// ────────────────────────────────────────────────
+
+const editor = new CodeMirror.EditorView({
+  doc: `# Python example – you can also write JS\nprint("Hello from Pyodide")\n\n# or JavaScript:\nconsole.log("Hello from browser JS");`,
+  extensions: [
+    CodeMirror.basicSetup,
+    CodeMirror.python(),
+    CodeMirror.javascript(),
+    CodeMirror.EditorView.lineWrapping,
+  ],
+  parent: document.getElementById('editor')
+});
+
+let pyodide = null;
+
+async function loadPyodideIfNeeded() {
+  if (pyodide) return;
+  append("<span class='loading'>Loading Pyodide (Python in WebAssembly) — please wait...</span>", 'loading');
+  try {
+    pyodide = await loadPyodide({
+      indexURL: "https://cdn.jsdelivr.net/pyodide/v0.29.3/full/"
+    });
+    append("Pyodide loaded. Python environment ready.");
+  } catch (err) {
+    append(`<span class="error">Pyodide load failed: ${err.message}</span>`, 'error');
+  }
+}
+
+document.getElementById('run-py').onclick = async () => {
+  await loadPyodideIfNeeded();
+  if (!pyodide) return;
+  const code = editor.state.doc.toString();
+  append('─ Running Python ─');
+  try {
+    pyodide.setStdout({ batched: s => s.trim() && append(s.trim()) });
+    pyodide.setStderr({ batched: s => s.trim() && append(`stderr: ${s.trim()}`, 'error') });
+    const result = await pyodide.runPythonAsync(code);
+    if (result !== undefined) append(`→ ${result}`);
+  } catch (err) {
+    append(`<span class="error">Python error: ${err.message}</span>`, 'error');
+  }
+};
+
+document.getElementById('run-js').onclick = () => {
+  const code = editor.state.doc.toString();
+  append('─ Running JavaScript ─');
+  try {
+    const fn = new Function('console', code);
+    const captured = [];
+    const fakeConsole = { log: (...args) => captured.push(args.join(' ')) };
+    fn(fakeConsole);
+    captured.forEach(line => append(`→ ${line}`));
+  } catch (err) {
+    append(`<span class="error">JS error: ${err.message}</span>`, 'error');
+  }
+};
+
+// Virtual keyboard (unchanged)
+document.getElementById('toggle-keyboard').onclick = () => {
+  const kb = document.getElementById('keyboard');
+  kb.style.display = kb.style.display === 'flex' ? 'none' : 'flex';
+  document.getElementById('toggle-keyboard').textContent = kb.style.display === 'flex' ? 'Hide Keyboard' : 'Show Virtual Keyboard';
+};
+
+document.getElementById('keyboard').addEventListener('click', e => {
+  if (!e.target.classList.contains('key')) return;
+  const key = e.target.dataset.key || e.target.textContent.trim();
+  if (key === 'Backspace') input.value = input.value.slice(0, -1);
+  else if (key === 'Enter') input.dispatchEvent(new KeyboardEvent('keydown', {key:'Enter', bubbles:true}));
+  else input.value += key;
+  input.focus();
+});
+
+// Initial messages
+append('Browser-based terminal & code playground loaded.');
+append('Type <span class="prompt">help</span> to see available commands.');
+append('Use the buttons below to execute code from the editor.');
+</script>
+
+</body>
+</html>

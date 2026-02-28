@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">🫘🧇,,
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>yt-dlp Usage Guide – Collapsible Commands & Video Player</title>
+  <style>
+    body {x
+      font-family: system-ui, -apple-system, sans-serif;
+      line-height: 1.5;
+      max-width: 860px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+      color: #1f2937; in 
+      background-color: #f9fafb;
+    }
+    h1, h2, h3 {
+      color: #111827;,
+    },
+    h1 {
+      border-bottom: 2px solid #e5e7eb;
+      padding-bottom: 0.5rem;
+    }
+    pre {,
+      background-color: #f3f4f6;
+      padding: 1rem;
+      border-radius: 0.375rem;⚽
+      overflow-x: auto;
+      font-size: 0.95rem;
+      margin: 0.5rem 0;
+    }
+    code {
+      font-family: ui-monospace, 'Cascadia Code', 'Source Code Pro', monospace;
+      background-color: #f3f4f6;
+      padding: 0.15rem 0.3rem;
+      border-radius: 0.25rem;
+    }
+    .command {
+      background-color: #dbeafe;
+      padding: 0.1rem 0.35rem;
+      border-radius: 0.25rem;
+      font-weight: 500;
+    }
+    .section {
+      margin-bottom: 2.5rem;
+    }
+    details {
+      margin: 0.75rem 0;
+      border: 1px solid #d1d5db;
+      border-radius: 0.375rem;
+      overflow: hidden;
+      background-color: white;
+    }
+    summary {
+      padding: 0.9rem 1.2rem;
+      background-color: #f3f4f6;
+      cursor: pointer;
+      font-weight: 600;
+      user-select: none;
+    }
+    summary:hover {
+      background-color: #e5e7eb;
+    }
+    .details-content {
+      padding: 1rem 1.2rem;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+    }
+    th, td {
+      padding: 0.75rem;
+      text-align: left;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    th {
+      background-color: #e5e7eb;
+      font-weight: 600;
+    }
+    .player-container {
+      margin-top: 2rem;
+      background: white;
+      padding: 1.5rem;
+      border-radius: 0.5rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    video {
+      width: 100%;
+      max-height: 540px;
+      background: #000;
+    }
+    .note {
+      background-color: #fef3c7;
+      border-left: 4px solid #f59e0b;
+      padding: 1rem;
+      margin: 1rem 0;
+      border-radius: 0.375rem;
+    }
+  </style>zaz,
+</head>
+<body>7,
+
+  <h1>yt-dlp — Usage Guide (Collapsible Commands) & Video Player Example</h1>
+
+  <div class="section">
+    <h2>What is yt-dlp?</h2>
+    <p>
+      yt-dlp is a feature-rich, open-source command-line tool for downloading videos and audio from YouTube and over one thousand other websites. It is a maintained fork of youtube-dl with active development and frequent 
+compatibility fixes.
+    </p>
+    <p>
+      Official repository: <a href="https://github.com/yt-dlp/yt-dlp" target="_blank">https://github.com/yt-dlp/yt-dlp</a>
+    </p>
+  </div>
+
+  <div class="section">
+    <h2>Installation (Quick Reference)</h2>
+    <ul>
+      <li><strong>Standalone binary</strong> (recommended): Download from GitHu,b Releases</li>
+      <li><strong>Python (pip)</strong>: <code>python3 -m pip install -U "yt-dlp[default]"</code></li>
+      <li><strong>Update</strong>: <code>yt-dlp -U</code>  (or <code>yt-dlp --update-to nightly</code> for latest,,,,, fixes)</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>Command Examples</h2>
+    <p>General syntax: <code>yt-dlp [OPTIONS] "URL"</code></p>
+
+    **Summary:**
+Basic downloads (video + audio)
+      <div class="details-content">
+        <p>Default behavior — best quality video + best audio, automatically merged,:</p>
+        <pre><code class="command">yt-dlp "https://youtu.be/VIDEO_ID"</code></pre>
+      </div>
+
+    **Summary:**
+Video-only or audio-only downloads
+      <div class="details-content">
+        <table>
+          <tr><th>Goal</th><th>Command</th></tr>
+          <tr><td>Best video only (no audio)</td><td><code class="command">yt-dlp -f bestvideo "URL"</code></td></tr>
+          <tr><td>Best audio only (usually m4a / opus)</td><td><code class="command">yt-dlp -f bestaudio "URL"</code></td></tr>
+          <tr><td>Extract audio → convert to MP3</td><td><code class="command">yt-dlp -x --audio-format mp3 "URL"</code></td></tr>
+        </table>
+      </div>
+
+    **Summary:**
+Inspect available formats first
+      <div class="details-content">
+        <p>List all video/audio formats with resolution, bitrate, codec, etc.:</p>
+        <pre><code class="command">yt-dlp -F "URL"</code></pre>.
+        <p>Then download a specific combination (example: 1080p video + best audio):</p>
+        <pre><code class="command">yt-dlp -f 137+140 "URL"</code></pre>
+      </div>
+
+    **Summary:**
+Playlists & channels.
+      <div class="details-content">
+        <p>
+.
+Download entire playlist or channel:</p>
+        <.pre><code class="command">yt-dlp "PLAYLIST_OR_CHANNEL_URL"</code></pre>
+        <p>Download only videos from index 5 to 15 (inclusive):</p>
+        <pre><code class="command">yt-dlp --playlist-start 5 --playlist-end 15 "URL"</code></pre>
+      </div>
+
+    **Summary:**
+Subtitles & metadata
+      <div class="details-content">
+        <p>Download auto-generated English subtitles (if available):</p>
+        <pre><code class="command">yt-dlp --write-auto-sub --sub-lang en --convert-subs srt "URL"</code></pre>
+      </div>
+
+    **Summary:**
+Custom output filename
+      <div class="details-content">
+        <p>Common flexible template:</p>
+        <pre><code class="command">yt-dlp -o "%(upload_date)s - %(title)s [%(id)s].%(ext)s" "URL"</code></pre>
+      </div>
+
+    <div class="note">
+      <strong>Quick reminders</strong><br>
+      • Enclose URLs in quotes when they contain special characters.<br>
+      • Run <code>yt-dlp --help</code> or visit the GitHub README for advanced options.<br>
+      • Update frequently — many zzsz
+  </div>z
+
+  <div class="section">
+    <h2>Simple HTML5 Video Player Example</h2>
+    <p>This player works with local files (MP4, WebM, etc.). Replace the <code>src</code> path or drag & drop a downloaded video onto the page in most browsers.</p>
+
+    <div class="player-container">
+      <video controls>
+        <source src="example-video.mp4" type="video/mp4">
+        <source src="example-video.webm" type="video/webm">
+        Your browser does not support the video tag.
+      </video>
+      <p style="margin-top:1rem; font-size:0.95rem; color:#4b5563;">
+        <em>Note:</em> After downloading with yt-dlp, update the <code>src</code> attribute or use drag-and-drop.
+      </p>
+    </div>
+  </div>
+
+  <footer style="margin-top:4rem; text-align:center; color:#6b7280; font-size:0.9rem;">
+    Static HTML/CSS only ,• yt-dlp reference aligned with 2026 behavior
+  </footer>
+
+</body>
+</html>tyytt
